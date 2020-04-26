@@ -334,10 +334,10 @@ export default class SignUp extends Component {
     this.setState({ isLoading: true });
     setTimeout(() => {
       this.setState({ isLoading: false });
-      this.props.navigation.navigate('PINScreen', {
+      this.props.navigation.push('PINScreen', {
         mode: PIN_SCREEN_MODE.SIGNUP_PIN
       });
-    }, 8000)
+    }, 4000);
   }
 
   getSignUpButtonStyle = () => {

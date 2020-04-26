@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignUp from './screens/signup';
 import PINScreen from './screens/pin';
+import VerificationScreen from './screens/verification';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const navigationOptions = { headerShown: false };
@@ -61,6 +62,11 @@ export default function App(props) {
             <Stack.Screen
               name="PINScreen"
               component={PINScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="VerificationScreen"
+              component={VerificationScreen}
               options={navigationOptions}
             />
           </Stack.Navigator>

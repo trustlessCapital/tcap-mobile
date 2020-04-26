@@ -8,11 +8,12 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
-  AppState
+  AppState,
 } from 'react-native';
 import LoadingIndicator from '../components/loading-indicator';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
+import { VERIFICATION_MODE } from './verification';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   backButton: {
     width: 40,
     height: 40,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerContainer: {
     flex: 1,
@@ -104,11 +105,13 @@ const styles = StyleSheet.create({
 
 export const PIN_SCREEN_MODE = {
   AUTH_PIN: 'auth_pin',
+  LOGIN_PIN: 'login_pin',
   SIGNUP_PIN: 'signup_pin',
   CONFIRM_PIN: 'confirm_pin',
 };
 
 export default class PINScreen extends Component {
+  loadingMessage = 'Please wait while we sign you up!';
   state = {
     pin: null,
     confirmPin: null,
@@ -116,7 +119,7 @@ export default class PINScreen extends Component {
     isLoading: false,
     enableBackButton: true,
     locked: true,
-    appState: AppState.currentState
+    appState: AppState.currentState,
   };
 
   constructor(props) {
@@ -126,7 +129,10 @@ export default class PINScreen extends Component {
       this.props.route.params &&
       this.props.route.params.mode
     )
-    this.state.mode = this.props.route.params.mode;
+      this.state.mode = this.props.route.params.mode;
+    if (this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN) {
+      this.state.disableBackButton = true;
+    }
   }
 
   componentDidMount() {
@@ -138,12 +144,15 @@ export default class PINScreen extends Component {
   }
 
   _handleAppStateChange = (nextAppState) => {
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
       if (!this.isAuthAsked) this.authenticateWithTouchID();
       this.isAuthAsked = false;
-    } 
-    this.setState({appState: nextAppState});
-  }
+    }
+    this.setState({ appState: nextAppState });
+  };
 
   authenticateWithTouchID = async () => {
     let hasHardware = await LocalAuthentication.hasHardwareAsync();
@@ -162,19 +171,21 @@ export default class PINScreen extends Component {
   render() {
     return (
       <SafeAreaView style={styles.wrapper}>
-        <View style={styles.backButtonWrapper}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={this.navigateBack}
-          >
-            <Ionicons
-              name={'ios-arrow-back'}
-              size={22}
-              color={Colors.title}
-              style={{ alignSelf: 'center' }}
-            />
-          </TouchableOpacity>
-        </View>
+        {!this.state.disableBackButton && (
+          <View style={styles.backButtonWrapper}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={this.navigateBack}
+            >
+              <Ionicons
+                name={'ios-arrow-back'}
+                size={22}
+                color={Colors.title}
+                style={{ alignSelf: 'center' }}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             <View style={styles.titleWrapper}>
@@ -280,7 +291,7 @@ export default class PINScreen extends Component {
         </View>
         <LoadingIndicator
           visible={this.state.isLoading}
-          message={'Please wait while we sign you in...'}
+          message={this.loadingMessage}
         />
       </SafeAreaView>
     );
@@ -289,6 +300,8 @@ export default class PINScreen extends Component {
   getTitle = () => {
     if (this.state.mode === PIN_SCREEN_MODE.CONFIRM_PIN) {
       return 'Confirm your 6 Digit PIN';
+    } else if (this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN) {
+      return 'Enter 6 Digit PIN to Login';
     } else {
       return 'Enter 6 Digit PIN';
     }
@@ -311,11 +324,15 @@ export default class PINScreen extends Component {
 
   navigateBack = () => {
     if (this.state.mode === PIN_SCREEN_MODE.CONFIRM_PIN) {
-      this.setState({ mode: PIN_SCREEN_MODE.SIGNUP_PIN, pin: '', confirmPin: '' });
+      this.setState({
+        mode: PIN_SCREEN_MODE.SIGNUP_PIN,
+        pin: '',
+        confirmPin: '',
+      });
     } else {
       this.props.navigation.goBack();
     }
-  }
+  };
 
   deleteKeyPress = () => {
     if (
@@ -337,7 +354,8 @@ export default class PINScreen extends Component {
   onButtonPress = (pin) => {
     if (
       this.state.mode === PIN_SCREEN_MODE.AUTH_PIN ||
-      this.state.mode === PIN_SCREEN_MODE.SIGNUP_PIN
+      this.state.mode === PIN_SCREEN_MODE.SIGNUP_PIN ||
+      this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN
     ) {
       if (!this.state.pin) {
         this.state.pin = '';
@@ -354,9 +372,22 @@ export default class PINScreen extends Component {
       if (!this.state.confirmPin) {
         this.state.confirmPin = '';
       }
-      if (this.state.confirmPin.length < 6) this.state.confirmPin += pin;
-      this.setState({ confirmPin: this.state.confirmPin });
+      if (this.state.confirmPin.length < 6) {
+        this.state.confirmPin += pin;
+        this.setState({ confirmPin: this.state.confirmPin });
+      }
+
+      if (this.state.confirmPin.length === 6) {
+        // TODO Make signup API Call
+        this.setState({ isLoading: true });
+        setTimeout(() => {
+          this.setState({ isLoading: false });
+          this.props.navigation.popToTop();
+          this.props.navigation.replace('VerificationScreen', {
+            mode: VERIFICATION_MODE.SMS,
+          });
+        }, 4000);
+      }
     }
   };
-  
 }
