@@ -2,106 +2,20 @@ import React, { Component } from 'react';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  StyleSheet,
+  AsyncStorage,
   Text,
   View,
   Image,
-  Dimensions,
   TouchableOpacity,
   AppState,
 } from 'react-native';
 import LoadingIndicator from '../components/loading-indicator';
+import ErrorDialog from '../components/error-dialog';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import { VERIFICATION_MODE } from './verification';
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  container: {
-    flex: 1,
-  },
-  backButtonWrapper: {
-    width: 40,
-    width: Dimensions.get('window').width,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-  },
-  headerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    alignItems: 'center',
-  },
-  pinBackgroundLogo: {
-    position: 'absolute',
-    bottom: -200,
-    left: Dimensions.get('window').width / 2 - 50,
-    width: 100,
-    resizeMode: 'contain',
-    opacity: 0.05,
-  },
-  titleWrapper: {
-    textAlign: 'center',
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: 20,
-    color: Colors.textColorGrey,
-    fontFamily: 'montserratBold',
-    fontSize: 18,
-  },
-  pinWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignSelf: 'center',
-  },
-  unfilledCircle: {
-    margin: 5,
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: Colors.subTitle,
-  },
-  filledCircle: {
-    margin: 5,
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: Colors.tintColor,
-  },
-  keyPadContainer: {
-    flex: 2,
-  },
-  keyPadImage: {
-    height: 80,
-    width: Dimensions.get('window').width,
-    resizeMode: 'cover',
-  },
-  keyPadWrapper: {
-    flex: 1,
-    backgroundColor: Colors.tintColor,
-  },
-  keyRow: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  key: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  keyStyle: {
-    color: '#FFF',
-    fontFamily: 'montserratBold',
-    fontSize: 26,
-    textAlign: 'center',
-  },
-});
+import APIService from '../services/api-services';
+import styles from '../stylesheets/pin';
 
 export const PIN_SCREEN_MODE = {
   AUTH_PIN: 'auth_pin',
@@ -111,7 +25,8 @@ export const PIN_SCREEN_MODE = {
 };
 
 export default class PINScreen extends Component {
-  loadingMessage = 'Please wait while we sign you up!';
+  email = null;
+  phone = null;
   state = {
     pin: null,
     confirmPin: null,
@@ -120,18 +35,24 @@ export default class PINScreen extends Component {
     enableBackButton: true,
     locked: true,
     appState: AppState.currentState,
+    showError: false,
+    errorMessage: null,
+    errorTitle: null,
+    loadingMessage: 'Please wait while we sign you up!',
   };
 
   constructor(props) {
     super(props);
-    if (
-      this.props.route &&
-      this.props.route.params &&
-      this.props.route.params.mode
-    )
-      this.state.mode = this.props.route.params.mode;
-    if (this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN) {
-      this.state.disableBackButton = true;
+    if (this.props.route && this.props.route.params) {
+      if (this.props.route.params.mode)
+        this.state.mode = this.props.route.params.mode;
+      if (this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN) {
+        this.state.disableBackButton = true;
+      }
+      if (this.props.route.params.email)
+        this.email = this.props.route.params.email;
+      if (this.props.route.params.phone)
+        this.phone = this.props.route.params.phone;
     }
   }
 
@@ -179,7 +100,7 @@ export default class PINScreen extends Component {
             >
               <Ionicons
                 name={'ios-arrow-back'}
-                size={22}
+                size={24}
                 color={Colors.title}
                 style={{ alignSelf: 'center' }}
               />
@@ -291,7 +212,15 @@ export default class PINScreen extends Component {
         </View>
         <LoadingIndicator
           visible={this.state.isLoading}
-          message={this.loadingMessage}
+          message={this.state.loadingMessage}
+        />
+        <ErrorDialog
+          title={this.state.errorTitle}
+          visible={this.state.showError}
+          message={this.state.errorMessage}
+          onDismiss={() => {
+            this.setState({ showError: false });
+          }}
         />
       </SafeAreaView>
     );
@@ -368,6 +297,13 @@ export default class PINScreen extends Component {
       ) {
         this.setState({ mode: PIN_SCREEN_MODE.CONFIRM_PIN });
       }
+
+      if (
+        this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN &&
+        this.state.pin.length === 6
+      ) {
+        this.loginUser();
+      }
     } else if (this.state.mode === PIN_SCREEN_MODE.CONFIRM_PIN) {
       if (!this.state.confirmPin) {
         this.state.confirmPin = '';
@@ -378,16 +314,114 @@ export default class PINScreen extends Component {
       }
 
       if (this.state.confirmPin.length === 6) {
-        // TODO Make signup API Call
-        this.setState({ isLoading: true });
-        setTimeout(() => {
+        this.signupUser();
+      }
+    }
+  };
+
+  signupUser = async () => {
+    if (this.state.confirmPin != this.state.pin) {
+      this.setState({
+        showError: true,
+        errorMessage: 'Confirmation PIN does not match!',
+        errorTitle: 'PIN does not match',
+      });
+      return;
+    }
+    this.setState({ isLoading: true });
+    APIService.signUp(this.email, this.phone)
+      .then((accountDetails) => {
+        // TODO Encrypt the account details with pin
+        this.encryptAndSaveAccount(accountDetails, this.state.pin).then(() => {
           this.setState({ isLoading: false });
           this.props.navigation.popToTop();
           this.props.navigation.replace('VerificationScreen', {
             mode: VERIFICATION_MODE.SMS,
+            accountDetails: accountDetails,
           });
-        }, 4000);
-      }
+        });
+      })
+      .catch((error) => {
+        this.setState({ isLoading: false });
+        if (error.status == 409) {
+          this.props.navigation.popToTop();
+          this.props.navigation.replace('SignUp', {
+            signupError: true,
+          });
+        } else {
+          this.setState({
+            showError: true,
+            errorMessage: 'Error occured in signing you up! Please try later!',
+            errorTitle: 'Signup Failed',
+          });
+        }
+      })
+      .finally(() => this.setState({ isLoading: false }));
+  };
+
+  failedLoginOrSignUp = () => {
+    this.props.navigation.popToTop();
+    this.props.navigation.replace('SignUp', {
+      signupError: true,
+    });
+  };
+
+  loginUser = async () => {
+    this.setState({ isLoading: true, loadingMessage: 'Please wait!!' });
+    // TODO Decrypt the Saved account details in asyncstorage using pin
+    account = await AsyncStorage.getItem('account');
+    try {
+      account = JSON.parse(account);
+    } catch (e) {
+      this.failedLoginOrSignUp();
+      return;
     }
+    if (!account.email || !account.phoneNumber) {
+      return this.failedLoginOrSignUp();
+    }
+    APIService.signIn(account.email, account.phoneNumber)
+      .then((accountDetails) => {
+        // TODO Encrypt the account details with pin
+        this.encryptAndSaveAccount(accountDetails, this.state.pin).then(() => {
+          this.setState({ isLoading: false });
+          if (
+            !accountDetails.isPhoneVerified ||
+            !accountDetails.isEmailVerified
+          ) {
+            this.props.navigation.replace('VerificationScreen', {
+              accountDetails: accountDetails,
+              mode: !accountDetails.isPhoneVerified
+                ? VERIFICATION_MODE.SMS
+                : VERIFICATION_MODE.EMAIL,
+            });
+          } else {
+            this.props.navigation.replace('DashboardScreen', {
+              accountDetails: accountDetails,
+            });
+          }
+        });
+      })
+      .catch((error) => {
+        if (error.status == 409) {
+          this.setState({
+            isLoading: false,
+            showError: true,
+            errorMessage: 'Invalid PIN/User account not found!',
+            errorTitle: 'Signin Failed',
+          });
+        } else {
+          this.setState({
+            isLoading: false,
+            showError: true,
+            errorMessage: 'Error occured in signing you in! Please try later!',
+            errorTitle: 'Signin Failed',
+          });
+        }
+      })
+      .finally(() => this.setState({ isLoading: false }));
+  };
+
+  encryptAndSaveAccount = (accountDetails, pin) => {
+    return AsyncStorage.setItem('account', JSON.stringify(accountDetails));
   };
 }

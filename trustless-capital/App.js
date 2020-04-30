@@ -6,9 +6,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignUp from './screens/signup';
-import PINScreen from './screens/pin';
+import PINScreen, { PIN_SCREEN_MODE } from './screens/pin';
 import VerificationScreen from './screens/verification';
+import DashboardScreen from './screens/dashboard';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AsyncStorage } from 'react-native';
 
 const navigationOptions = { headerShown: false };
 const Stack = createStackNavigator();
@@ -17,6 +19,7 @@ export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
 
   React.useEffect(() => {
+    account = null;
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHide();
@@ -36,10 +39,16 @@ export default function App(props) {
           montserrat: require('./assets/fonts/Montserrat-Regular.ttf'),
           montserratBold: require('./assets/fonts/Montserrat-Bold.ttf'),
         });
+
+        account = await AsyncStorage.getItem('account');
       } catch (e) {
         console.warn(e);
       } finally {
-        initalRoute = 'SignUp';
+        if (account) {
+          initalRoute = 'PINScreen';
+        } else {
+          initalRoute = 'SignUp';
+        }
         setLoadingComplete(true);
         SplashScreen.hide();
       }
@@ -62,11 +71,17 @@ export default function App(props) {
             <Stack.Screen
               name="PINScreen"
               component={PINScreen}
+              initialParams={{ mode: PIN_SCREEN_MODE.LOGIN_PIN }}
               options={navigationOptions}
             />
             <Stack.Screen
               name="VerificationScreen"
               component={VerificationScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="DashboardScreen"
+              component={DashboardScreen}
               options={navigationOptions}
             />
           </Stack.Navigator>

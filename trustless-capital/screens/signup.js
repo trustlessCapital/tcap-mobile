@@ -1,182 +1,22 @@
 import React, { Component } from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
   Text,
   View,
   Image,
-  Dimensions,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import LoadingIndicator from '../components/loading-indicator';
+import ErrorDialog from '../components/error-dialog';
 import Colors from '../constants/Colors';
 import { PIN_SCREEN_MODE } from './pin';
 import { Hoshi } from 'react-native-textinput-effects';
 import CountryPicker from 'react-native-country-picker-modal';
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
-
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  mainPattern: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    height: Dimensions.get('window').height + 50,
-    resizeMode: 'contain',
-  },
-  bgPattern1: {
-    position: 'absolute',
-    top: -40,
-    left: 40,
-    height: 400,
-    opacity: 0.2,
-    resizeMode: 'contain',
-    zIndex: 1,
-  },
-  container: {
-    flex: 1,
-    height: Dimensions.get('window').height,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginStart: 20,
-    marginEnd: 20,
-  },
-  headerContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    alignSelf: 'flex-start',
-    marginTop: 40,
-    marginBottom: 20,
-  },
-  logo: {
-    flex: 1,
-    width: 180,
-    resizeMode: 'contain',
-    alignSelf: 'flex-start',
-    paddingTop: 20,
-    paddingBottom: 20,
-  },
-  titleWrapper: {
-    flex: 1,
-    marginTop: 30,
-  },
-  title: {
-    alignSelf: 'flex-start',
-    color: Colors.tintColor,
-    fontFamily: 'montserratBold',
-    fontWeight: 'bold',
-    fontSize: 30,
-  },
-  subTitle: {
-    alignSelf: 'flex-start',
-    color: Colors.subTitle,
-    fontFamily: 'montserratBold',
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-  form: {
-    flex: 1,
-  },
-  textInputRoot: {
-    marginTop: 20,
-    width: Dimensions.get('window').width - 40,
-    borderBottomWidth: 1,
-  },
-  phoneTextInputWrapper: {
-    marginTop: 20,
-  },
-  phoneTextInputRoot: {
-    width: Dimensions.get('window').width - 40,
-    borderBottomWidth: 1,
-  },
-  countryPickerButtonWrapper: {
-    position: 'absolute',
-    zIndex: 99,
-    top: 15,
-  },
-  countryPickerButton: {
-    padding: 5,
-  },
-  countryPickerLabel: {
-    color: Colors.textColorGrey,
-    fontFamily: 'montserratBold',
-    fontWeight: 'bold',
-  },
-  textInput: {
-    color: Colors.textColorGrey,
-    fontSize: 14,
-  },
-  textInputLabel: {
-    color: Colors.textColorGrey,
-    fontSize: 12,
-  },
-  phoneTextInput: {
-    color: Colors.textColorGrey,
-    fontSize: 14,
-    paddingLeft: 45,
-  },
-  phoneTextInputLabel: {
-    fontSize: 12,
-    paddingLeft: 45,
-    color: Colors.textColorGrey,
-  },
-  formFooter: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 40,
-  },
-  flexStart: {
-    flex: 1,
-    height: 60,
-  },
-  signinLabelStyle: {
-    color: Colors.tintColor,
-    fontFamily: 'montserratBold',
-    fontSize: 18,
-    paddingTop: 18,
-  },
-  flexEnd: {
-    flex: 1,
-    alignItems: 'flex-end',
-    height: 60,
-  },
-  circleButton: {
-    backgroundColor: Colors.tintColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-  },
-  circleButtonDisabled: {
-    backgroundColor: Colors.tintColorDisabled,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-  },
-  footerContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  footerLink: {
-    color: Colors.tintColor,
-    fontFamily: 'montserratBold',
-    fontSize: 14,
-    textDecorationLine: 'underline',
-  },
-});
+import styles from '../stylesheets/signup';
 
 export default class SignUp extends Component {
   state = {
@@ -187,8 +27,19 @@ export default class SignUp extends Component {
     isLoading: false,
     countryCode: 'IN',
     showCountryPicker: false,
-    countryCallingCode: '+91'
+    countryCallingCode: '+91',
+    signupError: false
   };
+
+  constructor(props) {
+    super(props);
+    if (this.props.route &&
+      this.props.route.params) {
+      if (this.props.route.params.signupError) this.state.signupError = this.props.route.params.signupError;
+      if (this.props.route.params.email) this.state.emailInput = this.props.route.params.email;
+      if (this.props.route.params.phone) this.state.phoneInput = this.props.route.params.phone;
+    }
+  }
 
   onSelect = (country) => {
     this.setState({
@@ -326,18 +177,24 @@ export default class SignUp extends Component {
           visible={this.state.isLoading}
           message={'Please wait while we sign you up...'}
         />
+        <ErrorDialog
+          title={'Signup Failed'}
+          visible={this.state.signupError}
+          message={'Account already exists with given email!'}
+          onDismiss={() => {
+            this.setState({ signupError: false });
+          }}
+        />
       </SafeAreaView>
     );
   }
 
   signUp = () => {
-    this.setState({ isLoading: true });
-    setTimeout(() => {
-      this.setState({ isLoading: false });
-      this.props.navigation.push('PINScreen', {
-        mode: PIN_SCREEN_MODE.SIGNUP_PIN
-      });
-    }, 4000);
+    this.props.navigation.push('PINScreen', {
+      mode: PIN_SCREEN_MODE.SIGNUP_PIN,
+      email: this.state.emailInput,
+      phone: this.state.countryCallingCode + this.state.phoneInput,
+    });
   }
 
   getSignUpButtonStyle = () => {
@@ -347,6 +204,7 @@ export default class SignUp extends Component {
   }
 
   onEmailChange = (emailInput) => {
+    emailInput = emailInput.toLowerCase();
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput)) {
       this.setState({ emailInput: emailInput, isEmailValid: true });
     } else {
@@ -363,7 +221,7 @@ export default class SignUp extends Component {
   }
 
   onPhoneChange = (phoneInput) => {
-    let parsedNumber, isPhoneValid;
+    let parsedNumber;
     try {
       parsedNumber = phoneUtil.parse(this.state.countryCallingCode + phoneInput);
     } catch (e) {}

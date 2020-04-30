@@ -1,75 +1,21 @@
 import React, { Component } from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
   Text,
   View,
   Image,
-  Dimensions,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   TextInput
 } from 'react-native';
 import LoadingIndicator from '../components/loading-indicator';
-import Colors from '../constants/Colors';
 import { PIN_SCREEN_MODE } from './pin';
 const mailImage = require('../assets/images/icons/mail.png');
 const smsImage = require('../assets/images/icons/sms.png');
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  container: {
-    flex: 1,
-    height: Dimensions.get('window').height,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginStart: 20,
-    marginEnd: 20,
-  },
-  titleImage: {
-    height: 100,
-    resizeMode: 'contain',
-    marginBottom: 20,
-  },
-  title: {
-    color: Colors.tintColor,
-    fontFamily: 'montserratBold',
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  subTitle: {
-    color: Colors.textColorGrey,
-    fontFamily: 'montserrat',
-    fontSize: 14,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  otpInput: {
-    height: 40,
-    width: 200,
-    fontSize: 18,
-    textAlign: 'center',
-    letterSpacing: 10,
-    fontFamily: 'montserratBold',
-  },
-  button: {
-    marginTop: 10,
-    backgroundColor: Colors.tintColor,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    color: '#FFF',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontFamily: 'montserratBold',
-  },
-});
+import styles from '../stylesheets/verification';
+import APIService from '../services/api-services';
+import ErrorDialog from '../components/error-dialog';
 
 export const VERIFICATION_MODE = {
   SMS: 'sms',
@@ -77,21 +23,26 @@ export const VERIFICATION_MODE = {
 };
 
 export default class VerificationScreen extends Component {
+  accountDetails = null;
   state = {
     isLoading: false,
     isOTPScreen: true,
     mode: VERIFICATION_MODE.EMAIL,
-    otp: null
+    otp: null,
+    errorMessage: 'You have entered Invalid or Expired OTP!',
+    errorTitle: 'Verification Failed',
+    showError: false,
   };
 
   constructor(props) {
     super(props);
-    if (
-      this.props.route &&
-      this.props.route.params &&
-      this.props.route.params.mode
-    )
-    this.state.mode = this.props.route.params.mode;
+    if (this.props.route && this.props.route.params) {
+      if (this.props.route.params.mode)
+        this.state.mode = this.props.route.params.mode;
+      if (this.props.route.params.accountDetails)
+        this.accountDetails = this.props.route.params.accountDetails;
+    }
+    
   }
 
   onSelect = (country) => {
@@ -121,7 +72,7 @@ export default class VerificationScreen extends Component {
               {this.state.mode === VERIFICATION_MODE.SMS && (
                 <TextInput
                   style={styles.otpInput}
-                  onChangeText={(otp) => this.setState({ otp })}
+                  onChangeText={this.otpInput}
                   value={this.state.otp}
                   placeholder={'- - - -'}
                   maxLength={4}
@@ -132,14 +83,27 @@ export default class VerificationScreen extends Component {
                 style={styles.button}
                 onPress={this.onButtonPress}
               >
-                <Text style={styles.buttonText} >{this.getButtonTitle()}</Text>
+                <Text style={styles.buttonText}>{this.getButtonTitle()}</Text>
               </TouchableOpacity>
+              {this.state.mode === VERIFICATION_MODE.SMS && (
+                <TouchableOpacity onPress={this.resendOTP}>
+                  <Text style={styles.linkButton}>Resend OTP</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
         <LoadingIndicator
           visible={this.state.isLoading}
-          message={'Verifying otp...'}
+          message={'Please wait!'}
+        />
+        <ErrorDialog
+          title={this.state.errorTitle}
+          visible={this.state.showError}
+          message={this.state.errorMessage}
+          onDismiss={() => {
+            this.setState({ showError: false });
+          }}
         />
       </SafeAreaView>
     );
@@ -177,17 +141,60 @@ export default class VerificationScreen extends Component {
     }
   }
 
+  otpInput = (otp) => {
+    this.state.otp = otp;
+    this.setState({ otp });
+    if (otp.length == 4) {
+      this.verifyOTP();
+    }
+  }
+
   onButtonPress = () => {
     if (this.state.mode === VERIFICATION_MODE.SMS) {
-      // TODO Make signup API Call
-        this.setState({ isLoading: true });
-        setTimeout(() => {
-          this.setState({ isLoading: false, mode: VERIFICATION_MODE.EMAIL });
-        }, 4000);
+        this.verifyOTP()
     } else {
       this.props.navigation.replace('PINScreen', {
         mode: PIN_SCREEN_MODE.LOGIN_PIN,
       });
     }
+  }
+
+  verifyOTP = () => {
+    this.setState({ isLoading: true });
+    APIService.verifyOTP(this.accountDetails.email, this.accountDetails.phoneNumber, this.state.otp)
+      .then(() => {
+        this.setState({ isLoading: false, mode: VERIFICATION_MODE.EMAIL });
+      })
+      .catch((error) => {
+        this.setState({
+          isLoading: false,
+          showError: true,
+          errorMessage: 'You have entered Invalid or Expired OTP!',
+          errorTitle: 'Verification Failed',
+        });
+      })
+      .finally(() => this.setState({ isLoading: false }));
+  }
+
+   resendOTP = () => {
+    this.setState({ isLoading: true });
+    APIService.resendOTP(this.accountDetails.email, this.accountDetails.phoneNumber)
+      .then(() => {
+        this.setState({
+          isLoading: false,
+          showError: true,
+          errorMessage: 'OTP is sent to your mobile!',
+          errorTitle: 'OTP sent',
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          isLoading: false,
+          showError: true,
+          errorMessage: 'Unable to send OTP now. Try again later!',
+          errorTitle: 'OTP resend failed!',
+        });
+      })
+      .finally(() => this.setState({ isLoading: false }));
   }
 }
