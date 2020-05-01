@@ -98,6 +98,12 @@ export default class SignUp extends Component {
                       <Text style={styles.countryPickerLabel}>
                         {this.state.countryCallingCode}
                       </Text>
+                      <Icon
+                        name={'ios-arrow-down'}
+                        size={18}
+                        color={Colors.subTitle}
+                        style={{paddingStart: 5}}
+                      />
                     </TouchableOpacity>
                     <CountryPicker
                       theme={{

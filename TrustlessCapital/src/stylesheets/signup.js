@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 import Colors from '../constants/Colors';
 
 
-export default styles = StyleSheet.create({
+export default (styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
@@ -87,6 +87,7 @@ export default styles = StyleSheet.create({
   },
   countryPickerButton: {
     padding: 5,
+    flexDirection: 'row',
   },
   countryPickerLabel: {
     color: Colors.textColorGrey,
@@ -104,11 +105,11 @@ export default styles = StyleSheet.create({
   phoneTextInput: {
     color: Colors.textColorGrey,
     fontSize: 14,
-    paddingLeft: 45,
+    paddingLeft: 60,
   },
   phoneTextInputLabel: {
     fontSize: 12,
-    paddingLeft: 45,
+    paddingLeft: 60,
     color: Colors.textColorGrey,
   },
   formFooter: {
@@ -159,4 +160,4 @@ export default styles = StyleSheet.create({
     fontSize: 14,
     textDecorationLine: 'underline',
   },
-});
+}));
