@@ -16,12 +16,19 @@ import SecurityServices from '../services/security';
 export default class DashboardScreen extends Component {
   state = {
     isLoading: false,
-    appState: AppState.currentState
+    appState: AppState.currentState,
+    pk : '' //TODO Remove this afterwards
   };
   authState = {};
 
   constructor(props) {
     super(props);
+    if (this.props.route && this.props.route.params) {
+      if (this.props.route.params.accountDetails)
+        this.accountDetails = this.props.route.params.accountDetails;
+      if (this.props.route.params.pk)
+        this.state.pk = this.props.route.params.pk;
+    }
   }
 
   componentDidMount() {
@@ -48,6 +55,7 @@ export default class DashboardScreen extends Component {
           <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.container}>
               <Text style={styles.title}>Dashboard</Text>
+              <Text style={styles.title}>{this.state.pk}</Text>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

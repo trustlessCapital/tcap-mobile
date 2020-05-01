@@ -91,8 +91,11 @@ const fetchAccountDetails = (pin) => {
   });
 }
 
-export default SecurityServices = {
+export default (SecurityServices = {
   handleLocalAuthorization,
   storeAccountDetails,
   fetchAccountDetails,
-};
+  generateKey,
+  decryptData,
+  encryptData,
+});

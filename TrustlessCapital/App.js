@@ -26,6 +26,7 @@ import { PIN_SCREEN_MODE } from './src/constants';
 import VerificationScreen from './src/screens/verification';
 import DashboardScreen from './src/screens/dashboard';
 import styles from './src/stylesheets/app';
+
 const logoImage = require('./assets/splash.png');
 
 const navigationOptions = {headerShown: false};

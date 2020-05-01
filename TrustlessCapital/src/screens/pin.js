@@ -17,6 +17,7 @@ import APIService from '../services/api-services';
 import styles from '../stylesheets/pin';
 import SecurityServices from '../services/security';
 import { PIN_SCREEN_MODE } from '../constants';
+import WalletServices from '../services/wallet-services';
 
 export default class PINScreen extends Component {
   email = null;
@@ -314,19 +315,27 @@ export default class PINScreen extends Component {
       return;
     }
     this.setState({ isLoading: true });
-    APIService.signUp(this.email, this.phone)
-      .then((accountDetails) => {
-        SecurityServices.storeAccountDetails(accountDetails, this.state.pin).then(() => {
-          this.setState({ isLoading: false });
-          this.props.navigation.popToTop();
-          this.props.navigation.replace('VerificationScreen', {
-            mode: VERIFICATION_MODE.SMS,
-            accountDetails: accountDetails,
+    return APIService.signUp(this.email, this.phone)
+      .then(accountDetails => {
+        return SecurityServices.storeAccountDetails(
+          accountDetails,
+          this.state.pin,
+        ).then(() => {
+          return WalletServices.createAndStorePrivateKey(
+            this.state.pin,
+            accountDetails.email,
+          ).then(() => {
+            this.setState({isLoading: false});
+            this.props.navigation.popToTop();
+            this.props.navigation.replace('VerificationScreen', {
+              mode: VERIFICATION_MODE.SMS,
+              accountDetails: accountDetails,
+            });
           });
         });
       })
-      .catch((error) => {
-        this.setState({ isLoading: false });
+      .catch(error => {
+        this.setState({isLoading: false});
         if (error.status == 409) {
           this.props.navigation.popToTop();
           this.props.navigation.replace('SignUp', {
@@ -335,12 +344,13 @@ export default class PINScreen extends Component {
         } else {
           this.setState({
             showError: true,
-            errorMessage: 'Error occured in signing you up! Please try later!',
+            errorMessage:
+              'Error occured in signing you up! Please try later!',
             errorTitle: 'Signup Failed',
           });
         }
       })
-      .finally(() => this.setState({ isLoading: false }));
+      .finally(() => this.setState({isLoading: false}));
   };
 
   failedLoginOrSignUp = () => {
@@ -372,8 +382,12 @@ export default class PINScreen extends Component {
                     : VERIFICATION_MODE.EMAIL,
                 });
               } else {
-                this.props.navigation.replace('DashboardScreen', {
-                  accountDetails: accountDetails,
+                // TODO: Remove this after implementing dashboard.
+                WalletServices.getPrivateKey(this.state.pin).then((pk) => {
+                  this.props.navigation.replace('DashboardScreen', {
+                    accountDetails: accountDetails,
+                    pk: pk
+                  });
                 });
               }
             });
