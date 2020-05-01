@@ -13,7 +13,8 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
+  Image,
+  KeyboardAvoidingView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
@@ -24,6 +25,8 @@ import PINScreen from './src/screens/pin';
 import { PIN_SCREEN_MODE } from './src/constants';
 import VerificationScreen from './src/screens/verification';
 import DashboardScreen from './src/screens/dashboard';
+import styles from './src/stylesheets/app';
+const logoImage = require('./assets/splash.png');
 
 const navigationOptions = {headerShown: false};
 const Stack = createStackNavigator();
@@ -64,11 +67,14 @@ export default function App(props) {
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
       <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <ScrollView contentInsetAdjustmentBehavior="automatic">
-            <Text>HLOADING!!</Text>
-          </ScrollView>
+        <SafeAreaView style={styles.wrapper}>
+          <KeyboardAvoidingView style={{flex: 1}}>
+            <ScrollView contentContainerStyle={{flexGrow: 1}}>
+              <View style={styles.container}>
+                <Image style={styles.titleImage} source={logoImage} />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </SafeAreaView>
       </>
     );
