@@ -383,7 +383,7 @@ export default class PINScreen extends Component {
                 });
               } else {
                 // TODO: Remove this after implementing dashboard.
-                WalletServices.getPrivateKey(this.state.pin).then((pk) => {
+                WalletServices.getPrivateKey(this.state.pin, accountDetails.email).then((pk) => {
                   this.props.navigation.replace('DashboardScreen', {
                     accountDetails: accountDetails,
                     pk: pk

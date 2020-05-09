@@ -1,5 +1,6 @@
 //const SERVICE_HOST = "http://10.0.2.2:7001";
-const SERVICE_HOST = 'http://localhost:7001';
+//const SERVICE_HOST = 'http://localhost:7001';
+const SERVICE_HOST = 'http://3.15.205.156';
 const API_PREFIX = "/api";
 
 function processResponse(response) {
