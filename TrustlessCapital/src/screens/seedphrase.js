@@ -8,17 +8,24 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import styles from '../stylesheets/seedphrase';
+import WalletServices from '../services/wallet-services';
 
 export default class SeedPhraseScreen extends Component {
   state = {
     saveButtonText: 'Save',
-    resetButtonText: 'Reset'
+    resetButtonText: 'Reset',
+    seedPhrase: []
   };
-
-  seedPhrase = ["phrase1", "phrase2", "phrase3", "phrase4", "phrase5", "phrase6", "phrase1", "phrase2", "phrase3", "phrase4", "phrase5", "phrase6"];
 
   constructor(props) {
     super(props);
+    this._generateMnemonic();
+  }
+
+  _generateMnemonic() {
+    let seedPhrase = WalletServices.createMnemonic().split(' ');
+    this.state.seedPhrase = seedPhrase;
+    this.setState({seedPhrase});
   }
 
   _getPhraseItem(phrase, index) {
@@ -37,7 +44,7 @@ export default class SeedPhraseScreen extends Component {
   render() {
     let phrasesView = [];
     let phrases = [];
-    this.seedPhrase.forEach((phrase, index) => {
+    this.state.seedPhrase.forEach((phrase, index) => {
       phrases.push(this._getPhraseItem(phrase, index));
       if ((index + 1) % 2 === 0) {
         phrasesView.push(<View style={styles.phraseRow}>{phrases}</View>);
@@ -48,29 +55,31 @@ export default class SeedPhraseScreen extends Component {
     return (
       <SafeAreaView style={styles.wrapper}>
         <KeyboardAvoidingView style={{flex: 1}}>
-            <View style={styles.container}>
-              <Text style={styles.mainTitle}>Mnemonic Seed Phrase</Text>
-              <View style={styles.phrasesWrapper}>{phrasesView}</View>
-              <View>
-                <Text style={styles.title}>Disclaimer</Text>
-                <Text style={styles.subTitle}>
-                  Please note down your 12 word mnemonic seed phrase in the
-                  displayed order and save it in a secure manner.
-                </Text>
-              </View>
-              <View style={styles.footer}>
-                <TouchableOpacity style={styles.primaryButtonStyle}>
-                  <Text style={styles.primaryButtonText}>
-                    {this.state.saveButtonText}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.secondaryButtonStyle}>
-                  <Text style={styles.secondaryButtonText}>
-                    {this.state.resetButtonText}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+          <View style={styles.container}>
+            <Text style={styles.mainTitle}>Mnemonic Seed Phrase</Text>
+            <View style={styles.phrasesWrapper}>{phrasesView}</View>
+            <View>
+              <Text style={styles.title}>Disclaimer</Text>
+              <Text style={styles.subTitle}>
+                Please note down your 12 word mnemonic seed phrase in the
+                displayed order and save it in a secure manner.
+              </Text>
             </View>
+            <View style={styles.footer}>
+              <TouchableOpacity style={styles.primaryButtonStyle}>
+                <Text style={styles.primaryButtonText}>
+                  {this.state.saveButtonText}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.secondaryButtonStyle}
+                onPress={this._generateMnemonic.bind(this)}>
+                <Text style={styles.secondaryButtonText}>
+                  {this.state.resetButtonText}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     );

@@ -12,6 +12,18 @@ const createPrivateKey = () => {
   return ethers.Wallet.createRandom().privateKey;
 };
 
+const createMnemonic = () => {
+  return ethers.Wallet.createRandom().mnemonic
+};
+
+const createAddressFromPrivateKey = (pk) => {
+  return new ethers.Wallet(pk).address;
+};
+
+const createPrivateKeyFromMnemonic = (mnemonic, index) => {
+  return ethers.Wallet.fromMnemonic(mnemonic, "m/44'/60'/0'/0/" + index).privateKey;
+};
+
 const encryptWithEC = (text, label) => {
   return ECEncryption.encrypt({
     data: text,
@@ -65,6 +77,9 @@ export default (WalletServices = {
   createAndStorePrivateKey,
   getPrivateKey,
   encryptWithEC,
-  decryptWithEC
+  decryptWithEC,
+  createMnemonic,
+  createAddressFromPrivateKey,
+  createPrivateKeyFromMnemonic
 });
 
