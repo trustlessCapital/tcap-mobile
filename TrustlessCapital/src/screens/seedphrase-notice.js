@@ -192,8 +192,6 @@ export default class SeedPhraseNoticeScreen extends Component {
     return (
       <SafeAreaView style={styles.wrapper}>
         <KeyboardAvoidingView style={{flex: 1}}>
-          <ScrollView
-            contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.container}>
               <Carousel
                 layout={'default'}
@@ -229,7 +227,6 @@ export default class SeedPhraseNoticeScreen extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
     );

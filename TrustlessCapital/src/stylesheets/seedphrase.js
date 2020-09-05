@@ -82,17 +82,34 @@ export default (styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 40,
   },
-  buttonStyle: {
+  primaryButtonStyle: {
     borderRadius: 5,
     backgroundColor: Colors.tintColor,
     width: Dimensions.get('window').width - 80,
+    marginTop: 10,
     paddingHorizontal: 20,
     paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {
+  secondaryButtonStyle: {
+    borderRadius: 5,
+    backgroundColor: Colors.tintColorGreyed,
+    width: Dimensions.get('window').width - 80,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  primaryButtonText: {
     color: Colors.white,
+    fontFamily: 'Montserrat-Bold',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  secondaryButtonText: {
+    color: Colors.textColorGrey,
     fontFamily: 'Montserrat-Bold',
     fontWeight: 'bold',
     fontSize: 14,
