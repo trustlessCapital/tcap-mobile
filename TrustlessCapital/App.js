@@ -9,10 +9,8 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
   ScrollView,
   View,
-  Text,
   Image,
   KeyboardAvoidingView,
 } from 'react-native';
@@ -22,11 +20,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SignUp from './src/screens/signup';
 import PINScreen from './src/screens/pin';
+import SeedPhraseNoticeScreen from './src/screens/seedphrase-notice';
+import SeedPhraseScreen from './src/screens/seedphrase';
 import { PIN_SCREEN_MODE } from './src/constants';
 import VerificationScreen from './src/screens/verification';
 import DashboardScreen from './src/screens/dashboard';
 import styles from './src/stylesheets/app';
-import WalletServices from './src/services/wallet-services';
 
 const logoImage = require('./assets/splash.png');
 
@@ -58,7 +57,7 @@ export default function App(props) {
         if (account) {
           initalRoute = 'PINScreen';
         } else {
-          initalRoute = 'SignUp';
+          initalRoute = 'SignUp'; 
         }
         setLoadingComplete(true);
       }
@@ -99,6 +98,16 @@ export default function App(props) {
             <Stack.Screen
               name="VerificationScreen"
               component={VerificationScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="SeedPhraseNoticeScreen"
+              component={SeedPhraseNoticeScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="SeedPhraseScreen"
+              component={SeedPhraseScreen}
               options={navigationOptions}
             />
             <Stack.Screen
