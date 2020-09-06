@@ -392,7 +392,6 @@ class SortableGrid extends Component {
   }
 
   _saveItemOrder = items => {
-    console.log('>>>>>>>>>>>>>>ITEM ORDER CALLED');
     this.resetItemOrder();
     items.forEach((item, index) => {
       const foundKey = _.findKey(
