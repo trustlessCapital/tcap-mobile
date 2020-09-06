@@ -10,6 +10,7 @@ import {
 import styles from '../stylesheets/seedphrase';
 import WalletServices from '../services/wallet-services';
 import SortableGrid from '../components/sortable-grid';
+import ConfirmDialog from '../components/confirm-dialog';
 import * as _ from 'lodash';
 
 export default class SeedPhraseScreen extends Component {
@@ -18,7 +19,8 @@ export default class SeedPhraseScreen extends Component {
     resetButtonText: 'Reset',
     seedPhrase: [],
     isVerificationMode: false,
-    seedPhraseText: ''
+    seedPhraseText: '',
+    confirmResetDialog: false,
   };
 
   constructor(props) {
@@ -62,11 +64,9 @@ export default class SeedPhraseScreen extends Component {
   }
 
   _onResetButtonClick() {
+    this._generateMnemonic();
     if (this.state.isVerificationMode) {
       this.setState({isVerificationMode: false});
-      this._generateMnemonic();
-    } else {
-      this._generateMnemonic();
     }
   }
 
@@ -108,7 +108,7 @@ export default class SeedPhraseScreen extends Component {
               <Text style={styles.title}>Disclaimer</Text>
               <Text style={styles.subTitle}>
                 {this.state.isVerificationMode
-                  ? 'Please hold each shuffled phrase and reorder it correctly to your 12 word mnemonic seed phrase to verify.'
+                  ? 'Press and hold each shuffled phrase and reorder it correctly to your 12 word mnemonic seed phrase to verify.'
                   : 'Please note down your 12 word mnemonic seed phrase in the displayed order and save it in a secure manner.'}
               </Text>
             </View>
@@ -123,12 +123,24 @@ export default class SeedPhraseScreen extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.secondaryButtonStyle}
-                onPress={this._onResetButtonClick.bind(this)}>
+                onPress={() => {this.setState({confirmResetDialog: true});}}>
                 <Text style={styles.secondaryButtonText}>
                   {this.state.resetButtonText}
                 </Text>
               </TouchableOpacity>
             </View>
+            <ConfirmDialog
+              title={'Reset Mnemonic Phrase'}
+              visible={this.state.confirmResetDialog}
+              message={'Are you sure you want to reset mnemonic phrase?'}
+              onDismiss={() => {
+                this.setState({confirmResetDialog: false});
+              }}
+              onOk={() => {
+                this._onResetButtonClick();
+                this.setState({confirmResetDialog: false});
+              }}
+            />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
