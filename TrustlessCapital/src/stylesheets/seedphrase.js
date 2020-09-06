@@ -41,8 +41,8 @@ export default (styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   phrasesWrapper: {
-    flex: 1,
-    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    width: Dimensions.get('window').width,
   },
   phraseRow: {
     flexDirection: 'row',
@@ -52,10 +52,9 @@ export default (styles = StyleSheet.create({
   phraseItem: {
     borderRadius: 5,
     backgroundColor: Colors.tintColorGreyed,
-    width: Dimensions.get('window').width / 2 - 60,
-    height: 50,
-    marginHorizontal: 20,
-    alignItems: 'center',
+    width: Dimensions.get('window').width / 2 - 40,
+    height: 45,
+    marginStart: 20,
     justifyContent: 'center',
   },
   phraseItemWrapper: {
@@ -78,9 +77,15 @@ export default (styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
   },
+  header: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   footer: {
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 20,
+    marginBottom: 20,
   },
   primaryButtonStyle: {
     borderRadius: 5,
@@ -88,7 +93,7 @@ export default (styles = StyleSheet.create({
     width: Dimensions.get('window').width - 80,
     marginTop: 10,
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -97,7 +102,7 @@ export default (styles = StyleSheet.create({
     backgroundColor: Colors.tintColorGreyed,
     width: Dimensions.get('window').width - 80,
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 10,
     marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
