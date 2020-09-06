@@ -11,6 +11,8 @@ import styles from '../stylesheets/seedphrase';
 import WalletServices from '../services/wallet-services';
 import SortableGrid from '../components/sortable-grid';
 import ConfirmDialog from '../components/confirm-dialog';
+import LoadingIndicator from '../components/loading-indicator';
+import ErrorDialog from '../components/error-dialog';
 import * as _ from 'lodash';
 import { preventScreenCaptureAsync, allowScreenCaptureAsync } from 'expo-screen-capture';
 
@@ -22,6 +24,9 @@ export default class SeedPhraseScreen extends Component {
     isVerificationMode: false,
     seedPhraseText: '',
     confirmResetDialog: false,
+    invalidOrder: false,
+    isLoading: false,
+    loadingMessage: 'Please wait.. We are setting up your wallet!'
   };
 
   constructor(props) {
@@ -51,13 +56,19 @@ export default class SeedPhraseScreen extends Component {
   }
 
   _checkReshuffledSeedPhrase() {
+    if (!this.seedPhraseOrder) {
+      this.setState({ invalidOrder: true });
+      return;
+    }
     let seedPhraseUserOrder = [];
     this.seedPhraseOrder.forEach((o) => {
       seedPhraseUserOrder.push(this.state.seedPhrase[o.key]);
     });
     if (seedPhraseUserOrder.join(' ') == this.originalSeedPhrase.join(' ')) {
+      this.setState({ isLoading: true });
       console.log("TRUE");
     } else {
+      this.setState({invalidOrder: true});
       console.log('FALSE');
     }
   }
@@ -147,6 +158,18 @@ export default class SeedPhraseScreen extends Component {
               onOk={() => {
                 this._onResetButtonClick();
                 this.setState({confirmResetDialog: false});
+              }}
+            />
+            <LoadingIndicator
+              visible={this.state.isLoading}
+              message={this.state.loadingMessage}
+            />
+            <ErrorDialog
+              title={'Invalid seed phrase order'}
+              visible={this.state.invalidOrder}
+              message={'Please ensure the correct order of your 12 word seed phrase!'}
+              onDismiss={() => {
+                this.setState({invalidOrder: false});
               }}
             />
           </View>

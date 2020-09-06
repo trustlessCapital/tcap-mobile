@@ -38,6 +38,11 @@ const decryptWithEC = (cipherText, label) => {
   });
 };
 
+const createAddressFromMnemonic = (seedPhrase) => {
+  const pk = createPrivateKeyFromMnemonic(seedPhrase, 1);
+  const address = createAddressFromPrivateKey(pk);
+};
+
 const createAndStorePrivateKey = (pin, email) => {
   const pk = createPrivateKey();
   return SecurityServices.generateKey(pin, 'salt').then(key => {
@@ -79,7 +84,6 @@ export default (WalletServices = {
   encryptWithEC,
   decryptWithEC,
   createMnemonic,
-  createAddressFromPrivateKey,
-  createPrivateKeyFromMnemonic
+  createAddressFromMnemonic,
 });
 
