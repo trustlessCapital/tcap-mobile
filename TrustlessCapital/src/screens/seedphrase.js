@@ -12,6 +12,7 @@ import WalletServices from '../services/wallet-services';
 import SortableGrid from '../components/sortable-grid';
 import ConfirmDialog from '../components/confirm-dialog';
 import * as _ from 'lodash';
+import { preventScreenCaptureAsync, allowScreenCaptureAsync } from 'expo-screen-capture';
 
 export default class SeedPhraseScreen extends Component {
   state = {
@@ -28,9 +29,13 @@ export default class SeedPhraseScreen extends Component {
     this._generateMnemonic();
   }
 
-  navigateBack = () => {
-    this.props.navigation.goBack();
-  };
+  componentDidMount() {
+    preventScreenCaptureAsync(); 
+  }
+
+  componentWillUnmount() {
+    allowScreenCaptureAsync(); 
+  }
 
   _shuffleSeedPhrase(array) {
     for (let i = array.length - 1; i > 0; i--) {
