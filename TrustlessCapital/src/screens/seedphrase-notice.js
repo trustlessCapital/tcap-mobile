@@ -185,7 +185,7 @@ export default class SeedPhraseNoticeScreen extends Component {
   }
 
   _goToSeedPhraseScreen() {
-    //this.props.navigation.replace('dashboard');
+    this.props.navigation.navigate('SeedPhraseScreen');
   }
 
   render() {

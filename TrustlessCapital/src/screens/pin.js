@@ -321,17 +321,17 @@ export default class PINScreen extends Component {
           accountDetails,
           this.state.pin,
         ).then(() => {
-          return WalletServices.createAndStorePrivateKey(
+          /* return WalletServices.createAndStorePrivateKey(
             this.state.pin,
             accountDetails.email,
-          ).then(() => {
-            this.setState({isLoading: false});
-            this.props.navigation.popToTop();
-            this.props.navigation.replace('VerificationScreen', {
-              mode: VERIFICATION_MODE.SMS,
-              accountDetails: accountDetails,
-            });
+          ).then(() => { */
+          this.setState({isLoading: false});
+          this.props.navigation.popToTop();
+          this.props.navigation.replace('VerificationScreen', {
+            mode: VERIFICATION_MODE.SMS,
+            accountDetails: accountDetails,
           });
+          /* }); */
         });
       })
       .catch(error => {
@@ -382,13 +382,19 @@ export default class PINScreen extends Component {
                     : VERIFICATION_MODE.EMAIL,
                 });
               } else {
-                // TODO: Remove this after implementing dashboard.
-                WalletServices.getPrivateKey(this.state.pin, accountDetails.email).then((pk) => {
-                  this.props.navigation.replace('DashboardScreen', {
+                if (!accountDetails.isWalletCreated) {
+                  this.props.navigation.replace('SeedPhraseNoticeScreen', {
                     accountDetails: accountDetails,
-                    pk: pk
                   });
-                });
+                } else {
+                  // TODO: Remove this after implementing dashboard.
+                  WalletServices.getPrivateKey(this.state.pin, accountDetails.email).then((pk) => {
+                    this.props.navigation.replace('DashboardScreen', {
+                      accountDetails: accountDetails,
+                      pk: pk
+                    });
+                  });
+                }
               }
             });
           })

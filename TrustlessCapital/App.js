@@ -57,7 +57,7 @@ export default function App(props) {
         if (account) {
           initalRoute = 'PINScreen';
         } else {
-          initalRoute = 'SeedPhraseScreen'; // 'SignUp'; 
+          initalRoute = 'SignUp'; 
         }
         setLoadingComplete(true);
       }

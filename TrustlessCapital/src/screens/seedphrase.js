@@ -28,6 +28,10 @@ export default class SeedPhraseScreen extends Component {
     this._generateMnemonic();
   }
 
+  navigateBack = () => {
+    this.props.navigation.goBack();
+  };
+
   _shuffleSeedPhrase(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -101,8 +105,7 @@ export default class SeedPhraseScreen extends Component {
         <KeyboardAvoidingView style={{flex: 1}}>
           <View style={styles.container}>
             <Text style={styles.mainTitle}>
-              {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
-              Phrase
+              {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed Phrase
             </Text>
             <View style={styles.header}>
               <Text style={styles.title}>Disclaimer</Text>
