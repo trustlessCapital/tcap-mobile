@@ -19,6 +19,10 @@ PODS:
   - EXPermissions (8.1.0):
     - UMCore
     - UMPermissionsInterface
+  - EXRandom (8.2.1):
+    - UMCore
+  - EXScreenCapture (1.0.1):
+    - UMCore
   - FBLazyVector (0.62.2)
   - FBReactNativeSpec (0.62.2):
     - Folly (= 2018.10.22.00)
@@ -356,6 +360,8 @@ DEPENDENCIES:
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - EXLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
+  - EXRandom (from `../node_modules/expo-random/ios`)
+  - EXScreenCapture (from `../node_modules/expo-screen-capture/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Flipper (~> 0.33.1)
@@ -454,6 +460,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-local-authentication/ios"
   EXPermissions:
     :path: "../node_modules/expo-permissions/ios"
+  EXRandom:
+    :path: "../node_modules/expo-random/ios"
+  EXScreenCapture:
+    :path: "../node_modules/expo-screen-capture/ios"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -559,6 +569,8 @@ SPEC CHECKSUMS:
   EXImageLoader: 5c9d1bf408443ac4d4f44463eaf3b0d03bc70425
   EXLocalAuthentication: 238cc8f7d647e7676fba045420266da80bf7c2b2
   EXPermissions: d2cafee9c72578ecc9ca121481e6c4a04a798861
+  EXRandom: ba8d15e6bff9563be3d293e88bb51f8222c08c0a
+  EXScreenCapture: 40b360e5ce624d2c42ef70f06b0d71886eb28039
   FBLazyVector: 4aab18c93cd9546e4bfed752b4084585eca8b245
   FBReactNativeSpec: 5465d51ccfeecb7faa12f9ae0024f2044ce4044e
   Flipper: 6c1f484f9a88d30ab3e272800d53688439e50f69
@@ -618,4 +630,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7a67c69242132b82b7d60baa55f8e3dfcd7a5071
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3

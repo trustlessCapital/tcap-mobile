@@ -57,6 +57,16 @@ export default (styles = StyleSheet.create({
     marginStart: 20,
     justifyContent: 'center',
   },
+  phraseItemWithBorder: {
+    borderRadius: 5,
+    backgroundColor: Colors.tintColorGreyed,
+    width: Dimensions.get('window').width / 2 - 40,
+    height: 45,
+    marginStart: 20,
+    justifyContent: 'center',
+    borderColor: Colors.tintColor,
+    borderWidth: 1,
+  },
   phraseItemWrapper: {
     position: 'absolute',
     top: 0,

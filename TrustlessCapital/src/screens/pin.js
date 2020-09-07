@@ -17,7 +17,7 @@ import APIService from '../services/api-services';
 import styles from '../stylesheets/pin';
 import SecurityServices from '../services/security';
 import { PIN_SCREEN_MODE } from '../constants';
-import WalletServices from '../services/wallet-services';
+import WalletUtils from '../services/wallet-utils';
 
 export default class PINScreen extends Component {
   email = null;
@@ -321,7 +321,7 @@ export default class PINScreen extends Component {
           accountDetails,
           this.state.pin,
         ).then(() => {
-          /* return WalletServices.createAndStorePrivateKey(
+          /* return WalletUtils.createAndStorePrivateKey(
             this.state.pin,
             accountDetails.email,
           ).then(() => { */
@@ -385,10 +385,11 @@ export default class PINScreen extends Component {
                 if (!accountDetails.isWalletCreated) {
                   this.props.navigation.replace('SeedPhraseNoticeScreen', {
                     accountDetails: accountDetails,
+                    pin: this.state.pin
                   });
                 } else {
                   // TODO: Remove this after implementing dashboard.
-                  WalletServices.getPrivateKey(this.state.pin, accountDetails.email).then((pk) => {
+                  WalletUtils.getPrivateKey(this.state.pin, accountDetails.email).then((pk) => {
                     this.props.navigation.replace('DashboardScreen', {
                       accountDetails: accountDetails,
                       pk: pk
