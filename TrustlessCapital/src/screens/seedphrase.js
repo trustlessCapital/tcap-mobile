@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import styles from '../stylesheets/seedphrase';
 import WalletUtils from '../services/wallet-utils';
-//import WalletService from '../services/wallet-service';
+import WalletService from '../services/wallet-service';
 import SortableGrid from '../components/sortable-grid';
 import ConfirmDialog from '../components/confirm-dialog';
 import LoadingIndicator from '../components/loading-indicator';
@@ -89,11 +89,18 @@ export default class SeedPhraseScreen extends Component {
           this.pin,
           this.accountDetails.email,
         ).then(pk => {
-          //const walletService = WalletService.getInstance();
-          //walletService.getSyncWallet(pk);
-          this.props.navigation.replace('DashboardScreen', {
-            accountDetails: this.accountDetails,
-            pk: pk,
+          const walletService = WalletService.getInstance();
+          walletService.getSyncWallet(pk).then(() => {
+            walletService.getAccountState(pk).then((accountState) => {
+              console.log('ACCOUNT STATE ::: ', accountState);
+              this.setState({
+                isLoading: false,
+              });
+              this.props.navigation.replace('DashboardScreen', {
+                accountDetails: this.accountDetails,
+                pk: pk,
+              });
+            });
           });
         });
       });

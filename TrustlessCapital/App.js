@@ -26,7 +26,7 @@ import { PIN_SCREEN_MODE } from './src/constants';
 import VerificationScreen from './src/screens/verification';
 import DashboardScreen from './src/screens/dashboard';
 import styles from './src/stylesheets/app';
-//import WalletService from './src/services/wallet-service';
+import WalletService from './src/services/wallet-service';
 
 const logoImage = require('./assets/splash.png');
 
@@ -50,12 +50,8 @@ export default function App(props) {
         };
 
         await performTimeConsumingTask();
-        /* const walletService = await new Promise((resolve, reject) => {
-          setTimeout(() => {
-            return resolve(WalletService.getInstance());
-          }, 1000);
-        });
-        await walletService.init(); */
+        const walletService = WalletService.getInstance();
+        await walletService.init();
 
         account = await AsyncStorage.getItem('account');
       } catch (e) {

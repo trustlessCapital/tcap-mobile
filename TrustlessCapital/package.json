@@ -37,9 +37,7 @@
     "react-native-textinput-effects": "^0.6.1",
     "react-native-unimodules": "^0.9.0",
     "react-native-vector-icons": "^6.6.0",
-    "text-encoding-polyfill": "^0.6.7",
-    "webassemblyjs": "^1.9.0",
-    "zksync": "^0.6.5"
+    "text-encoding-polyfill": "^0.6.7"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
