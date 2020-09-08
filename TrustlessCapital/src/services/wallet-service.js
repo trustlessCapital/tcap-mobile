@@ -3,14 +3,7 @@ import * as zksync from '../lib/zksync/build-src/index';
 
 export default class WalletService {
 
-  constructor() {
-    
-  }
-
-  init = async () => {
-    this.syncProvider = await zksync.getDefaultProvider("rinkeby");
-  }
-
+  constructor() {}
 
   static myInstance = null;
   /**
@@ -24,8 +17,17 @@ export default class WalletService {
     return this.myInstance;
   }
 
+  setPk(pk) {
+    this.pk = pk;
+  }
+
+  getProvider = async () => {
+    this.syncProvider = await zksync.getDefaultProvider("rinkeby");
+  }
+
   getSyncWallet = async (pk) => {
-    try{
+    try {
+      await this.getProvider();
       const ethWallet = WalletUtils.createWallet(pk);
       this.syncWallet = await zksync.Wallet.fromEthSigner(ethWallet, this.syncProvider);
     } catch(e){
@@ -35,11 +37,7 @@ export default class WalletService {
   }
 
   getAccountState = async (pk) => {
-    const ethWallet = WalletUtils.createWallet(pk);
-    this.syncWallet = await zksync.Wallet.fromEthSigner(
-      ethWallet,
-      this.syncProvider,
-    );
+    await this.getSyncWallet(pk);
     return this.syncWallet.getAccountState();
   }
 }

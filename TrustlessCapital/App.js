@@ -50,8 +50,7 @@ export default function App(props) {
         };
 
         await performTimeConsumingTask();
-        const walletService = WalletService.getInstance();
-        await walletService.init();
+        WalletService.getInstance();
 
         account = await AsyncStorage.getItem('account');
       } catch (e) {
