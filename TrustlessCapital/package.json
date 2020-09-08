@@ -14,8 +14,10 @@
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.2.1",
     "@react-navigation/stack": "^5.2.16",
-    "ethers": "^4.0.47",
+    "buffer": "^5.6.0",
+    "ethers": "^5.0.10",
     "expo-local-authentication": "^9.0.0",
+    "expo-random": "^8.2.1",
     "expo-screen-capture": "^1.0.1",
     "google-libphonenumber": "^3.2.9",
     "lodash": "^4.17.20",
@@ -34,7 +36,8 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-textinput-effects": "^0.6.1",
     "react-native-unimodules": "^0.9.0",
-    "react-native-vector-icons": "^6.6.0"
+    "react-native-vector-icons": "^6.6.0",
+    "text-encoding-polyfill": "^0.6.7"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

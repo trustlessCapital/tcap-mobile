@@ -120,6 +120,12 @@ export default class SeedPhraseNoticeScreen extends Component {
 
   constructor(props) {
     super(props);
+    if (this.props.route && this.props.route.params) {
+      if (this.props.route.params.accountDetails)
+        this.accountDetails = this.props.route.params.accountDetails;
+      if (this.props.route.params.pin)
+        this.pin = this.props.route.params.pin;
+    }
   }
 
   _getcarouselItem(item) {
@@ -185,7 +191,10 @@ export default class SeedPhraseNoticeScreen extends Component {
   }
 
   _goToSeedPhraseScreen() {
-    this.props.navigation.navigate('SeedPhraseScreen');
+    this.props.navigation.navigate('SeedPhraseScreen', {
+      pin: this.pin,
+      accountDetails: this.accountDetails,
+    });
   }
 
   render() {
