@@ -36,6 +36,10 @@ const _decryptWithEC = (cipherText, label) => {
   });
 };
 
+const clearPrivateKey = () => {
+  return Keychain.resetGenericPassword();
+}
+
 const createAndStorePrivateKey = (seedPhrase, pin, email) => {
   const pk = _createPrivateKeyFromMnemonic(seedPhrase, "1");
   return SecurityServices.generateKey(pin, 'salt').then(key => {
@@ -52,6 +56,9 @@ const createAndStorePrivateKey = (seedPhrase, pin, email) => {
 const getPrivateKey = (pin, email) => {
   return SecurityServices.generateKey(pin, 'salt').then(key => {
     return Keychain.getGenericPassword().then(cipherText => {
+      if (!cipherText) {
+        return null;
+      }
       cipherText = cipherText.password;
       return _decryptWithEC(cipherText, email).then(encryptedData => {
         try {
@@ -71,12 +78,13 @@ const getPrivateKey = (pin, email) => {
   });
 };
 
-export default WalletUtils = {
+export default (WalletUtils = {
   createAndStorePrivateKey,
   getPrivateKey,
   createMnemonic,
   createWallet,
   createAddressFromPrivateKey,
   _createPrivateKeyFromMnemonic,
-};
+  clearPrivateKey,
+});
 

@@ -22,6 +22,7 @@ import SignUp from './src/screens/signup';
 import PINScreen from './src/screens/pin';
 import SeedPhraseNoticeScreen from './src/screens/seedphrase-notice';
 import SeedPhraseScreen from './src/screens/seedphrase';
+import SeedPhraseRecoveryScreen from './src/screens/seedphrase-recovery';
 import { PIN_SCREEN_MODE } from './src/constants';
 import VerificationScreen from './src/screens/verification';
 import DashboardScreen from './src/screens/dashboard';
@@ -110,6 +111,11 @@ export default function App(props) {
             <Stack.Screen
               name="SeedPhraseScreen"
               component={SeedPhraseScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="SeedPhraseRecoveryScreen"
+              component={SeedPhraseRecoveryScreen}
               options={navigationOptions}
             />
             <Stack.Screen

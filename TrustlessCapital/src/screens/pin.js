@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  AsyncStorage,
   Text,
   View,
   Image,
@@ -52,11 +51,18 @@ export default class PINScreen extends Component {
         this.phone = this.props.route.params.phone;
       if (this.props.route.params.isPinFallback)
         this.isPinFallback = this.props.route.params.isPinFallback;
+      
+      this.recoverAccount = this.props.route.params.recoverAccount;
     }
   }
 
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
+    if (this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN && !this.isPinFallback) {
+      SecurityServices.authenticateOnStartup().then(() => this.allowLogin = true).catch(() => {
+        this.allowLogin = true;
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -82,29 +88,36 @@ export default class PINScreen extends Component {
           <View style={styles.backButtonWrapper}>
             <TouchableOpacity
               style={styles.backButton}
-              onPress={this.navigateBack}
-            >
+              onPress={this.navigateBack}>
               <Icon
                 name={'ios-arrow-back'}
                 size={24}
                 color={Colors.title}
-                style={{ alignSelf: 'center' }}
+                style={{alignSelf: 'center'}}
               />
             </TouchableOpacity>
           </View>
         )}
         <View style={styles.container}>
+          {this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN && (
+            <View style={styles.recoverButtonWrapper}>
+              <TouchableOpacity
+                onPress={this.navigateToRecoverAccount.bind(this)}>
+                <Text style={styles.recoverAccount}>Recover Account</Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <View style={styles.headerContainer}>
             <View style={styles.titleWrapper}>
               <Text style={styles.title}>{this.getTitle()}</Text>
             </View>
             <View style={styles.pinWrapper}>
-              <View style={this.getCircleStyle(1)}></View>
-              <View style={this.getCircleStyle(2)}></View>
-              <View style={this.getCircleStyle(3)}></View>
-              <View style={this.getCircleStyle(4)}></View>
-              <View style={this.getCircleStyle(5)}></View>
-              <View style={this.getCircleStyle(6)}></View>
+              <View style={this.getCircleStyle(1)} />
+              <View style={this.getCircleStyle(2)} />
+              <View style={this.getCircleStyle(3)} />
+              <View style={this.getCircleStyle(4)} />
+              <View style={this.getCircleStyle(5)} />
+              <View style={this.getCircleStyle(6)} />
             </View>
           </View>
         </View>
@@ -112,85 +125,74 @@ export default class PINScreen extends Component {
           <Image
             style={styles.keyPadImage}
             source={require('../../assets/images/backgrounds/pin-pattern.png')}
-          ></Image>
+          />
           <View style={styles.keyPadWrapper}>
             <View style={styles.keyRow}>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('1')}
-              >
+                onPress={() => this.onButtonPress('1')}>
                 <Text style={styles.keyStyle}>1</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('2')}
-              >
+                onPress={() => this.onButtonPress('2')}>
                 <Text style={styles.keyStyle}>2</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('3')}
-              >
+                onPress={() => this.onButtonPress('3')}>
                 <Text style={styles.keyStyle}>3</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.keyRow}>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('4')}
-              >
+                onPress={() => this.onButtonPress('4')}>
                 <Text style={styles.keyStyle}>4</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('5')}
-              >
+                onPress={() => this.onButtonPress('5')}>
                 <Text style={styles.keyStyle}>5</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('6')}
-              >
+                onPress={() => this.onButtonPress('6')}>
                 <Text style={styles.keyStyle}>6</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.keyRow}>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('7')}
-              >
+                onPress={() => this.onButtonPress('7')}>
                 <Text style={styles.keyStyle}>7</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('8')}
-              >
+                onPress={() => this.onButtonPress('8')}>
                 <Text style={styles.keyStyle}>8</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('9')}
-              >
+                onPress={() => this.onButtonPress('9')}>
                 <Text style={styles.keyStyle}>9</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.keyRow}>
-              <View style={styles.key}></View>
+              <View style={styles.key} />
               <TouchableOpacity
                 style={styles.key}
-                onPress={() => this.onButtonPress('0')}
-              >
+                onPress={() => this.onButtonPress('0')}>
                 <Text style={styles.keyStyle}>0</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.key}
-                onPress={this.deleteKeyPress}
-              >
+                onPress={this.deleteKeyPress}>
                 <Icon
                   name={'ios-backspace'}
                   size={22}
                   color="#fff"
-                  style={{ alignSelf: 'center' }}
+                  style={{alignSelf: 'center'}}
                 />
               </TouchableOpacity>
             </View>
@@ -205,7 +207,7 @@ export default class PINScreen extends Component {
           visible={this.state.showError}
           message={this.state.errorMessage}
           onDismiss={() => {
-            this.setState({ showError: false });
+            this.setState({showError: false});
           }}
         />
       </SafeAreaView>
@@ -248,6 +250,12 @@ export default class PINScreen extends Component {
       this.props.navigation.goBack();
     }
   };
+
+  navigateToRecoverAccount = () => {
+    this.props.navigation.push('SignUp', {
+      recoverAccount: true
+    });
+  }
 
   deleteKeyPress = () => {
     if (
@@ -315,23 +323,30 @@ export default class PINScreen extends Component {
       return;
     }
     this.setState({ isLoading: true });
-    return APIService.signUp(this.email, this.phone)
+    let signUpP;
+    if (this.recoverAccount) {
+      signUpP = APIService.recoverAccount(this.email, this.phone);
+    } else {
+      signUpP = APIService.signUp(this.email, this.phone);
+    }
+    return signUpP
       .then(accountDetails => {
-        return SecurityServices.storeAccountDetails(
-          accountDetails,
-          this.state.pin,
-        ).then(() => {
-          /* return WalletUtils.createAndStorePrivateKey(
+        let clearStorageP = Promise.resolve();
+        if (this.recoverAccount) {
+          clearStorageP = this.clearStorage();
+        }
+        clearStorageP.then(() => {
+          return SecurityServices.storeAccountDetails(
+            accountDetails,
             this.state.pin,
-            accountDetails.email,
-          ).then(() => { */
-          this.setState({isLoading: false});
-          this.props.navigation.popToTop();
-          this.props.navigation.replace('VerificationScreen', {
-            mode: VERIFICATION_MODE.SMS,
-            accountDetails: accountDetails,
+          ).then(() => {
+            this.setState({ isLoading: false });
+            this.props.navigation.popToTop();
+            this.props.navigation.replace('VerificationScreen', {
+              mode: VERIFICATION_MODE.SMS,
+              accountDetails: accountDetails,
+            });
           });
-          /* }); */
         });
       })
       .catch(error => {
@@ -352,6 +367,11 @@ export default class PINScreen extends Component {
       })
       .finally(() => this.setState({isLoading: false}));
   };
+
+  clearStorage = async () => {
+    await SecurityServices.clearStorageAndKey();
+    await WalletUtils.clearPrivateKey();
+  }
 
   failedLoginOrSignUp = () => {
     this.props.navigation.popToTop();
@@ -382,7 +402,7 @@ export default class PINScreen extends Component {
                     : VERIFICATION_MODE.EMAIL,
                 });
               } else {
-                if (!accountDetails.isWalletCreated) {
+                if (!accountDetails.isMnemonicCreated) {
                   this.props.navigation.replace('SeedPhraseNoticeScreen', {
                     accountDetails: accountDetails,
                     pin: this.state.pin
@@ -390,6 +410,15 @@ export default class PINScreen extends Component {
                 } else {
                   // TODO: Remove this after implementing dashboard.
                   WalletUtils.getPrivateKey(this.state.pin, accountDetails.email).then((pk) => {
+                    if (!pk) {
+                      return this.props.navigation.replace(
+                        'SeedPhraseRecoveryScreen',
+                        {
+                          accountDetails: accountDetails,
+                          pin: this.state.pin,
+                        },
+                      );
+                    }
                     this.props.navigation.replace('DashboardScreen', {
                       accountDetails: accountDetails,
                       pk: pk

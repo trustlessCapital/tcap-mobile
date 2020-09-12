@@ -1,6 +1,6 @@
 //const SERVICE_HOST = "http://10.0.2.2:7001";
-//const SERVICE_HOST = 'http://localhost:7001';
-const SERVICE_HOST = 'http://3.15.205.156';
+const SERVICE_HOST = 'http://localhost:7001';
+//const SERVICE_HOST = 'http://3.15.205.156';
 const API_PREFIX = "/api";
 
 function processResponse(response) {
@@ -13,6 +13,20 @@ function processResponse(response) {
 
 function signUp(email, phone) {
   return fetch(SERVICE_HOST + API_PREFIX + '/user/signup', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      phoneNumber: phone,
+      email,
+    }),
+  }).then(processResponse);
+}
+
+function recoverAccount(email, phone) {
+  return fetch(SERVICE_HOST + API_PREFIX + '/user/recoveraccount', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -68,10 +82,26 @@ function resendOTP(email, phone) {
   }).then(processResponse);
 }
 
+function mnemonicGenerated(email, phone) {
+  return fetch(SERVICE_HOST + API_PREFIX + '/user/mnemonicgenerated', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      phoneNumber: phone,
+      email,
+    }),
+  }).then(processResponse);
+}
 
-export default APIService = {
+
+export default (APIService = {
   signUp,
+  recoverAccount,
   signIn,
   resendOTP,
-  verifyOTP
-};
+  verifyOTP,
+  mnemonicGenerated,
+});

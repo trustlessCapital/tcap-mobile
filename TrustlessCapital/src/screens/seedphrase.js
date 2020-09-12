@@ -16,6 +16,8 @@ import LoadingIndicator from '../components/loading-indicator';
 import ErrorDialog from '../components/error-dialog';
 import * as _ from 'lodash';
 import { preventScreenCaptureAsync, allowScreenCaptureAsync } from 'expo-screen-capture';
+import APIService from '../services/api-services';
+import SecurityServices from '../services/security';
 
 const WAIT_SEEDPHRASE = 'Please wait.. while we create your seed phrase!';
 const WAIT_CREATEWALLET = 'Please wait.. while we create your wallet!';
@@ -84,30 +86,40 @@ export default class SeedPhraseScreen extends Component {
         this.pin,
         this.accountDetails.email,
       ).then(() => {
-        this.setState({isLoading: true});
-        return WalletUtils.getPrivateKey(
-          this.pin,
+        APIService.mnemonicGenerated(
           this.accountDetails.email,
-        ).then(pk => {
-          const walletService = WalletService.getInstance();
-          walletService.getSyncWallet(pk).then(() => {
-            walletService.getAccountState(pk).then((accountState) => {
-              console.log('ACCOUNT STATE ::: ', accountState);
-              this.setState({
-                isLoading: false,
-              });
-              this.props.navigation.replace('DashboardScreen', {
-                accountDetails: this.accountDetails,
-                pk: pk,
-              });
-            });
+          this.accountDetails.phoneNumber,
+        ).then(accountDetails => {
+          SecurityServices.storeAccountDetails(accountDetails, this.pin).then(() => {
+            this.accountDetails = accountDetails;
+            this._navigateToDashboard();
           });
         });
       });
     } else {
       this.setState({invalidOrder: true});
-      console.log('FALSE');
     }
+  }
+
+  _navigateToDashboard() {
+    return WalletUtils.getPrivateKey(
+      this.pin,
+      this.accountDetails.email,
+    ).then(pk => {
+      const walletService = WalletService.getInstance();
+      walletService.getSyncWallet(pk).then(() => {
+        walletService.getAccountState(pk).then((accountState) => {
+          console.log('ACCOUNT STATE ::: ', accountState);
+          this.setState({
+            isLoading: false,
+          });
+          this.props.navigation.replace('DashboardScreen', {
+            accountDetails: this.accountDetails,
+            pk: pk,
+          });
+        });
+      });
+    }); 
   }
 
   _onSaveButtonClick() {

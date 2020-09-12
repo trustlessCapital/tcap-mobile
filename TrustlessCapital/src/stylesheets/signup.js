@@ -25,7 +25,7 @@ export default (styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    height: Dimensions.get('window').height,
+    height: Dimensions.get('window').height - 70,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -152,9 +152,8 @@ export default (styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 40,
   },
-  footerLink: {
+  recoverAccount: {
     color: Colors.tintColor,
     fontFamily: 'Montserrat-Bold',
     fontSize: 14,

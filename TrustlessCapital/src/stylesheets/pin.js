@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import Colors from '../constants/Colors';
 
-export default styles = StyleSheet.create({
+export default (styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
@@ -87,4 +87,16 @@ export default styles = StyleSheet.create({
     fontSize: 26,
     textAlign: 'center',
   },
-});
+  recoverButtonWrapper: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
+  recoverAccount: {
+    color: Colors.tintColor,
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 12,
+    marginHorizontal: 20,
+    marginVertical: 10
+  },
+}));
