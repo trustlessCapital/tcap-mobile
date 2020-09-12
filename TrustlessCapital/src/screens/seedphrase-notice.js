@@ -10,7 +10,9 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import styles from '../stylesheets/seedphrase-notice';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import StatusBarColor from '../components/status-bar-color'; 
+import Colors from '../constants/Colors';
 
 export default class SeedPhraseNoticeScreen extends Component {
   state = {
@@ -200,42 +202,36 @@ export default class SeedPhraseNoticeScreen extends Component {
   render() {
     return (
       <SafeAreaView style={styles.wrapper}>
+        <StatusBarColor
+          backgroundColor={Colors.primary_bg}
+          barStyle="light-content"
+        />
         <KeyboardAvoidingView style={{flex: 1}}>
-            <View style={styles.container}>
-              <Carousel
-                layout={'default'}
-                ref={ref => (this.carousel = ref)}
-                data={this.carouselItems}
-                sliderWidth={
-                  Dimensions.get('window').width
-                }
-                itemWidth={
-                  Dimensions.get('window').width
-                }
-                renderItem={this._renderItem.bind(
-                  this,
-                )}
-                onSnapToItem={this._onSlideChange.bind(
-                  this,
-                )}
-                inactiveSlideOpacity={1}
-                inactiveSlideScale={1}
-                useScrollView={true}
-              />
-              {this.pagination}
+          <View style={styles.container}>
+            <Carousel
+              layout={'default'}
+              ref={ref => (this.carousel = ref)}
+              data={this.carouselItems}
+              sliderWidth={Dimensions.get('window').width}
+              itemWidth={Dimensions.get('window').width}
+              renderItem={this._renderItem.bind(this)}
+              onSnapToItem={this._onSlideChange.bind(this)}
+              inactiveSlideOpacity={1}
+              inactiveSlideScale={1}
+              useScrollView={true}
+            />
+            {this.pagination}
 
-              <View style={styles.footer}>
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  onPress={this._goToNext.bind(
-                    this,
-                  )}>
-                  <Text style={styles.buttonText}>
-                    {this.state.nextButtonText}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.footer}>
+              <TouchableOpacity
+                style={styles.buttonStyle}
+                onPress={this._goToNext.bind(this)}>
+                <Text style={styles.buttonText}>
+                  {this.state.nextButtonText}
+                </Text>
+              </TouchableOpacity>
             </View>
+          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     );

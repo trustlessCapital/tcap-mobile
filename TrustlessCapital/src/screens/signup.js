@@ -29,7 +29,7 @@ export default class SignUp extends Component {
     countryCode: 'IN',
     showCountryPicker: false,
     countryCallingCode: '+91',
-    signupError: true,
+    signupError: false,
     recoverAccount: false
   };
 

@@ -6,9 +6,9 @@ import Dialog, { DialogContent } from 'react-native-popup-dialog';
 const LoadingIndicator = ({  visible, message }) => {
   return (
     <Dialog visible={visible}>
-      <DialogContent>
+      <DialogContent style={styles.dialogContentWrapper}>
         <View style={styles.dialogContent}>
-          <ActivityIndicator size="small" color={Colors.tintColor} />
+          <ActivityIndicator size="small" color={Colors.title} />
           {message && <Text style={styles.message}>{message}</Text>}
         </View>
       </DialogContent>
@@ -17,6 +17,9 @@ const LoadingIndicator = ({  visible, message }) => {
 };
 
 const styles = {
+  dialogContentWrapper: {
+    backgroundColor: Colors.primaryBg,
+  },
   dialogContent: {
     justifyContent: 'center',
     marginBottom: 'auto',
@@ -25,13 +28,14 @@ const styles = {
     minWidth: 30,
     maxWidth: 250,
     textAlign: 'center',
+    backgroundColor: Colors.primaryBg,
   },
   message: {
     marginTop: 15,
     fontSize: 13,
     textAlign: 'center',
     fontFamily: 'montserrat',
-    color: Colors.title
+    color: Colors.title,
   },
 };
 

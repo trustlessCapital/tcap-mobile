@@ -5,14 +5,14 @@ import Colors from '../constants/Colors';
 export default (styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.primaryBg,
   },
   container: {
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     marginStart: 20,
     marginEnd: 20,
+    backgroundColor: Colors.primaryBg,
   },
   logo: {
     height: 40,
@@ -27,7 +27,7 @@ export default (styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    color: Colors.tintColor,
+    color: Colors.title,
     fontFamily: 'Montserrat-Bold',
     fontWeight: 'bold',
     textAlign: 'center',
@@ -36,7 +36,7 @@ export default (styles = StyleSheet.create({
     marginHorizontal: 40,
   },
   paragraph: {
-    color: Colors.textColorGrey,
+    color: Colors.subTitle,
     fontFamily: 'Montserrat-Regular',
     fontSize: 14,
     textAlign: 'center',
@@ -44,7 +44,7 @@ export default (styles = StyleSheet.create({
     marginHorizontal: 40,
   },
   paragraphImportant: {
-    color: Colors.tintColor,
+    color: Colors.tintColorSecondary,
     fontFamily: 'Montserrat-Bold',
     fontSize: 14,
     textAlign: 'center',
@@ -59,14 +59,14 @@ export default (styles = StyleSheet.create({
     height: 5,
     borderRadius: 5,
     marginHorizontal: 1,
-    backgroundColor: '#000',
+    backgroundColor: Colors.title,
   },
   inactiveDotStyle: {
     width: 20,
     height: 5,
     borderRadius: 5,
     marginHorizontal: 1,
-    backgroundColor: '#000',
+    backgroundColor: Colors.tintColorSecondary,
   },
   dotContainerStyle: {
     alignSelf: 'center',
@@ -77,7 +77,7 @@ export default (styles = StyleSheet.create({
   },
   buttonStyle: {
     borderRadius: 5,
-    backgroundColor: Colors.tintColor,
+    backgroundColor: Colors.tintColorSecondary,
     width: Dimensions.get('window').width - 80,
     paddingHorizontal: 20,
     paddingVertical: 15,

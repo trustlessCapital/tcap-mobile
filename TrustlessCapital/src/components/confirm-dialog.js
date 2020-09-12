@@ -28,7 +28,7 @@ const ConfirmDialog = ({title, visible, message, onOk, onDismiss, onOkText, onDi
         <DialogFooter style={styles.dialogFooter} bordered={true}>
           <DialogButton
             text={onOkText ? onOkText : 'Ok'}
-            bordered={false}
+            style={styles.dialogButton}
             textStyle={styles.dialogButtonText}
             onPress={() => {
               if (onOk) onOk();
@@ -36,7 +36,7 @@ const ConfirmDialog = ({title, visible, message, onOk, onDismiss, onOkText, onDi
           />
           <DialogButton
             text={onDismissText ? onDismissText : 'Cancel'}
-            bordered={false}
+            style={styles.dialogButton}
             textStyle={styles.dialogButtonText}
             onPress={() => {
               if (onDismiss) onDismiss();
@@ -87,6 +87,9 @@ const styles = {
   },
   dialogButtonText: {
     color: Colors.tintColorSecondary,
+  },
+  dialogButton: {
+    borderColor: Colors.tintColor,
   },
 };
 
