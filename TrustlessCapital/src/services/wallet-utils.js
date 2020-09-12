@@ -56,6 +56,9 @@ const createAndStorePrivateKey = (seedPhrase, pin, email) => {
 const getPrivateKey = (pin, email) => {
   return SecurityServices.generateKey(pin, 'salt').then(key => {
     return Keychain.getGenericPassword().then(cipherText => {
+      if (!cipherText) {
+        return null;
+      }
       cipherText = cipherText.password;
       return _decryptWithEC(cipherText, email).then(encryptedData => {
         try {

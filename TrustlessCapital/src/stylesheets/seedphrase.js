@@ -129,4 +129,9 @@ export default (styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
+  seedPhraseInput: {
+    fontFamily: 'Montserrat-Regular',
+    textAlign: 'center',
+    fontSize: 14,
+  },
 }));

@@ -410,6 +410,15 @@ export default class PINScreen extends Component {
                 } else {
                   // TODO: Remove this after implementing dashboard.
                   WalletUtils.getPrivateKey(this.state.pin, accountDetails.email).then((pk) => {
+                    if (!pk) {
+                      return this.props.navigation.replace(
+                        'SeedPhraseRecoveryScreen',
+                        {
+                          accountDetails: accountDetails,
+                          pin: this.state.pin,
+                        },
+                      );
+                    }
                     this.props.navigation.replace('DashboardScreen', {
                       accountDetails: accountDetails,
                       pk: pk
