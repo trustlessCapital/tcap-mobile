@@ -16,8 +16,11 @@ import ConfirmDialog from '../components/confirm-dialog';
 import ErrorDialog from '../components/error-dialog';
 import LoadingIndicator from '../components/loading-indicator';
 import * as _ from 'lodash';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import Colors from '../constants/Colors';
 const WAIT_RECOVERWALLET = 'Please wait.. while we recover your wallet!';
+import StatusBarColor from '../components/status-bar-color';
+
 export default class SeedPhraseRecoveryScreen extends Component {
   
   state = {
@@ -122,61 +125,68 @@ export default class SeedPhraseRecoveryScreen extends Component {
   render() {
     return (
       <SafeAreaView style={styles.wrapper}>
+        <StatusBarColor
+          backgroundColor={Colors.primary_bg}
+          barStyle="light-content"
+        />
         <KeyboardAvoidingView style={{flex: 1}}>
-          <View style={styles.container}>
-            <Text style={styles.mainTitle}>
-              Recover Account
-            </Text>
-            <View style={styles.header}>
-              <Text style={styles.title}>Disclaimer</Text>
-              <Text style={styles.subTitle}>
-                Please enter your 12 word mnemonic seed phrase in the order to recover your wallet.
-              </Text>
-            </View>
-            {this._getSortableGrid()}
-            <View style={styles.footer}>
-              <TouchableOpacity
-                style={styles.primaryButtonStyle}
-                onPress={this._onSaveButtonClick.bind(this)}>
-                <Text style={styles.primaryButtonText}>
-                  {this.state.saveButtonText}
+          <KeyboardAwareScrollView contentContainerStyle={{flexGrow: 1}}>
+            <View style={styles.container}>
+              <Text style={styles.mainTitle}>Recover Account</Text>
+              <View style={styles.header}>
+                <Text style={styles.title}>Disclaimer</Text>
+                <Text style={styles.subTitle}>
+                  Please enter your 12 word mnemonic seed phrase in the
+                  order to recover your wallet.
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.secondaryButtonStyle}
-                onPress={() => {
-                  this.setState({confirmResetDialog: true});
-                }}>
-                <Text style={styles.secondaryButtonText}>
-                  {this.state.resetButtonText}
-                </Text>
-              </TouchableOpacity>
+              </View>
+              {this._getSortableGrid()}
+              <View style={styles.footer}>
+                <TouchableOpacity
+                  style={styles.primaryButtonStyle}
+                  onPress={this._onSaveButtonClick.bind(this)}>
+                  <Text style={styles.primaryButtonText}>
+                    {this.state.saveButtonText}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.secondaryButtonStyle}
+                  onPress={() => {
+                    this.setState({confirmResetDialog: true});
+                  }}>
+                  <Text style={styles.secondaryButtonText}>
+                    {this.state.resetButtonText}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <ConfirmDialog
+                title={'Reset Mnemonic Phrase'}
+                visible={this.state.confirmResetDialog}
+                message={
+                  'Are you sure you want to reset the entered mnemonic phrase?'
+                }
+                onDismiss={() => {
+                  this.setState({confirmResetDialog: false});
+                }}
+                onOk={() => {
+                  this._onResetButtonClick();
+                  this.setState({confirmResetDialog: false});
+                }}
+              />
+              <LoadingIndicator
+                visible={this.state.isLoading}
+                message={this.state.loadingMessage}
+              />
+              <ErrorDialog
+                title={'Invalid seed phrase'}
+                visible={this.state.isInvalidPhrase}
+                message={'Please ensure you have entered all 12 words!'}
+                onDismiss={() => {
+                  this.setState({isInvalidPhrase: false});
+                }}
+              />
             </View>
-            <ConfirmDialog
-              title={'Reset Mnemonic Phrase'}
-              visible={this.state.confirmResetDialog}
-              message={'Are you sure you want to reset the entered mnemonic phrase?'}
-              onDismiss={() => {
-                this.setState({confirmResetDialog: false});
-              }}
-              onOk={() => {
-                this._onResetButtonClick();
-                this.setState({confirmResetDialog: false});
-              }}
-            />
-            <LoadingIndicator
-              visible={this.state.isLoading}
-              message={this.state.loadingMessage}
-            />
-            <ErrorDialog
-              title={'Invalid seed phrase'}
-              visible={this.state.isInvalidPhrase}
-              message={'Please ensure you have entered all 12 words!'}
-              onDismiss={() => {
-                this.setState({isInvalidPhrase: false});
-              }}
-            />
-          </View>
+          </KeyboardAwareScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
     );

@@ -17,6 +17,7 @@ import { Hoshi } from 'react-native-textinput-effects';
 import CountryPicker from 'react-native-country-picker-modal';
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 import styles from '../stylesheets/signup';
+import StatusBarColor from '../components/status-bar-color';
 
 export default class SignUp extends Component {
   state = {
@@ -66,6 +67,10 @@ export default class SignUp extends Component {
   render() {
     return (
       <SafeAreaView style={styles.wrapper}>
+        <StatusBarColor
+          backgroundColor={Colors.primary_bg}
+          barStyle="light-content"
+        />
         <KeyboardAvoidingView style={{flex: 1}}>
           <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.container}>
@@ -125,13 +130,13 @@ export default class SignUp extends Component {
                     </TouchableOpacity>
                     <CountryPicker
                       theme={{
-                        primaryColor: '#ccc',
-                        primaryColorVariant: '#eee',
-                        backgroundColor: '#ffffff',
-                        onBackgroundTextColor: Colors.textColorGrey,
+                        primaryColor: Colors.title,
+                        primaryColorVariant: Colors.primaryBorder,
+                        backgroundColor: Colors.primaryBg,
+                        onBackgroundTextColor: Colors.subTitle,
                         fontSize: 14,
                         fontFamily: 'Montserrat-Bold',
-                        filterPlaceholderTextColor: '#aaa',
+                        filterPlaceholderTextColor: Colors.title,
                         activeOpacity: 0.7,
                         itemHeight: 40,
                       }}
@@ -192,7 +197,8 @@ export default class SignUp extends Component {
                 <View style={styles.flexStart} />
                 <View style={styles.flexEnd}>
                   <TouchableOpacity>
-                    <Text style={styles.recoverAccount}
+                    <Text
+                      style={styles.recoverAccount}
                       onPress={this.switchAccountMode.bind(this)}>
                       {this.state.recoverAccount
                         ? 'New User? Sign Up'

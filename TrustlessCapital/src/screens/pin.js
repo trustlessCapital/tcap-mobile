@@ -17,6 +17,7 @@ import styles from '../stylesheets/pin';
 import SecurityServices from '../services/security';
 import { PIN_SCREEN_MODE } from '../constants';
 import WalletUtils from '../services/wallet-utils';
+import StatusBarColor from '../components/status-bar-color';
 
 export default class PINScreen extends Component {
   email = null;
@@ -84,6 +85,10 @@ export default class PINScreen extends Component {
   render() {
     return (
       <SafeAreaView style={styles.wrapper}>
+        <StatusBarColor
+          backgroundColor={Colors.primary_bg}
+          barStyle="light-content"
+        />
         {!this.state.disableBackButton && (
           <View style={styles.backButtonWrapper}>
             <TouchableOpacity
@@ -331,10 +336,7 @@ export default class PINScreen extends Component {
     }
     return signUpP
       .then(accountDetails => {
-        let clearStorageP = Promise.resolve();
-        if (this.recoverAccount) {
-          clearStorageP = this.clearStorage();
-        }
+        let clearStorageP = this.clearStorage();
         clearStorageP.then(() => {
           return SecurityServices.storeAccountDetails(
             accountDetails,
@@ -408,7 +410,6 @@ export default class PINScreen extends Component {
                     pin: this.state.pin
                   });
                 } else {
-                  // TODO: Remove this after implementing dashboard.
                   WalletUtils.getPrivateKey(this.state.pin, accountDetails.email).then((pk) => {
                     if (!pk) {
                       return this.props.navigation.replace(
@@ -458,7 +459,7 @@ export default class PINScreen extends Component {
         this.setState({
           isLoading: false,
           showError: true,
-          errorMessage: 'Invalid PIN/User account not found!',
+          errorMessage: errMsg,
           errorTitle: 'Signin Failed',
         });
       });

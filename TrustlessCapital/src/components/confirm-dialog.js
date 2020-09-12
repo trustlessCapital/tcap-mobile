@@ -19,27 +19,32 @@ const ConfirmDialog = ({title, visible, message, onOk, onDismiss, onOkText, onDi
         <DialogTitle
           title={title ? title : 'Caution'}
           style={styles.header}
+          textStyle={styles.headerText}
           hasTitleBar={false}
           align="center"
         />
       }
       footer={
-        <DialogFooter>
+        <DialogFooter style={styles.dialogFooter} bordered={true}>
           <DialogButton
             text={onOkText ? onOkText : 'Ok'}
+            style={styles.dialogButton}
+            textStyle={styles.dialogButtonText}
             onPress={() => {
               if (onOk) onOk();
             }}
           />
           <DialogButton
             text={onDismissText ? onDismissText : 'Cancel'}
+            style={styles.dialogButton}
+            textStyle={styles.dialogButtonText}
             onPress={() => {
               if (onDismiss) onDismiss();
             }}
           />
         </DialogFooter>
       }>
-      <DialogContent>
+      <DialogContent style={styles.dialogContentWrapper}>
         <View style={styles.dialogContent}>
           {message && <Text style={styles.message}>{message}</Text>}
         </View>
@@ -49,6 +54,9 @@ const ConfirmDialog = ({title, visible, message, onOk, onDismiss, onOkText, onDi
 };
 
 const styles = {
+  dialogContentWrapper: {
+    backgroundColor: Colors.primaryBg,
+  },
   dialogContent: {
     justifyContent: 'center',
     marginBottom: 15,
@@ -57,6 +65,7 @@ const styles = {
     minWidth: 30,
     maxWidth: 250,
     textAlign: 'center',
+    backgroundColor: Colors.primaryBg,
   },
   message: {
     marginTop: 15,
@@ -66,8 +75,21 @@ const styles = {
     color: Colors.title,
   },
   header: {
-    backgroundColor: '#F7F7F8',
-    padding: 15
+    backgroundColor: Colors.tintColor,
+    padding: 15,
+  },
+  headerText: {
+    color: Colors.title,
+  },
+  dialogFooter: {
+    backgroundColor: Colors.tintColor,
+    borderColor: Colors.tintColor,
+  },
+  dialogButtonText: {
+    color: Colors.tintColorSecondary,
+  },
+  dialogButton: {
+    borderColor: Colors.tintColor,
   },
 };
 

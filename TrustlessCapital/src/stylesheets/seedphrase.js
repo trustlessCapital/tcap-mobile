@@ -5,18 +5,18 @@ import Colors from '../constants/Colors';
 export default (styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.primaryBg,
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     marginStart: 20,
     marginEnd: 20,
+    backgroundColor: Colors.primaryBg,
   },
   mainTitle: {
-    color: Colors.tintColor,
+    color: Colors.title,
     fontFamily: 'Montserrat-Regular',
     fontWeight: 'bold',
     textAlign: 'center',
@@ -25,7 +25,7 @@ export default (styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   title: {
-    color: Colors.tintColor,
+    color: Colors.tintColorSecondary,
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
     fontSize: 16,
@@ -33,7 +33,7 @@ export default (styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   subTitle: {
-    color: Colors.textColorGrey,
+    color: Colors.title,
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
     fontSize: 14,
@@ -51,7 +51,7 @@ export default (styles = StyleSheet.create({
   },
   phraseItem: {
     borderRadius: 5,
-    backgroundColor: Colors.tintColorGreyed,
+    backgroundColor: Colors.tintColor,
     width: Dimensions.get('window').width / 2 - 40,
     height: 45,
     marginStart: 20,
@@ -59,12 +59,12 @@ export default (styles = StyleSheet.create({
   },
   phraseItemWithBorder: {
     borderRadius: 5,
-    backgroundColor: Colors.tintColorGreyed,
+    backgroundColor: Colors.tintColor,
     width: Dimensions.get('window').width / 2 - 40,
     height: 45,
     marginStart: 20,
     justifyContent: 'center',
-    borderColor: Colors.tintColor,
+    borderColor: Colors.tintColorSecondary,
     borderWidth: 1,
   },
   phraseItemWrapper: {
@@ -75,17 +75,19 @@ export default (styles = StyleSheet.create({
     paddingVertical: 2,
     borderTopLeftRadius: 5,
     borderBottomRightRadius: 5,
-    backgroundColor: Colors.tintColorGreyedDark,
+    backgroundColor: Colors.primaryBg,
   },
   phraseIndex: {
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
     fontSize: 11,
+    color: Colors.subTitle,
   },
   phraseText: {
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
     fontSize: 14,
+    color: Colors.title,
   },
   header: {
     flex: 1,
@@ -99,7 +101,7 @@ export default (styles = StyleSheet.create({
   },
   primaryButtonStyle: {
     borderRadius: 5,
-    backgroundColor: Colors.tintColor,
+    backgroundColor: Colors.tintColorSecondary,
     width: Dimensions.get('window').width - 80,
     marginTop: 10,
     paddingHorizontal: 20,
@@ -109,7 +111,7 @@ export default (styles = StyleSheet.create({
   },
   secondaryButtonStyle: {
     borderRadius: 5,
-    backgroundColor: Colors.tintColorGreyed,
+    backgroundColor: Colors.tintColor,
     width: Dimensions.get('window').width - 80,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -118,13 +120,13 @@ export default (styles = StyleSheet.create({
     justifyContent: 'center',
   },
   primaryButtonText: {
-    color: Colors.white,
+    color: Colors.title,
     fontFamily: 'Montserrat-Bold',
     fontWeight: 'bold',
     fontSize: 14,
   },
   secondaryButtonText: {
-    color: Colors.textColorGrey,
+    color: Colors.subTitle,
     fontFamily: 'Montserrat-Bold',
     fontWeight: 'bold',
     fontSize: 14,
@@ -133,5 +135,6 @@ export default (styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
     fontSize: 14,
+    color: Colors.title,
   },
 }));

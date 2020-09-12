@@ -18,6 +18,8 @@ import * as _ from 'lodash';
 import { preventScreenCaptureAsync, allowScreenCaptureAsync } from 'expo-screen-capture';
 import APIService from '../services/api-services';
 import SecurityServices from '../services/security';
+import StatusBarColor from '../components/status-bar-color';
+import Colors from '../constants/Colors';
 
 const WAIT_SEEDPHRASE = 'Please wait.. while we create your seed phrase!';
 const WAIT_CREATEWALLET = 'Please wait.. while we create your wallet!';
@@ -113,6 +115,7 @@ export default class SeedPhraseScreen extends Component {
           this.setState({
             isLoading: false,
           });
+          this.props.navigation.popToTop();
           this.props.navigation.replace('DashboardScreen', {
             accountDetails: this.accountDetails,
             pk: pk,
@@ -169,10 +172,15 @@ export default class SeedPhraseScreen extends Component {
   render() {
     return (
       <SafeAreaView style={styles.wrapper}>
+        <StatusBarColor
+          backgroundColor={Colors.primary_bg}
+          barStyle="light-content"
+        />
         <KeyboardAvoidingView style={{flex: 1}}>
           <View style={styles.container}>
             <Text style={styles.mainTitle}>
-              {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed Phrase
+              {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
+              Phrase
             </Text>
             <View style={styles.header}>
               <Text style={styles.title}>Disclaimer</Text>
@@ -193,7 +201,9 @@ export default class SeedPhraseScreen extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.secondaryButtonStyle}
-                onPress={() => {this.setState({confirmResetDialog: true});}}>
+                onPress={() => {
+                  this.setState({confirmResetDialog: true});
+                }}>
                 <Text style={styles.secondaryButtonText}>
                   {this.state.resetButtonText}
                 </Text>
@@ -218,7 +228,9 @@ export default class SeedPhraseScreen extends Component {
             <ErrorDialog
               title={'Invalid seed phrase order'}
               visible={this.state.invalidOrder}
-              message={'Please ensure the correct order of your 12 word seed phrase!'}
+              message={
+                'Please ensure the correct order of your 12 word seed phrase!'
+              }
               onDismiss={() => {
                 this.setState({invalidOrder: false});
               }}

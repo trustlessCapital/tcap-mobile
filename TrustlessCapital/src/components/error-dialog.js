@@ -11,6 +11,7 @@ import Dialog, {
 const ErrorDialog = ({ title, visible, message, onDismiss }) => {
   return (
     <Dialog
+      style={styles.dialog}
       visible={visible}
       onTouchOutside={() => {
         if (onDismiss) onDismiss();
@@ -19,22 +20,24 @@ const ErrorDialog = ({ title, visible, message, onDismiss }) => {
         <DialogTitle
           title={title ? title : 'Error'}
           style={styles.header}
+          textStyle={styles.headerText}
           hasTitleBar={false}
           align="left"
         />
       }
       footer={
-        <DialogFooter>
+        <DialogFooter style={styles.dialogFooter} bordered={true}>
           <DialogButton
             text="Ok"
+            bordered={false}
+            textStyle={styles.dialogButtonText}
             onPress={() => {
               if (onDismiss) onDismiss();
             }}
           />
         </DialogFooter>
-      }
-    >
-      <DialogContent>
+      }>
+      <DialogContent style={styles.dialogContentWrapper}>
         <View style={styles.dialogContent}>
           {message && <Text style={styles.message}>{message}</Text>}
         </View>
@@ -44,6 +47,9 @@ const ErrorDialog = ({ title, visible, message, onDismiss }) => {
 };
 
 const styles = {
+  dialogContentWrapper: {
+    backgroundColor: Colors.primaryBg,
+  },
   dialogContent: {
     justifyContent: 'center',
     marginBottom: 15,
@@ -52,6 +58,7 @@ const styles = {
     minWidth: 30,
     maxWidth: 250,
     textAlign: 'center',
+    backgroundColor: Colors.primaryBg,
   },
   message: {
     marginTop: 15,
@@ -61,8 +68,18 @@ const styles = {
     color: Colors.title,
   },
   header: {
-    backgroundColor: '#F7F7F8',
-    padding: 15
+    backgroundColor: Colors.tintColor,
+    padding: 15,
+  },
+  headerText: {
+    color: Colors.title,
+  },
+  dialogFooter: {
+    backgroundColor: Colors.tintColor,
+    borderColor: Colors.tintColor,
+  },
+  dialogButtonText: {
+    color: Colors.tintColorSecondary,
   },
 };
 

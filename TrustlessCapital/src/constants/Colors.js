@@ -1,10 +1,12 @@
-const tintColor = '#287CFF';
-
 export default {
-  tintColor,
-  subTitle: '#c4c9ce',
-  title: '#0d0c22',
-  textColorGrey: '#6e6d7a',
+  tintColor: '#1B255C',
+  tintColorSecondary: '#E35558',
+  tintColorSecondaryLight: '#ba8081',
+  primaryBg: '#141C42',
+  primaryBorder: '#323b63',
+  subTitle: '#CACBD5',
+  title: '#FFF',
+  textColorGrey: '#CACBD5',
   error: '#dd2e3a',
   tintColorDisabled: '#569aff',
   white: '#FFFFFF',

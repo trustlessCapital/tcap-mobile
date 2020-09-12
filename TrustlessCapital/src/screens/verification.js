@@ -16,6 +16,8 @@ const smsImage = require('../../assets/images/icons/sms.png');
 import styles from '../stylesheets/verification';
 import APIService from '../services/api-services';
 import ErrorDialog from '../components/error-dialog';
+import Colors from '../constants/Colors';
+import StatusBarColor from '../components/status-bar-color';
 
 export const VERIFICATION_MODE = {
   SMS: 'sms',
@@ -60,13 +62,17 @@ export default class VerificationScreen extends Component {
   render() {
     return (
       <SafeAreaView style={styles.wrapper}>
-        <KeyboardAvoidingView style={{ flex: 1 }}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <StatusBarColor
+          backgroundColor={Colors.primary_bg}
+          barStyle="light-content"
+        />
+        <KeyboardAvoidingView style={{flex: 1}}>
+          <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.container}>
               <Image
                 style={styles.titleImage}
                 source={this.getHeaderImage()}
-              ></Image>
+              />
               <Text style={styles.title}>{this.getTitle()}</Text>
               <Text style={styles.subTitle}>{this.getSubTitle()}</Text>
               {this.state.mode === VERIFICATION_MODE.SMS && (
@@ -74,6 +80,7 @@ export default class VerificationScreen extends Component {
                   style={styles.otpInput}
                   onChangeText={this.otpInput}
                   value={this.state.otp}
+                  placeholderTextColor={Colors.subTitle}
                   placeholder={'- - - -'}
                   maxLength={4}
                   keyboardType={'phone-pad'}
@@ -81,9 +88,10 @@ export default class VerificationScreen extends Component {
               )}
               <TouchableOpacity
                 style={styles.button}
-                onPress={this.onButtonPress}
-              >
-                <Text style={styles.buttonText}>{this.getButtonTitle()}</Text>
+                onPress={this.onButtonPress}>
+                <Text style={styles.buttonText}>
+                  {this.getButtonTitle()}
+                </Text>
               </TouchableOpacity>
               {this.state.mode === VERIFICATION_MODE.SMS && (
                 <TouchableOpacity onPress={this.resendOTP}>
@@ -102,7 +110,7 @@ export default class VerificationScreen extends Component {
           visible={this.state.showError}
           message={this.state.errorMessage}
           onDismiss={() => {
-            this.setState({ showError: false });
+            this.setState({showError: false});
           }}
         />
       </SafeAreaView>
