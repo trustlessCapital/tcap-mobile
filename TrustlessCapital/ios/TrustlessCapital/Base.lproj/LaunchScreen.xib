@@ -13,12 +13,12 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splash_image" translatesAutoresizingMaskIntoConstraints="NO" id="NDQ-5x-cNO">
-                    <rect key="frame" x="7" y="342" width="400" height="213"/>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splash_image" translatesAutoresizingMaskIntoConstraints="NO" id="hlc-Jb-Ba4">
+                    <rect key="frame" x="0.0" y="344" width="414" height="209"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <color key="backgroundColor" red="0.078431372549019607" green="0.10980392156862745" blue="0.25882352941176467" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <point key="canvasLocation" x="89.855072463768124" y="67.633928571428569"/>
         </view>
     </objects>
