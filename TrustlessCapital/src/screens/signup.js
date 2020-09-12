@@ -28,7 +28,8 @@ export default class SignUp extends Component {
     countryCode: 'IN',
     showCountryPicker: false,
     countryCallingCode: '+91',
-    signupError: false
+    signupError: false,
+    recoverAccount: false
   };
 
   constructor(props) {
@@ -38,6 +39,15 @@ export default class SignUp extends Component {
       if (this.props.route.params.signupError) this.state.signupError = this.props.route.params.signupError;
       if (this.props.route.params.email) this.state.emailInput = this.props.route.params.email;
       if (this.props.route.params.phone) this.state.phoneInput = this.props.route.params.phone;
+      if (this.props.route.params.recoverAccount) this.state.recoverAccount = true;
+    }
+  }
+
+  switchAccountMode = () => {
+    if (this.state.recoverAccount) {
+      this.setState({ recoverAccount: false });
+    } else {
+      this.setState({ recoverAccount: true });
     }
   }
 
@@ -73,8 +83,16 @@ export default class SignUp extends Component {
                   source={require('../../assets/images/logo.png')}
                 />
                 <View style={styles.titleWrapper}>
-                  <Text style={styles.title}>Welcome!</Text>
-                  <Text style={styles.subTitle}>Sign up to Continue</Text>
+                  <Text style={styles.title}>
+                    {this.state.recoverAccount
+                      ? 'Recover Account'
+                      : 'Welcome!'}
+                  </Text>
+                  <Text style={styles.subTitle}>
+                    {this.state.recoverAccount
+                      ? 'Sign In to continue'
+                      : 'Sign up to Continue'}
+                  </Text>
                 </View>
               </View>
               <View style={styles.form}>
@@ -150,7 +168,9 @@ export default class SignUp extends Component {
                 </View>
                 <View style={styles.formFooter}>
                   <View style={styles.flexStart}>
-                    <Text style={styles.signinLabelStyle}>Sign Up</Text>
+                    <Text style={styles.signinLabelStyle}>
+                      {this.state.recoverAccount ? 'Sign In' : 'Sign Up'}
+                    </Text>
                   </View>
                   <View style={styles.flexEnd}>
                     <TouchableOpacity
@@ -171,7 +191,14 @@ export default class SignUp extends Component {
               <View style={styles.footerContainer}>
                 <View style={styles.flexStart} />
                 <View style={styles.flexEnd}>
-                  <Text style={styles.footerLink}>Recover Account</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.recoverAccount}
+                      onPress={this.switchAccountMode.bind(this)}>
+                      {this.state.recoverAccount
+                        ? 'New User? Sign Up'
+                        : 'Recover Account'}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -198,6 +225,7 @@ export default class SignUp extends Component {
       mode: PIN_SCREEN_MODE.SIGNUP_PIN,
       email: this.state.emailInput,
       phone: this.state.countryCallingCode + this.state.phoneInput,
+      recoverAccount: this.state.recoverAccount
     });
   }
 

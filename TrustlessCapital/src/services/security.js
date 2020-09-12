@@ -39,6 +39,18 @@ const authenticateWithTouchID = async (component, authState) => {
   }
 };
 
+const authenticateOnStartup = async () => {
+  let hasHardware = await LocalAuthentication.hasHardwareAsync();
+
+  let isEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+  if (hasHardware && isEnrolled) {
+    return LocalAuthentication.authenticateAsync();
+  }
+
+  return Promise.resolve();
+}
+
 const encryptData = (text, key) => {
   return Aes.randomKey(16).then((iv) => {
     return Aes.encrypt(text, key, iv).then((cipher) => ({
@@ -63,6 +75,10 @@ const storeAccountDetails = (accountDetails, pin) => {
     });
   });
 };
+
+const clearStorageAndKey = () => {
+  return AsyncStorage.clear();
+}
 
 const fetchAccountDetails = (pin) => {
   return generateKey(pin, 'salt').then((key) => {
@@ -93,9 +109,11 @@ const fetchAccountDetails = (pin) => {
 
 export default (SecurityServices = {
   handleLocalAuthorization,
+  authenticateOnStartup,
   storeAccountDetails,
   fetchAccountDetails,
   generateKey,
   decryptData,
   encryptData,
+  clearStorageAndKey,
 });

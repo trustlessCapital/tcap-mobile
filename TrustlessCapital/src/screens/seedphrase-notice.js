@@ -128,10 +128,10 @@ export default class SeedPhraseNoticeScreen extends Component {
     }
   }
 
-  _getcarouselItem(item) {
+  _getcarouselItem(item, index) {
     return (
       <>
-        <View style={styles.carouselItem}>
+        <View key={index} style={styles.carouselItem}>
           <Image
             style={styles.logo}
             source={require('../../assets/images/logo.png')}
@@ -171,7 +171,7 @@ export default class SeedPhraseNoticeScreen extends Component {
   }
 
   _renderItem({item, index}) {
-    return this._getcarouselItem(item);
+    return this._getcarouselItem(item, index);
   }
 
   get pagination() {
