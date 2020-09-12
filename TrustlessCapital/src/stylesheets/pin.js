@@ -4,7 +4,7 @@ import Colors from '../constants/Colors';
 export default (styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.primaryBg,
   },
   container: {
     flex: 1,
@@ -38,7 +38,7 @@ export default (styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     marginBottom: 20,
-    color: Colors.textColorGrey,
+    color: Colors.title,
     fontFamily: 'Montserrat-Bold',
     fontSize: 18,
   },
@@ -59,7 +59,7 @@ export default (styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: Colors.tintColor,
+    backgroundColor: Colors.tintColorSecondary,
   },
   keyPadContainer: {
     flex: 2,
@@ -93,10 +93,10 @@ export default (styles = StyleSheet.create({
     right: 0,
   },
   recoverAccount: {
-    color: Colors.tintColor,
+    color: Colors.tintColorSecondary,
     fontFamily: 'Montserrat-Bold',
     fontSize: 12,
     marginHorizontal: 20,
-    marginVertical: 10
+    marginVertical: 10,
   },
 }));

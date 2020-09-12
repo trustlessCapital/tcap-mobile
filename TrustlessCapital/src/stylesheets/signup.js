@@ -5,7 +5,7 @@ import Colors from '../constants/Colors';
 export default (styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.primaryBg,
   },
   mainPattern: {
     position: 'absolute',
@@ -26,7 +26,7 @@ export default (styles = StyleSheet.create({
   container: {
     flex: 1,
     height: Dimensions.get('window').height - 70,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.primaryBg,
     alignItems: 'center',
     justifyContent: 'center',
     marginStart: 20,
@@ -53,7 +53,7 @@ export default (styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'flex-start',
-    color: Colors.tintColor,
+    color: Colors.title,
     fontFamily: 'Montserrat-Bold',
     fontWeight: 'bold',
     fontSize: 30,
@@ -90,27 +90,27 @@ export default (styles = StyleSheet.create({
     flexDirection: 'row',
   },
   countryPickerLabel: {
-    color: Colors.textColorGrey,
+    color: Colors.subTitle,
     fontFamily: 'Montserrat-Bold',
     fontWeight: 'bold',
   },
   textInput: {
-    color: Colors.textColorGrey,
+    color: Colors.subTitle,
     fontSize: 14,
   },
   textInputLabel: {
-    color: Colors.textColorGrey,
+    color: Colors.subTitle,
     fontSize: 12,
   },
   phoneTextInput: {
-    color: Colors.textColorGrey,
+    color: Colors.subTitle,
     fontSize: 14,
     paddingLeft: 60,
   },
   phoneTextInputLabel: {
     fontSize: 12,
     paddingLeft: 60,
-    color: Colors.textColorGrey,
+    color: Colors.subTitle,
   },
   formFooter: {
     flex: 1,
@@ -122,7 +122,7 @@ export default (styles = StyleSheet.create({
     height: 60,
   },
   signinLabelStyle: {
-    color: Colors.tintColor,
+    color: Colors.title,
     fontFamily: 'Montserrat-Bold',
     fontSize: 18,
     paddingTop: 18,
@@ -133,7 +133,7 @@ export default (styles = StyleSheet.create({
     height: 60,
   },
   circleButton: {
-    backgroundColor: Colors.tintColor,
+    backgroundColor: Colors.tintColorSecondary,
     alignItems: 'center',
     justifyContent: 'center',
     width: 60,
@@ -141,7 +141,7 @@ export default (styles = StyleSheet.create({
     borderRadius: 30,
   },
   circleButtonDisabled: {
-    backgroundColor: Colors.tintColorDisabled,
+    backgroundColor: Colors.tintColorSecondaryLight,
     alignItems: 'center',
     justifyContent: 'center',
     width: 60,
@@ -154,7 +154,7 @@ export default (styles = StyleSheet.create({
     alignItems: 'center',
   },
   recoverAccount: {
-    color: Colors.tintColor,
+    color: Colors.tintColorSecondary,
     fontFamily: 'Montserrat-Bold',
     fontSize: 14,
     textDecorationLine: 'underline',

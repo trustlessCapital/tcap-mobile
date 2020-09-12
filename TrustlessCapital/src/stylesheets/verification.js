@@ -1,10 +1,10 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import Colors from '../constants/Colors';
 
-export default styles = StyleSheet.create({
+export default (styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.primaryBg,
   },
   container: {
     flex: 1,
@@ -14,6 +14,7 @@ export default styles = StyleSheet.create({
     justifyContent: 'center',
     marginStart: 20,
     marginEnd: 20,
+    backgroundColor: Colors.primaryBg,
   },
   titleImage: {
     height: 100,
@@ -21,13 +22,13 @@ export default styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    color: Colors.tintColor,
+    color: Colors.title,
     fontFamily: 'Montserrat-Bold',
     fontSize: 18,
     marginBottom: 10,
   },
   subTitle: {
-    color: Colors.textColorGrey,
+    color: Colors.subTitle,
     fontFamily: 'Montserrat',
     fontSize: 14,
     textAlign: 'center',
@@ -40,23 +41,24 @@ export default styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: 10,
     fontFamily: 'Montserrat-Bold',
+    color: Colors.title
   },
   button: {
     marginTop: 10,
-    backgroundColor: Colors.tintColor,
+    backgroundColor: Colors.tintColorSecondary,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
-    color: '#FFF',
+    color: Colors.title,
   },
   buttonText: {
-    color: '#FFF',
+    color: Colors.title,
     fontFamily: 'Montserrat-Bold',
   },
   linkButton: {
-    color: Colors.tintColor,
+    color: Colors.tintColorSecondary,
     fontFamily: 'Montserrat',
     fontSize: 12,
-    marginTop: 20
+    marginTop: 20,
   },
-});
+}));

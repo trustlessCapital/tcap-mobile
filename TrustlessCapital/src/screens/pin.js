@@ -17,6 +17,7 @@ import styles from '../stylesheets/pin';
 import SecurityServices from '../services/security';
 import { PIN_SCREEN_MODE } from '../constants';
 import WalletUtils from '../services/wallet-utils';
+import StatusBarColor from '../components/status-bar-color';
 
 export default class PINScreen extends Component {
   email = null;
@@ -84,6 +85,10 @@ export default class PINScreen extends Component {
   render() {
     return (
       <SafeAreaView style={styles.wrapper}>
+        <StatusBarColor
+          backgroundColor={Colors.primary_bg}
+          barStyle="light-content"
+        />
         {!this.state.disableBackButton && (
           <View style={styles.backButtonWrapper}>
             <TouchableOpacity
