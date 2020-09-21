@@ -22,11 +22,11 @@ export default class DepositConfirmScreen extends Component {
 
   navigateBack = () => { this.props.navigation.goBack(); }
 
-  goToDepositStatusScreen = (type) => {
+  goToDepositStatusScreen = () => {
     this.props.navigation.push('DepositStatusScreen', {
       accountDetails: this.accountDetails,
       pk: this.pk,
-      type,
+      amount: this.state.amount,
     });
   }
 

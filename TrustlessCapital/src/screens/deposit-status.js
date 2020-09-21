@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../components/status-bar-color';
 import Colors from '../constants/Colors';
 import styles from '../stylesheets/deposit-home';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 export default class DepositStatusScreen extends Component {
   state = {
@@ -28,6 +29,54 @@ export default class DepositStatusScreen extends Component {
       pk: this.pk,
       type
     });
+  }
+
+  goToDashboard = () => {
+    this.props.navigation.popToTop();
+    this.props.navigation.replace('DashboardScreen', {
+      pk: this.pk,
+      accountDetails: this.accountDetails,
+    });
+  }
+
+  async openLink() {
+    try {
+      const url = 'https://www.facebook.com'
+      if (await InAppBrowser.isAvailable()) {
+        await InAppBrowser.open(url, {
+          // iOS Properties
+          dismissButtonStyle: 'done',
+          preferredBarTintColor: Colors.white,
+          preferredControlTintColor: Colors.tintColor,
+          readerMode: false,
+          animated: true,
+          modalPresentationStyle: 'pageSheet',
+          modalTransitionStyle: 'coverVertical',
+          modalEnabled: true,
+          enableBarCollapsing: true,
+          // Android Properties
+          showTitle: true,
+          toolbarColor: Colors.primaryBg,
+          secondaryToolbarColor: 'white',
+          enableUrlBarHiding: true,
+          enableDefaultShare: true,
+          forceCloseOnRedirection: false,
+          // Animations
+          animations: {
+            startEnter: 'slide_in_right',
+            startExit: 'slide_out_left',
+            endEnter: 'slide_in_left',
+            endExit: 'slide_out_right',
+          },
+          headers: {
+            'my-custom-header': 'Track Status',
+          },
+        });
+      }
+      else Linking.openURL(url)
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   get titleBar() {
@@ -67,8 +116,13 @@ export default class DepositStatusScreen extends Component {
           </View>
           <Text style={styles.title}>
             Your deposit transaction has been mined and will be processed
-            after 1 confirmations. Use the link below to track the progress
+            after 1 confirmations. Click button below to track the progress
           </Text>
+          <TouchableOpacity
+            onPress={() => { this.openLink() }}
+            style={[styles.buttonStyleSecondary, styles.halfButton]}>
+            <Text style={styles.buttonText}>Track Status</Text>
+          </TouchableOpacity>
           <View style={styles.cardContent}>
             <View
               style={[
@@ -96,7 +150,9 @@ export default class DepositStatusScreen extends Component {
               </View>
             </View>
             <View style={[styles.cardFooter]}>
-              <TouchableOpacity style={[styles.buttonStylePrimary]}>
+              <TouchableOpacity
+                onPress={this.goToDashboard.bind(this)}
+                style={[styles.buttonStylePrimary]}>
                 <Text style={styles.buttonText}>Ok</Text>
               </TouchableOpacity>
             </View>
