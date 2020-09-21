@@ -5,9 +5,9 @@ import {
   View,
   Image,
   TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView, TextInput
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LoadingIndicator from '../components/loading-indicator';
 import ErrorDialog from '../components/error-dialog';
@@ -72,7 +72,7 @@ export default class SignUp extends Component {
           barStyle="light-content"
         />
         <KeyboardAvoidingView style={{flex: 1}}>
-          <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          <KeyboardAwareScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.container}>
               <Image
                 style={styles.mainPattern}
@@ -101,18 +101,15 @@ export default class SignUp extends Component {
                 </View>
               </View>
               <View style={styles.form}>
-                <Hoshi
-                  label={'Email'}
-                  borderColor={this.getEmailBorderColor()}
-                  style={styles.textInputRoot}
-                  inputStyle={styles.textInput}
-                  labelStyle={styles.textInputLabel}
-                  borderHeight={2}
-                  inputPadding={8}
-                  keyboardType={'email-address'}
-                  onChangeText={this.onEmailChange}
-                  value={this.state.emailInput}
-                />
+                <View style={styles.textInputRoot}>
+                  <TextInput
+                    placeholder={'E-mail'}
+                    placeholderTextColor={Colors.tintColorGreyedDark}
+                    style={styles.textInput}
+                    onChangeText={this.onEmailChange}
+                    value={this.state.emailInput}
+                  />
+                </View>
                 <View style={styles.phoneTextInputWrapper}>
                   <View style={styles.countryPickerButtonWrapper}>
                     <TouchableOpacity
@@ -158,18 +155,20 @@ export default class SignUp extends Component {
                       visible={this.state.showCountryPicker}
                     />
                   </View>
-                  <Hoshi
-                    label={'Phone Number'}
-                    borderColor={this.getPhoneBorderColor()}
-                    style={styles.phoneTextInputRoot}
-                    inputStyle={styles.phoneTextInput}
-                    labelStyle={styles.phoneTextInputLabel}
-                    borderHeight={2}
-                    inputPadding={8}
-                    keyboardType={'phone-pad'}
-                    onChangeText={this.onPhoneChange}
-                    value={this.state.phoneInput}
-                  />
+                  <View
+                    style={[
+                      styles.textInputRoot,
+                      styles.phoneTextInputRoot,
+                    ]}>
+                    <TextInput
+                      placeholder={'Phone Number'}
+                      placeholderTextColor={Colors.tintColorGreyedDark}
+                      style={styles.textInput}
+                      keyboardType={'phone-pad'}
+                      onChangeText={this.onPhoneChange}
+                      value={this.state.phoneInput}
+                    />
+                  </View>
                 </View>
                 <View style={styles.formFooter}>
                   <View style={styles.flexStart}>
@@ -205,10 +204,19 @@ export default class SignUp extends Component {
                         : 'Recover Account'}
                     </Text>
                   </TouchableOpacity>
+                  {this.state.recoverAccount && (
+                    <TouchableOpacity>
+                      <Text
+                        style={styles.recoverAccount}
+                        onPress={this.goToPinLogin.bind(this)}>
+                        Login
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             </View>
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </KeyboardAvoidingView>
         <LoadingIndicator
           visible={this.state.isLoading}
@@ -225,6 +233,10 @@ export default class SignUp extends Component {
       </SafeAreaView>
     );
   }
+
+  goToPinLogin = () => {
+    this.props.navigation.goBack();
+  };
 
   signUp = () => {
     this.props.navigation.push('PINScreen', {

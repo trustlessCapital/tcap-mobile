@@ -84,6 +84,7 @@ export default (styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    marginBottom: 20
   },
   buttonStylePrimary: {
     borderRadius: 5,
