@@ -176,6 +176,7 @@ export default class DepositHomeScreen extends Component {
               {this.mainContent}
               <View style={styles.cardFooter}>
                 <TouchableOpacity
+                  onPress={this.navigateBack.bind(this)}
                   style={[styles.buttonStylePrimary]}>
                   <Text style={styles.buttonText}>Cancel</Text>
                 </TouchableOpacity>

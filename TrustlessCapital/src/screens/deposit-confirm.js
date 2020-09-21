@@ -4,9 +4,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../components/status-bar-color';
 import Colors from '../constants/Colors';
 import styles from '../stylesheets/deposit-home';
+import ConfirmDialog from '../components/confirm-dialog';
+import LoadingIndicator from '../components/loading-indicator';
+import ErrorDialog from '../components/error-dialog';
+
 
 export default class DepositConfirmScreen extends Component {
   state = {
+    confirmDialog: false,
+    confirmDialogTitle: 'Cancel Deposit Funds',
+    confirmDialogMessage: 'Are you sure you want to cancel the deposit funds transaction?',
   }
 
   constructor(props) {
@@ -28,6 +35,18 @@ export default class DepositConfirmScreen extends Component {
       pk: this.pk,
       amount: this.state.amount,
     });
+  }
+
+  goToDashboard = () => {
+    this.props.navigation.popToTop();
+    this.props.navigation.replace('DashboardScreen', {
+      pk: this.pk,
+      accountDetails: this.accountDetails,
+    });
+  }
+
+  cancelTx = () => {
+    this.setState({ confirmDialog: true });
   }
 
   get titleBar() {
@@ -142,6 +161,7 @@ export default class DepositConfirmScreen extends Component {
                 <Text style={styles.buttonText}>Deposit</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={this.cancelTx.bind(this)}
                 style={[styles.buttonStyleSecondary, styles.halfButton]}>
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
@@ -176,6 +196,22 @@ export default class DepositConfirmScreen extends Component {
               <ScrollView style={styles.mainContentWrapper}>
                 {this.depositContent}
               </ScrollView>
+              <ConfirmDialog
+                title={this.state.confirmDialogTitle}
+                visible={this.state.confirmDialog}
+                message={this.state.confirmDialogMessage}
+                onDismiss={() => {
+                  this.setState({confirmDialog: false});
+                }}
+                onOk={() => {
+                  this.goToDashboard();
+                  this.setState({confirmDialog: false});
+                }}
+              />
+              <LoadingIndicator
+                visible={this.state.isLoading}
+                message={this.state.loadingMessage}
+              />
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>
