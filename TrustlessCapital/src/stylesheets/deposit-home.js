@@ -31,6 +31,7 @@ export default (styles = StyleSheet.create({
   titleBarContentLeft: {
     flex: 1,
     alignItems: 'flex-start',
+    width: 30,
   },
   backButton: {
     width: 30,
@@ -51,7 +52,7 @@ export default (styles = StyleSheet.create({
   titleBarTitle: {
     color: Colors.white,
     fontFamily: 'Montserrat-Bold',
-    fontSize: 18,
+    fontSize: 16,
   },
   title: {
     color: Colors.white,
@@ -107,6 +108,26 @@ export default (styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     fontSize: 14,
   },
+  greenText: {
+    color: Colors.green,
+  },
+  inputLabel: {
+    color: Colors.tintColorGreyedDark,
+    fontFamily: 'Montserrat-Bold',
+    fontWeight: 'bold',
+    fontSize: 12,
+    marginBottom: 5,
+    marginLeft: 5,
+    alignSelf: 'flex-start',
+  },
+  inputText: {
+    flex: 1,
+    color: Colors.white,
+    fontFamily: 'Montserrat-Bold',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginLeft: 10,
+  },
   buttonStyleSecondary: {
     borderRadius: 5,
     backgroundColor: Colors.tintColor,
@@ -117,7 +138,7 @@ export default (styles = StyleSheet.create({
   },
   buttonStyle: {
     borderRadius: 10,
-    backgroundColor: Colors.primaryBgLight,
+    backgroundColor: Colors.tintColorLight,
     width: '100%',
     paddingVertical: 15,
     alignItems: 'center',
@@ -137,8 +158,25 @@ export default (styles = StyleSheet.create({
   rowFlex: {
     flexDirection: 'row',
   },
+  columnFlex: {
+    flexDirection: 'column',
+  },
+  centerAlign: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainContentWrapper: {
+    flex: 1,
+    width: Dimensions.get('window').width - 40,
+    marginStart: 20,
+    marginEnd: 20,
+  },
   mainContent: {
     flex: 1,
   },
+  borderTop: {
+    borderTopColor: Colors.primaryBg,
+    borderTopWidth: 1
+  }
 }));
 

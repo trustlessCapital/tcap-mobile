@@ -22,6 +22,13 @@ export default class DepositHomeScreen extends Component {
   }
 
   navigateBack = () => { this.props.navigation.goBack(); }
+
+  goToDepositFromEthScreen = () => {
+    this.props.navigation.push('DepositEthBalanceScreen', {
+      accountDetails: this.accountDetails,
+      pk: this.pk,
+    });
+  }
   
   openCountryPicker = () => {
     this.setState({ showCountryPicker: true });
@@ -120,6 +127,7 @@ export default class DepositHomeScreen extends Component {
                 onClose: () => {
                   this.setState({showCountryPicker: false});
                 },
+                containerButtonStyle: {height: 0, width: 0},
               }}
               visible={this.state.showCountryPicker}
             />
@@ -129,7 +137,9 @@ export default class DepositHomeScreen extends Component {
                 Bank and Credit/Debit Card
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonStyleSecondary}>
+            <TouchableOpacity
+              onPress={this.goToDepositFromEthScreen.bind(this)}
+              style={styles.buttonStyleSecondary}>
               <Text style={styles.buttonText}>
                 Add from Etherium main network
               </Text>

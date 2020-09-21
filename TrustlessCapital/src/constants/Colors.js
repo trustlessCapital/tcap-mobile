@@ -11,6 +11,7 @@ export default {
   title: '#FFF',
   textColorGrey: '#CACBD5',
   error: '#dd2e3a',
+  green: '#3bba48',
   tintColorDisabled: '#569aff',
   white: '#FFFFFF',
   tintColorGreyed: '#f4f8ff',

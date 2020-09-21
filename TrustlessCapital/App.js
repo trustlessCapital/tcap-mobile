@@ -29,6 +29,8 @@ import DashboardScreen from './src/screens/dashboard';
 import styles from './src/stylesheets/app';
 import WalletService from './src/services/wallet-service';
 import DepositHomeScreen from './src/screens/deposit-home';
+import DepositEthBalanceScreen from './src/screens/deposit-eth-network-balances';
+import DepositEthScreen from './src/screens/deposit-eth-network';
 
 const logoImage = require('./assets/splash.png');
 
@@ -127,6 +129,16 @@ export default function App(props) {
             <Stack.Screen
               name="DepositHomeScreen"
               component={DepositHomeScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="DepositEthBalanceScreen"
+              component={DepositEthBalanceScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="DepositEthScreen"
+              component={DepositEthScreen}
               options={navigationOptions}
             />
           </Stack.Navigator>

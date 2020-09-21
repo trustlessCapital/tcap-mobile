@@ -19,7 +19,7 @@ export default (styles = StyleSheet.create({
   titleBar_title: {
     color: Colors.white,
     fontFamily: 'Montserrat-Bold',
-    fontSize: 18,
+    fontSize: 16,
   },
   balanceCard: {
     alignItems: 'center',
