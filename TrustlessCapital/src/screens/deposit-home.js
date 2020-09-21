@@ -4,9 +4,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../components/status-bar-color';
 import Colors from '../constants/Colors';
 import styles from '../stylesheets/deposit-home';
+import CountryPicker from 'react-native-country-picker-modal';
 
 export default class DepositHomeScreen extends Component {
   state = {
+    showCountryPicker: false,
+    countryName: 'India'
   }
 
   constructor(props) {
@@ -18,9 +21,19 @@ export default class DepositHomeScreen extends Component {
     }
   }
 
+  navigateBack = () => { this.props.navigation.goBack(); }
+  
+  openCountryPicker = () => {
+    this.setState({ showCountryPicker: true });
+  }
 
-  navigateBack = () => {this.props.navigation.goBack();}
-
+  onCountrySelect = (country) => {
+    this.setState({
+      countryCode: country.cca2,
+      countryName: country.name,
+      showCountryPicker: false,
+    });
+  }
 
   get titleBar() {
     return (
@@ -64,12 +77,15 @@ export default class DepositHomeScreen extends Component {
           </Text>
           <View style={styles.cardContent}>
             <TouchableOpacity
+              onPress={this.openCountryPicker}
               style={[styles.buttonStyle, styles.marginButtom]}>
               <Text style={[styles.buttonText3, styles.marginLeft]}>
                 Country
               </Text>
               <View style={[styles.rowFlex, styles.marginRight]}>
-                <Text style={styles.buttonText2}>India</Text>
+                <Text style={styles.buttonText2}>
+                  {this.state.countryName}
+                </Text>
                 <Icon
                   name={'ios-arrow-down'}
                   size={16}
@@ -78,6 +94,35 @@ export default class DepositHomeScreen extends Component {
                 />
               </View>
             </TouchableOpacity>
+            <CountryPicker
+              theme={{
+                primaryColor: Colors.title,
+                primaryColorVariant: Colors.primaryBorder,
+                backgroundColor: Colors.primaryBg,
+                onBackgroundTextColor: Colors.subTitle,
+                fontSize: 14,
+                fontFamily: 'Montserrat-Bold',
+                filterPlaceholderTextColor: Colors.title,
+                activeOpacity: 0.7,
+                itemHeight: 40,
+              }}
+              {...{
+                countryCode: this.state.countryCode,
+                withFilter: true,
+                withFlag: true,
+                withCountryNameButton: false,
+                withCallingCodeButton: false,
+                withFlagButton: false,
+                withAlphaFilter: true,
+                withCallingCode: false,
+                withEmoji: true,
+                onSelect: this.onCountrySelect,
+                onClose: () => {
+                  this.setState({showCountryPicker: false});
+                },
+              }}
+              visible={this.state.showCountryPicker}
+            />
             <TouchableOpacity
               style={[styles.buttonStyleSecondary, styles.marginButtom]}>
               <Text style={styles.buttonText}>
