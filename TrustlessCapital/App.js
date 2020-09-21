@@ -31,6 +31,8 @@ import WalletService from './src/services/wallet-service';
 import DepositHomeScreen from './src/screens/deposit-home';
 import DepositEthBalanceScreen from './src/screens/deposit-eth-network-balances';
 import DepositEthScreen from './src/screens/deposit-eth-network';
+import DepositConfirmScreen from './src/screens/deposit-confirm';
+import DepositStatusScreen from './src/screens/deposit-status';
 
 const logoImage = require('./assets/splash.png');
 
@@ -139,6 +141,16 @@ export default function App(props) {
             <Stack.Screen
               name="DepositEthScreen"
               component={DepositEthScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="DepositConfirmScreen"
+              component={DepositConfirmScreen}
+              options={navigationOptions}
+            />
+            <Stack.Screen
+              name="DepositStatusScreen"
+              component={DepositStatusScreen}
               options={navigationOptions}
             />
           </Stack.Navigator>
