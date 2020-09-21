@@ -42,6 +42,7 @@ export default class SignUp extends Component {
       if (this.props.route.params.phone) this.state.phoneInput = this.props.route.params.phone;
       if (this.props.route.params.recoverAccount) this.state.recoverAccount = true;
     }
+    this.canGoBack = this.props.navigation.canGoBack();
   }
 
   switchAccountMode = () => {
@@ -204,10 +205,10 @@ export default class SignUp extends Component {
                         : 'Recover Account'}
                     </Text>
                   </TouchableOpacity>
-                  {this.state.recoverAccount && (
+                  {this.state.recoverAccount && this.canGoBack && (
                     <TouchableOpacity>
                       <Text
-                        style={styles.recoverAccount}
+                        style={[styles.recoverAccount, {marginTop: 5}]}
                         onPress={this.goToPinLogin.bind(this)}>
                         Login
                       </Text>

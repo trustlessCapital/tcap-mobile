@@ -1,15 +1,23 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import styles from '../stylesheets/dashboard-wallet';
+import {Placeholder, PlaceholderLine, Shine} from 'rn-placeholder';
+import Colors from '../constants/Colors';
+import WalletService from '../services/wallet-service';
 
 export default class DashboardWallet extends Component {
   state = {
+    verifiedBalance: 0,
+    depositingBalance: 0,
+    loadingBalance: true
   }
 
   constructor(props) {
     super(props);
     this.pk = this.props.pk;
     this.accountDetails = this.props.accountDetails;
+    this.walletService = WalletService.getInstance();
+    this.fetchAccountBalance();
   }
 
   goToDepositHomeScreen = () => {
@@ -19,6 +27,14 @@ export default class DashboardWallet extends Component {
     });
   }
 
+  fetchAccountBalance = async () => {
+    this.state.loadingBalance = true;
+    this.setState({});
+    let accountState = await this.walletService.getAccountState(this.pk);
+    this.walletService.getEtheriumBalance(this.pk);
+    this.state.loadingBalance = false;
+    this.setState({});
+  }
 
   get titleBar() {
     return (
