@@ -1,8 +1,11 @@
 export default {
   tintColor: '#1B255C',
+  tintColorDark: '#0b0f26',
+  tintColorLight: '#394268',
   tintColorSecondary: '#E35558',
   tintColorSecondaryLight: '#ba8081',
   primaryBg: '#141C42',
+  primaryBgLight: '#1f274c',
   primaryBorder: '#323b63',
   subTitle: '#CACBD5',
   title: '#FFF',
