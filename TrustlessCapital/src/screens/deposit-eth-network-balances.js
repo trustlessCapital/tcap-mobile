@@ -7,10 +7,12 @@ import styles from '../stylesheets/deposit-home';
 import ConfirmDialog from '../components/confirm-dialog';
 import LoadingIndicator from '../components/loading-indicator';
 import ErrorDialog from '../components/error-dialog';
-
+import WalletService from '../services/wallet-service';
+import StorageUtils from '../services/storage-utils';
 
 export default class DepositEthBalanceScreen extends Component {
   state = {
+    isLoading: true,
     confirmDialog: false,
     confirmDialogTitle: 'Cancel Deposit Funds',
     confirmDialogMessage: 'Are you sure you want to cancel the deposit funds transaction?',
@@ -25,13 +27,39 @@ export default class DepositEthBalanceScreen extends Component {
     }
   }
 
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
+    let promises = [this.fetchEtheriumBalance(), this.getExchangeRates()];
+    this.state.isLoading = true;
+    Promise.all(promises).then(() => {
+      this.setState({isLoading: false});
+    }).catch(() => {
+      // Show toast in case of any error
+      this.setState({isLoading: false});
+    })
+  }
+
+  getExchangeRates = async () => {
+    this.exchangeRates = await StorageUtils.exchangeRates();
+  }
+
+  fetchEtheriumBalance = async () => {
+    const walletService = WalletService.getInstance();
+    await walletService.getEtheriumBalance().then(balanceObj => {
+      // Set balance of each token
+    });
+  }
+
   navigateBack = () => { this.props.navigation.goBack(); }
 
-  goToDepositFromEthScreen = (type) => {
+  goToDepositFromEthScreen = (token) => {
     this.props.navigation.push('DepositEthScreen', {
       accountDetails: this.accountDetails,
       pk: this.pk,
-      type
+      token,
     });
   }
 
@@ -81,7 +109,7 @@ export default class DepositEthBalanceScreen extends Component {
           </Text>
           <View style={styles.cardContent}>
             <TouchableOpacity
-              onPress={this.goToDepositFromEthScreen}
+              onPress={() => { this.goToDepositFromEthScreen('ETH') }}
               style={[styles.buttonStyle, styles.marginButtom]}>
               <Text style={[styles.buttonText3, styles.marginLeft]}>
                 ETH
@@ -101,7 +129,7 @@ export default class DepositEthBalanceScreen extends Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={this.goToDepositFromEthScreen}
+              onPress={() => { this.goToDepositFromEthScreen('USDC') }}
               style={[styles.buttonStyle, styles.marginButtom]}>
               <Text style={[styles.buttonText3, styles.marginLeft]}>
                 USDC
@@ -121,7 +149,7 @@ export default class DepositEthBalanceScreen extends Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={this.goToDepositFromEthScreen}
+              onPress={() => { this.goToDepositFromEthScreen('DAI') }}
               style={[styles.buttonStyle, styles.marginButtom]}>
               <Text style={[styles.buttonText3, styles.marginLeft]}>
                 DAI
@@ -141,7 +169,7 @@ export default class DepositEthBalanceScreen extends Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={this.goToDepositFromEthScreen}
+              onPress={() => { this.goToDepositFromEthScreen('WBTC') }}
               style={[styles.buttonStyle, styles.marginButtom]}>
               <Text style={[styles.buttonText3, styles.marginLeft]}>
                 WBTC
@@ -211,7 +239,6 @@ export default class DepositEthBalanceScreen extends Component {
               />
               <LoadingIndicator
                 visible={this.state.isLoading}
-                message={this.state.loadingMessage}
               />
             </View>
           </KeyboardAvoidingView>

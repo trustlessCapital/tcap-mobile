@@ -16,10 +16,12 @@ import styles from '../stylesheets/deposit-home';
 import ConfirmDialog from '../components/confirm-dialog';
 import LoadingIndicator from '../components/loading-indicator';
 import ErrorDialog from '../components/error-dialog';
-
+import WalletService from '../services/wallet-service';
+import StorageUtils from '../services/storage-utils';
 
 export default class DepositEthScreen extends Component {
   state = {
+    isLoading: true,
     confirmDialog: false,
     confirmDialogTitle: 'Cancel Deposit Funds',
     confirmDialogMessage: 'Are you sure you want to cancel the deposit funds transaction?',
@@ -30,8 +32,27 @@ export default class DepositEthScreen extends Component {
     if (this.props.route && this.props.route.params) {
       if (this.props.route.params.accountDetails)
         this.accountDetails = this.props.route.params.accountDetails;
-      if (this.props.route.params.pk) this.pk = this.props.route.params.pk;
+      if (this.props.route.params.token)
+        this.token = this.props.route.params.token;
     }
+  }
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.state.isLoading = true;
+    this.getExchangeRates().then(() => {
+      this.setState({isLoading: false});
+    }).catch(() => {
+      // Show toast in case of any error
+      this.setState({isLoading: false});
+    })
+  }
+
+  getExchangeRates = async () => {
+    this.exchangeRates = await StorageUtils.exchangeRates();
   }
 
   navigateBack = () => { this.props.navigation.goBack(); }
@@ -39,7 +60,6 @@ export default class DepositEthScreen extends Component {
   goToDepositConfirmScreen = () => {
     this.props.navigation.push('DepositConfirmScreen', {
       accountDetails: this.accountDetails,
-      pk: this.pk,
       amount: this.state.amount
     });
   }
@@ -47,7 +67,6 @@ export default class DepositEthScreen extends Component {
   goToDashboard = () => {
     this.props.navigation.popToTop();
     this.props.navigation.replace('DashboardScreen', {
-      pk: this.pk,
       accountDetails: this.accountDetails,
     });
   }
@@ -105,14 +124,14 @@ export default class DepositEthScreen extends Component {
                   placeholder={'Enter Amount'}
                   placeholderTextColor={Colors.tintColorGreyedDark}
                   onChangeText={text => {
-                    this.state.amount = text.replace(/[^0-9]/g, '');
+                    this.state.amount = text.replace(/[^0-9\.]/g, '');
                     this.setState({});
                   }}
                   keyboardType={'phone-pad'}
                   value={this.state.amount}
                 />
                 <View style={[styles.rowFlex, styles.marginRight]}>
-                  <Text style={[styles.buttonText3]}>ETH</Text>
+                  <Text style={[styles.buttonText3]}>{this.token}</Text>
                 </View>
               </View>
               <View
@@ -187,7 +206,6 @@ export default class DepositEthScreen extends Component {
               />
               <LoadingIndicator
                 visible={this.state.isLoading}
-                message={this.state.loadingMessage}
               />
             </View>
           </KeyboardAvoidingView>

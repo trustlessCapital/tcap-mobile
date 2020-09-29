@@ -60,7 +60,7 @@ export default class WalletService {
 
   depositFundsToZkSync = async (token, amount) => {
     await this.getSyncWallet();
-    const deposit = await syncWallet.depositToSyncFromEthereum({
+    const deposit = await this.syncWallet.depositToSyncFromEthereum({
       depositTo: this.syncWallet.address(),
       token,
       amount: ethers.utils.parseEther(amount),
@@ -96,5 +96,9 @@ export default class WalletService {
         }
       });
     });
+  }
+
+  getTxStatusUrl(txId) {
+    return `https://rinkeby.etherscan.io/tx/${txId}`;
   }
 }

@@ -7,10 +7,13 @@ import styles from '../stylesheets/deposit-home';
 import ConfirmDialog from '../components/confirm-dialog';
 import LoadingIndicator from '../components/loading-indicator';
 import ErrorDialog from '../components/error-dialog';
+import WalletService from '../services/wallet-service';
+import StorageUtils from '../services/storage-utils';
 
 
 export default class DepositConfirmScreen extends Component {
   state = {
+    isLoading: true,
     confirmDialog: false,
     confirmDialogTitle: 'Cancel Deposit Funds',
     confirmDialogMessage: 'Are you sure you want to cancel the deposit funds transaction?',
@@ -21,18 +24,48 @@ export default class DepositConfirmScreen extends Component {
     if (this.props.route && this.props.route.params) {
       if (this.props.route.params.accountDetails)
         this.accountDetails = this.props.route.params.accountDetails;
-      if (this.props.route.params.pk) this.pk = this.props.route.params.pk;
       if (this.props.route.params.amount)
         this.state.amount = this.props.route.params.amount;
+      if (this.props.route.params.token)
+        this.token = this.props.route.params.token;
     }
+  }
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.state.isLoading = true;
+    this.getExchangeRates().then(() => {
+      this.setState({isLoading: false});
+    }).catch(() => {
+      // Show toast in case of any error
+      this.setState({isLoading: false});
+    })
+  }
+
+  getExchangeRates = async () => {
+    this.exchangeRates = await StorageUtils.exchangeRates();
   }
 
   navigateBack = () => { this.props.navigation.goBack(); }
 
+  depositFunds = () => {
+    this.setState({isLoading: true});
+    const walletService = WalletService.getInstance();
+    walletService.depositFundsToZkSync(this.token, this.state.amount).then((txDetails) => {
+      console.log('>>>> txDetails', txDetails);
+      this.setState({isLoading: false});
+    }).catch((e) => {
+      console.log(">>>> err", e);
+      this.setState({isLoading: false});
+    });
+  }
+
   goToDepositStatusScreen = () => {
     this.props.navigation.push('DepositStatusScreen', {
       accountDetails: this.accountDetails,
-      pk: this.pk,
       amount: this.state.amount,
     });
   }
@@ -40,7 +73,6 @@ export default class DepositConfirmScreen extends Component {
   goToDashboard = () => {
     this.props.navigation.popToTop();
     this.props.navigation.replace('DashboardScreen', {
-      pk: this.pk,
       accountDetails: this.accountDetails,
     });
   }
@@ -156,7 +188,7 @@ export default class DepositConfirmScreen extends Component {
             </View>
             <View style={[styles.cardFooter]}>
               <TouchableOpacity
-                onPress={this.goToDepositStatusScreen.bind(this)}
+                onPress={this.depositFunds.bind(this)}
                 style={[styles.buttonStylePrimary, styles.halfButton]}>
                 <Text style={styles.buttonText}>Deposit</Text>
               </TouchableOpacity>
@@ -210,7 +242,6 @@ export default class DepositConfirmScreen extends Component {
               />
               <LoadingIndicator
                 visible={this.state.isLoading}
-                message={this.state.loadingMessage}
               />
             </View>
           </KeyboardAvoidingView>

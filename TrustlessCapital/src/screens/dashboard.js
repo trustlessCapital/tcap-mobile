@@ -13,8 +13,6 @@ import Colors from '../constants/Colors';
 import StatusBarColor from '../components/status-bar-color';
 import {TabView, SceneMap} from 'react-native-tab-view';
 import DashboardWallet from './dashboard-wallet';
-import WalletService from '../services/wallet-service';
-import { wallet } from '../lib/zksync/build-src';
 
 export default class DashboardScreen extends Component {
   state = {

@@ -5,9 +5,13 @@ import StatusBarColor from '../components/status-bar-color';
 import Colors from '../constants/Colors';
 import styles from '../stylesheets/deposit-home';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
+import WalletService from '../services/wallet-service';
+import StorageUtils from '../services/storage-utils';
+import LoadingIndicator from '../components/loading-indicator';
 
 export default class DepositStatusScreen extends Component {
   state = {
+    isLoading: true
   }
 
   constructor(props) {
@@ -15,10 +19,31 @@ export default class DepositStatusScreen extends Component {
     if (this.props.route && this.props.route.params) {
       if (this.props.route.params.accountDetails)
         this.accountDetails = this.props.route.params.accountDetails;
-      if (this.props.route.params.pk) this.pk = this.props.route.params.pk;
       if (this.props.route.params.amount)
         this.state.amount = this.props.route.params.amount;
+      if (this.props.route.params.transactionDetails)
+        this.state.transactionDetails = this.props.route.params.transactionDetails;
     }
+
+    this.walletService = WalletService.getInstance();
+  }
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.state.isLoading = true;
+    this.getExchangeRates().then(() => {
+      this.setState({isLoading: false});
+    }).catch(() => {
+      // Show toast in case of any error
+      this.setState({isLoading: false});
+    })
+  }
+
+  getExchangeRates = async () => {
+    this.exchangeRates = await StorageUtils.exchangeRates();
   }
 
   navigateBack = () => { this.props.navigation.goBack(); }
@@ -26,7 +51,6 @@ export default class DepositStatusScreen extends Component {
   goToDepositFromEthScreen = (type) => {
     this.props.navigation.push('DepositEthScreen', {
       accountDetails: this.accountDetails,
-      pk: this.pk,
       type
     });
   }
@@ -34,14 +58,13 @@ export default class DepositStatusScreen extends Component {
   goToDashboard = () => {
     this.props.navigation.popToTop();
     this.props.navigation.replace('DashboardScreen', {
-      pk: this.pk,
       accountDetails: this.accountDetails,
     });
   }
 
   async openLink() {
     try {
-      const url = 'https://www.facebook.com'
+      const url = this.walletService.getTxStatusUrl(this.transactionDetails.txId);
       if (await InAppBrowser.isAvailable()) {
         await InAppBrowser.open(url, {
           // iOS Properties
@@ -186,6 +209,7 @@ export default class DepositStatusScreen extends Component {
               <ScrollView style={styles.mainContentWrapper}>
                 {this.depositContent}
               </ScrollView>
+              <LoadingIndicator visible={this.state.isLoading} />
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>
