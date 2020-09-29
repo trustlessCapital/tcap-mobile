@@ -96,6 +96,12 @@ function mnemonicGenerated(email, phone) {
   }).then(processResponse);
 }
 
+function getExchangePrice() {
+  return fetch(SERVICE_HOST + '/v1/price/all', {
+    method: 'GET',
+  }).then(processResponse);
+}
+
 
 export default (APIService = {
   signUp,
@@ -104,4 +110,5 @@ export default (APIService = {
   resendOTP,
   verifyOTP,
   mnemonicGenerated,
+  getExchangePrice,
 });

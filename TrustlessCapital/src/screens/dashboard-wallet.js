@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import styles from '../stylesheets/dashboard-wallet';
-import {Placeholder, PlaceholderLine, Shine} from 'rn-placeholder';
-import Colors from '../constants/Colors';
+import StorageUtils from '../services/storage-utils';
 import WalletService from '../services/wallet-service';
+import LoadingIndicator from '../components/loading-indicator';
+import apiServices from '../services/api-services';
 
 export default class DashboardWallet extends Component {
   state = {
     totalBalance: 0.0,
-    loading: true
+    isLoading: true
   }
 
   constructor(props) {
@@ -25,19 +26,34 @@ export default class DashboardWallet extends Component {
   }
 
   componentDidMount() {
-    this.fetchAccountBalance();
+    this.loadData();
+  }
+
+  loadData() {
+    let promises = [this.fetchAccountBalance(), this.getExchangeRates()];
+    this.state.isLoading = true;
+    Promise.all(promises).then(() => {
+      this.setState({isLoading: false});
+    }).catch(() => {
+      // Show toast in case of any error
+      this.setState({isLoading: false});
+    })
+  }
+
+  getExchangeRates = async () => {
+    await apiServices.getExchangePrice().then((exchangeRates) => {
+      StorageUtils.exchangeRates(exchangeRates);
+    });
   }
 
   fetchAccountBalance = async () => {
-    this.state.loading = true;
     const walletService = WalletService.getInstance();
-    walletService.getZkSyncBalance().then(balanceObj => {
+    await walletService.getZkSyncBalance().then(balanceObj => {
       if (!balanceObj) {
         this.state.totalBalance = 0.0;
       } else {
         // Calculate balance
-      }
-      this.setState({loading: false});
+      } 
     });
   }
 
@@ -71,6 +87,10 @@ export default class DashboardWallet extends Component {
               <Text style={styles.buttonText}>Withdraw</Text>
             </TouchableOpacity>
           </View>
+          <LoadingIndicator
+            visible={this.state.isLoading}
+            message={'Please wait while we prepare your wallet dashboard...'}
+          />
         </View>
       </>
     );
