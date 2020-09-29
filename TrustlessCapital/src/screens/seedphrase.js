@@ -109,18 +109,13 @@ export default class SeedPhraseScreen extends Component {
       this.accountDetails.email,
     ).then(pk => {
       const walletService = WalletService.getInstance();
-      walletService.getSyncWallet(pk).then(() => {
-        walletService.getAccountState(pk).then((accountState) => {
-          console.log('ACCOUNT STATE ::: ', accountState);
-          this.setState({
-            isLoading: false,
-          });
-          this.props.navigation.popToTop();
-          this.props.navigation.replace('DashboardScreen', {
-            accountDetails: this.accountDetails,
-            pk: pk,
-          });
-        });
+      walletService.setPk(pk);
+      this.setState({
+        isLoading: false,
+      });
+      this.props.navigation.popToTop();
+      this.props.navigation.replace('DashboardScreen', {
+        accountDetails: this.accountDetails,
       });
     }); 
   }

@@ -13,6 +13,8 @@ import Colors from '../constants/Colors';
 import StatusBarColor from '../components/status-bar-color';
 import {TabView, SceneMap} from 'react-native-tab-view';
 import DashboardWallet from './dashboard-wallet';
+import WalletService from '../services/wallet-service';
+import { wallet } from '../lib/zksync/build-src';
 
 export default class DashboardScreen extends Component {
   state = {
@@ -46,8 +48,6 @@ export default class DashboardScreen extends Component {
     if (this.props.route && this.props.route.params) {
       if (this.props.route.params.accountDetails)
         this.accountDetails = this.props.route.params.accountDetails;
-      if (this.props.route.params.pk)
-        this.pk = this.props.route.params.pk;
     }
   }
 
@@ -61,7 +61,6 @@ export default class DashboardScreen extends Component {
 
   WalletRoute = () => (
     <DashboardWallet
-      pk={this.pk}
       accountDetails={this.accountDetails}
       navigation={this.props.navigation}
     ></DashboardWallet>

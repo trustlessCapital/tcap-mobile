@@ -7,17 +7,14 @@ import WalletService from '../services/wallet-service';
 
 export default class DashboardWallet extends Component {
   state = {
-    verifiedBalance: 0,
-    depositingBalance: 0,
-    loadingBalance: true
+    totalBalance: 0.0,
+    loading: true
   }
 
   constructor(props) {
     super(props);
-    this.pk = this.props.pk;
     this.accountDetails = this.props.accountDetails;
     this.walletService = WalletService.getInstance();
-    this.fetchAccountBalance();
   }
 
   goToDepositHomeScreen = () => {
@@ -27,13 +24,21 @@ export default class DashboardWallet extends Component {
     });
   }
 
+  componentDidMount() {
+    this.fetchAccountBalance();
+  }
+
   fetchAccountBalance = async () => {
-    this.state.loadingBalance = true;
-    this.setState({});
-    let accountState = await this.walletService.getAccountState(this.pk);
-    this.walletService.getEtheriumBalance(this.pk);
-    this.state.loadingBalance = false;
-    this.setState({});
+    this.state.loading = true;
+    const walletService = WalletService.getInstance();
+    walletService.getZkSyncBalance().then(balanceObj => {
+      if (!balanceObj) {
+        this.state.totalBalance = 0.0;
+      } else {
+        // Calculate balance
+      }
+      this.setState({loading: false});
+    });
   }
 
   get titleBar() {
@@ -52,8 +57,9 @@ export default class DashboardWallet extends Component {
         <View style={styles.balanceCard}>
           <Text style={styles.balanceTitle}>Total Balance</Text>
           <View style={styles.balanceWrapper}>
-            <Text style={styles.balanceText}>$ 77,777.</Text>
-            <Text style={styles.balanceTextDecimal}>00</Text>
+            <Text style={styles.balanceText}>
+              $ {this.state.totalBalance}
+            </Text>
           </View>
           <View style={styles.balanceCardFooter}>
             <TouchableOpacity
