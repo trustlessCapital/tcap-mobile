@@ -18,6 +18,7 @@ import LoadingIndicator from '../components/loading-indicator';
 import ErrorDialog from '../components/error-dialog';
 import WalletService from '../services/wallet-service';
 import StorageUtils from '../services/storage-utils';
+import WalletUtils from '../services/wallet-utils';
 
 export default class DepositEthScreen extends Component {
   state = {
@@ -60,7 +61,8 @@ export default class DepositEthScreen extends Component {
   goToDepositConfirmScreen = () => {
     this.props.navigation.push('DepositConfirmScreen', {
       accountDetails: this.accountDetails,
-      amount: this.state.amount
+      amount: this.state.amount,
+      token: this.token
     });
   }
 
@@ -131,7 +133,7 @@ export default class DepositEthScreen extends Component {
                   value={this.state.amount}
                 />
                 <View style={[styles.rowFlex, styles.marginRight]}>
-                  <Text style={[styles.buttonText3]}>{this.token}</Text>
+                  <Text style={[styles.buttonText3]}>{this.token.toUpperCase()}</Text>
                 </View>
               </View>
               <View
@@ -146,7 +148,7 @@ export default class DepositEthScreen extends Component {
                     styles.greenText,
                     {marginTop: 10, width: '100%'},
                   ]}>
-                  ~$881.25
+                  ~${WalletUtils.getAssetDisplayTextInUSD(this.token, this.state.amount, this.exchangeRates)}
                 </Text>
               </View>
             </View>

@@ -9,9 +9,12 @@ import LoadingIndicator from '../components/loading-indicator';
 import ErrorDialog from '../components/error-dialog';
 import WalletService from '../services/wallet-service';
 import StorageUtils from '../services/storage-utils';
+import apiServices from '../services/api-services';
+import walletUtils from '../services/wallet-utils';
 
 export default class DepositEthBalanceScreen extends Component {
   state = {
+    ethBalance: [],
     isLoading: true,
     confirmDialog: false,
     confirmDialogTitle: 'Cancel Deposit Funds',
@@ -36,7 +39,8 @@ export default class DepositEthBalanceScreen extends Component {
     this.state.isLoading = true;
     Promise.all(promises).then(() => {
       this.setState({isLoading: false});
-    }).catch(() => {
+    }).catch((e) => {
+      console.log("ERROR >>> ", e)
       // Show toast in case of any error
       this.setState({isLoading: false});
     })
@@ -47,9 +51,9 @@ export default class DepositEthBalanceScreen extends Component {
   }
 
   fetchEtheriumBalance = async () => {
-    const walletService = WalletService.getInstance();
-    await walletService.getEtheriumBalance().then(balanceObj => {
-      // Set balance of each token
+    const address = await WalletService.getInstance().getEtheriumAddress();
+    await apiServices.getEtheriumBalance(address).then(ethBalance => {
+      this.state.ethBalance = ethBalance;
     });
   }
 
@@ -108,86 +112,47 @@ export default class DepositEthBalanceScreen extends Component {
             Choose from your balances in Etherium Main Network
           </Text>
           <View style={styles.cardContent}>
-            <TouchableOpacity
-              onPress={() => { this.goToDepositFromEthScreen('ETH') }}
-              style={[styles.buttonStyle, styles.marginButtom]}>
-              <Text style={[styles.buttonText3, styles.marginLeft]}>
-                ETH
-              </Text>
-              <View style={[styles.rowFlex, styles.marginRight]}>
-                <View
-                  style={[
-                    styles.columnFlex,
-                    styles.marginLeft,
-                    styles.centerAlign,
-                  ]}>
-                  <Text style={[styles.buttonText3]}>2.34</Text>
-                  <Text style={[styles.buttonText2, styles.greenText]}>
-                    $881.25
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => { this.goToDepositFromEthScreen('USDC') }}
-              style={[styles.buttonStyle, styles.marginButtom]}>
-              <Text style={[styles.buttonText3, styles.marginLeft]}>
-                USDC
-              </Text>
-              <View style={[styles.rowFlex, styles.marginRight]}>
-                <View
-                  style={[
-                    styles.columnFlex,
-                    styles.marginLeft,
-                    styles.centerAlign,
-                  ]}>
-                  <Text style={[styles.buttonText3]}>1000</Text>
-                  <Text style={[styles.buttonText2, styles.greenText]}>
-                    $1000.00
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => { this.goToDepositFromEthScreen('DAI') }}
-              style={[styles.buttonStyle, styles.marginButtom]}>
-              <Text style={[styles.buttonText3, styles.marginLeft]}>
-                DAI
-              </Text>
-              <View style={[styles.rowFlex, styles.marginRight]}>
-                <View
-                  style={[
-                    styles.columnFlex,
-                    styles.marginLeft,
-                    styles.centerAlign,
-                  ]}>
-                  <Text style={[styles.buttonText3]}>2.34</Text>
-                  <Text style={[styles.buttonText2, styles.greenText]}>
-                    $881.25
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => { this.goToDepositFromEthScreen('WBTC') }}
-              style={[styles.buttonStyle, styles.marginButtom]}>
-              <Text style={[styles.buttonText3, styles.marginLeft]}>
-                WBTC
-              </Text>
-              <View style={[styles.rowFlex, styles.marginRight]}>
-                <View
-                  style={[
-                    styles.columnFlex,
-                    styles.marginLeft,
-                    styles.centerAlign,
-                  ]}>
-                  <Text style={[styles.buttonText3]}>1</Text>
-                  <Text style={[styles.buttonText2, styles.greenText]}>
-                    $10700
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+            {this.state.ethBalance.map(
+              (balanceObj, index) =>
+                balanceObj.value != 0 && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.goToDepositFromEthScreen(balanceObj.symbol);
+                    }}
+                    style={[styles.buttonStyle, styles.marginButtom]}>
+                    <Text style={[styles.buttonText3, styles.marginLeft]}>
+                      {balanceObj.symbol.toUpperCase()}
+                    </Text>
+                    <View style={[styles.rowFlex, styles.marginRight]}>
+                      <View
+                        style={[
+                          styles.columnFlex,
+                          styles.marginLeft,
+                          styles.centerAlign,
+                        ]}>
+                        <Text style={[styles.buttonText3]}>
+                          {walletUtils.getAssetDisplayText(
+                            balanceObj.symbol,
+                            balanceObj.value,
+                          )}
+                        </Text>
+                        <Text
+                          style={[styles.buttonText2, styles.greenText]}>
+                          $
+                          {walletUtils.getAssetDisplayTextInUSD(
+                            balanceObj.symbol,
+                            walletUtils.getAssetDisplayText(
+                              balanceObj.symbol,
+                              balanceObj.value,
+                            ),
+                            this.exchangeRates,
+                          )}
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                ),
+            )}
           </View>
         </View>
       </>

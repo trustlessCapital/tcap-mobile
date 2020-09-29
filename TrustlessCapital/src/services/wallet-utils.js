@@ -1,12 +1,13 @@
 const ethers = require('ethers');
 import * as Random from 'expo-random';
+import * as _ from 'lodash';
 import SecurityServices from './security';
 import * as Keychain from 'react-native-keychain';
 import ECEncryption from 'react-native-ec-encryption';
 import base64 from 'react-native-base64';
 
-const createWallet = (pk) => {
-  return new ethers.Wallet(pk);
+const createWallet = (pk, network) => {
+  return new ethers.Wallet(pk, network);
 };
 
 const createMnemonic = async () => {
@@ -78,6 +79,20 @@ const getPrivateKey = (pin, email) => {
   });
 };
 
+const getAssetDisplayText = (symbol, value) => {
+  return (parseFloat(value) * 1e-18).toFixed(2);
+}
+
+const getAssetDisplayTextInUSD = (symbol, value, exchangeRates) => {
+  if (!value) {
+    return 0;
+  }
+  value = parseFloat(value);
+  let exchangeRate = _.find(exchangeRates, { symbol });
+  if (!exchangeRate) return '';
+  return (value * parseFloat(exchangeRate.value) * 1e-8).toFixed(2);
+};
+
 export default (WalletUtils = {
   createAndStorePrivateKey,
   getPrivateKey,
@@ -86,5 +101,7 @@ export default (WalletUtils = {
   createAddressFromPrivateKey,
   _createPrivateKeyFromMnemonic,
   clearPrivateKey,
+  getAssetDisplayText,
+  getAssetDisplayTextInUSD,
 });
 

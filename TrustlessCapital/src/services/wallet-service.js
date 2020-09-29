@@ -1,12 +1,9 @@
 const ethers = require('ethers');
 import WalletUtils from './wallet-utils';
 import * as zksync from '../lib/zksync/build-src/index';
-import walletUtils from './wallet-utils';
-import Web3 from 'web3';
-import ZkSyncTokens from '../constants/ZkSyncTokens';
 
-
-const PROJECT_ID = '70a3313a4c414b5da283fa9bcaf0ed0a';
+const NETWORK = 'rinkeby';
+//const NETWORK = 'mainnet';
 export default class WalletService {
 
   constructor() {}
@@ -29,12 +26,17 @@ export default class WalletService {
   }
 
   getProvider = async () => {
-    this.syncProvider = await zksync.getDefaultProvider("rinkeby");
+    this.syncProvider = await zksync.getDefaultProvider(NETWORK);
+  }
+
+  getEthersProvider = async () => {
+    return ethers.getDefaultProvider(NETWORK);
   }
 
   getSyncWallet = async () => {
     await this.getProvider();
-    const ethWallet = WalletUtils.createWallet(this.pk);
+    const ethersProvider = await this.getEthersProvider();
+    const ethWallet = WalletUtils.createWallet(this.pk, ethersProvider);
     this.syncWallet = await zksync.Wallet.fromEthSigner(ethWallet, this.syncProvider);
   
     return this.syncWallet;
@@ -59,14 +61,19 @@ export default class WalletService {
   }
 
   depositFundsToZkSync = async (token, amount) => {
-    await this.getSyncWallet();
-    const deposit = await this.syncWallet.depositToSyncFromEthereum({
-      depositTo: this.syncWallet.address(),
-      token,
+    const syncProvider = await zksync.getDefaultProvider('rinkeby');
+    const ethersProvider = ethers.getDefaultProvider('rinkeby');
+    const ethWallet = new ethers.Wallet("0x66a7cf77d14045472340684b7aeb78a62639e3ac6a60fac5647fa6affbf2b92a", ethersProvider);
+    const syncWallet = await zksync.Wallet.fromEthSigner(ethWallet, syncProvider);
+
+    const deposit = await syncWallet.depositToSyncFromEthereum({
+      depositTo: syncWallet.address(),
+      token: token.toUpperCase(),
       amount: ethers.utils.parseEther(amount),
     });
-
-    return await deposit.awaitVerifyReceipt();
+    const depositReceipt = await deposit.awaitReceipt();
+    console.log('depositReceipt.executed: ', depositReceipt);
+    console.log('depositReceipt.block: ', depositReceipt.block);
   }
 
   getZkSyncBalance = async () => {
@@ -76,29 +83,12 @@ export default class WalletService {
     return verifiedBalances;
   }
 
-  getEtheriumBalance = async () => {
-    let ethAddress = walletUtils.createAddressFromPrivateKey(this.pk);
-
-    const web3 = new Web3(
-      new Web3.providers.HttpProvider(
-        `https://mainnet.infura.io/v3/${PROJECT_ID}`,
-      ),
-    );
-
-    await new Promise((resolve, reject) => {
-      web3.eth.getBalance(ethAddress, function(err, result) {
-        if (err) {
-          reject(err);
-        } else {
-          const ethBalance = web3.utils.fromWei(result, 'ether');
-          // For each ZkSyncTokens get balance in eth network
-          resolve(ethBalance);
-        }
-      });
-    });
+  getEtheriumAddress = async () => {
+    await this.getSyncWallet();
+    return this.syncWallet.address();
   }
 
   getTxStatusUrl(txId) {
-    return `https://rinkeby.etherscan.io/tx/${txId}`;
+    return `https://${NETWORK}.etherscan.io/tx/${txId}`;
   }
 }

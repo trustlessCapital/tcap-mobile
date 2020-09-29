@@ -9,7 +9,7 @@ import LoadingIndicator from '../components/loading-indicator';
 import ErrorDialog from '../components/error-dialog';
 import WalletService from '../services/wallet-service';
 import StorageUtils from '../services/storage-utils';
-
+import WalletUtils from '../services/wallet-utils';
 
 export default class DepositConfirmScreen extends Component {
   state = {
@@ -134,7 +134,12 @@ export default class DepositConfirmScreen extends Component {
                     {this.state.amount}
                   </Text>
                   <Text style={[styles.buttonText2, styles.greenText]}>
-                    $881.25
+                    ~$
+                    {WalletUtils.getAssetDisplayTextInUSD(
+                      this.token,
+                      this.state.amount,
+                      this.exchangeRates,
+                    )}
                   </Text>
                 </View>
               </View>
@@ -155,9 +160,9 @@ export default class DepositConfirmScreen extends Component {
                     styles.marginLeft,
                     styles.centerAlign,
                   ]}>
-                  <Text style={[styles.buttonText3]}>2.34</Text>
+                  <Text style={[styles.buttonText3]}>0</Text>
                   <Text style={[styles.buttonText2, styles.greenText]}>
-                    $881.25
+                    $0
                   </Text>
                 </View>
               </View>
@@ -179,9 +184,16 @@ export default class DepositConfirmScreen extends Component {
                     styles.marginLeft,
                     styles.centerAlign,
                   ]}>
-                  <Text style={[styles.buttonText3]}>2.34</Text>
+                  <Text style={[styles.buttonText3]}>
+                    {this.state.amount}
+                  </Text>
                   <Text style={[styles.buttonText2, styles.greenText]}>
-                    $881.25
+                    ~$
+                    {WalletUtils.getAssetDisplayTextInUSD(
+                      this.token,
+                      this.state.amount,
+                      this.exchangeRates,
+                    )}
                   </Text>
                 </View>
               </View>
