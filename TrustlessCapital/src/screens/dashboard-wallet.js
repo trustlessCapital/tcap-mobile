@@ -5,6 +5,8 @@ import StorageUtils from '../services/storage-utils';
 import WalletService from '../services/wallet-service';
 import LoadingIndicator from '../components/loading-indicator';
 import apiServices from '../services/api-services';
+import walletUtils from '../services/wallet-utils';
+import * as _ from 'lodash';
 
 export default class DashboardWallet extends Component {
   state = {
@@ -33,15 +35,24 @@ export default class DashboardWallet extends Component {
     let promises = [this.fetchAccountBalance(), this.getExchangeRates()];
     this.state.isLoading = true;
     Promise.all(promises).then(() => {
+      if (this.state.balanceObj) {
+        let total = 0;
+        _.forOwn(this.state.balanceObj, (val, key) => {
+          let value = walletUtils.getAssetDisplayText(key.toLowerCase(), val)
+          total += walletUtils.getAssetDisplayTextInUSD(key.toLowerCase(), value, this.exchangeRates);
+        });
+        this.state.totalBalance = parseFloat(total);
+      }
       this.setState({isLoading: false});
-    }).catch(() => {
-      // Show toast in case of any error
+    }).catch((e) => {
+      console.log("Error ", e)
       this.setState({isLoading: false});
     })
   }
 
   getExchangeRates = async () => {
     await apiServices.getExchangePrice().then((exchangeRates) => {
+      this.exchangeRates = exchangeRates;
       StorageUtils.exchangeRates(exchangeRates);
     });
   }
@@ -52,7 +63,7 @@ export default class DashboardWallet extends Component {
       if (!balanceObj) {
         this.state.totalBalance = 0.0;
       } else {
-        // Calculate balance
+        this.state.balanceObj = balanceObj;
       } 
     });
   }

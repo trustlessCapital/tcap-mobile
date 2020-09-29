@@ -1,4 +1,5 @@
-const ethers = require('ethers');
+import '@ethersproject/shims';
+import {ethers} from 'ethers';
 import WalletUtils from './wallet-utils';
 import * as zksync from '../lib/zksync/build-src/index';
 
@@ -61,19 +62,14 @@ export default class WalletService {
   }
 
   depositFundsToZkSync = async (token, amount) => {
-    const syncProvider = await zksync.getDefaultProvider('rinkeby');
-    const ethersProvider = ethers.getDefaultProvider('rinkeby');
-    const ethWallet = new ethers.Wallet("0x66a7cf77d14045472340684b7aeb78a62639e3ac6a60fac5647fa6affbf2b92a", ethersProvider);
-    const syncWallet = await zksync.Wallet.fromEthSigner(ethWallet, syncProvider);
+    await this.getSyncWallet();
 
-    const deposit = await syncWallet.depositToSyncFromEthereum({
-      depositTo: syncWallet.address(),
+    const deposit = await this.syncWallet.depositToSyncFromEthereum({
+      depositTo: this.syncWallet.address(),
       token: token.toUpperCase(),
       amount: ethers.utils.parseEther(amount),
     });
-    const depositReceipt = await deposit.awaitReceipt();
-    console.log('depositReceipt.executed: ', depositReceipt);
-    console.log('depositReceipt.block: ', depositReceipt.block);
+    return await deposit.awaitReceipt();
   }
 
   getZkSyncBalance = async () => {
