@@ -55,18 +55,20 @@ export default class DepositConfirmScreen extends Component {
     this.setState({isLoading: true});
     const walletService = WalletService.getInstance();
     walletService.depositFundsToZkSync(this.token, this.state.amount).then((txDetails) => {
-      console.log('>>>> txDetails', txDetails);
-      this.setState({isLoading: false});
+      console.log('txDetails', txDetails);
+      this.setState({ isLoading: false });
+      this.goToDepositStatusScreen(txDetails);
     }).catch((e) => {
-      console.log(">>>> err", e);
+      console.log("Error ", e);
       this.setState({isLoading: false});
     });
   }
 
-  goToDepositStatusScreen = () => {
+  goToDepositStatusScreen = (txDetails) => {
     this.props.navigation.push('DepositStatusScreen', {
       accountDetails: this.accountDetails,
       amount: this.state.amount,
+      txDetails
     });
   }
 
