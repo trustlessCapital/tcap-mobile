@@ -3,13 +3,17 @@
  * @flow strict-local
  */
 
+ /**
+  * Create By @name Sukumar_Abhijeet 
+  */
+
 import React from 'react';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import AuthNavigator from './src/@Routing/AuthStack';
 import Colors from './src/constants/Colors';
 import StatusBarColor from './src/components/status-bar-color';
-import MixNavigator from './src/@Routing/TabStack';
+import Controller from './src/@Routing';
+import {NavigationContainer} from '@react-navigation/native';
 
 
 export default function App() {
@@ -19,8 +23,9 @@ export default function App() {
                 backgroundColor={Colors.primaryBg}
                 barStyle="light-content"
             />
-            {/* <AuthNavigator /> */}
-            <MixNavigator />
+             <NavigationContainer>
+             <Controller />
+             </NavigationContainer>
         </SafeAreaProvider>
     );
 }

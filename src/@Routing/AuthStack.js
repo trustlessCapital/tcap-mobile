@@ -13,9 +13,6 @@ import VerificationScreen from '../@Screens/Auth/Verification';
 import SeedPhraseNoticeScreen from '../@Screens/Auth/Seeds/seedphrase-notice';
 import SeedPhraseScreen from '../@Screens/Auth/Seeds/seedphrase';
 import SeedPhraseRecoveryScreen from '../@Screens/Auth/Seeds/seedphrase-recovery';
-import DashboardScreen from '../@Screens/Tabs/Dashboard';
-import {NavigationContainer} from '@react-navigation/native';
-
 import SplashScreen from '../@Screens/Auth/Splash';
 
 const Stack = createStackNavigator();
@@ -23,7 +20,6 @@ const navigationOptions = {headerShown: false};
 
 const AuthNavigator = () => {
     return (
-        <NavigationContainer>
           <Stack.Navigator initialRouteName={'Splash'} headerMode="none">
           <Stack.Screen
             component={SplashScreen}
@@ -61,38 +57,7 @@ const AuthNavigator = () => {
               component={SeedPhraseRecoveryScreen}
               options={navigationOptions}
             />
-            <Stack.Screen
-              name="DashboardScreen"
-              component={DashboardScreen}
-              options={navigationOptions}
-            />
-            {/* <Stack.Screen
-              name="DepositHomeScreen"
-              component={DepositHomeScreen}
-              options={navigationOptions}
-            /> */}
-            {/* <Stack.Screen
-              name="DepositEthBalanceScreen"
-              component={DepositEthBalanceScreen}
-              options={navigationOptions}
-            />
-            <Stack.Screen
-              name="DepositEthScreen"
-              component={DepositEthScreen}
-              options={navigationOptions}
-            />
-            <Stack.Screen
-              name="DepositConfirmScreen"
-              component={DepositConfirmScreen}
-              options={navigationOptions}
-            />
-            <Stack.Screen
-              name="DepositStatusScreen"
-              component={DepositStatusScreen}
-              options={navigationOptions}
-            /> */}
           </Stack.Navigator>
-        </NavigationContainer>
     );
 };
 

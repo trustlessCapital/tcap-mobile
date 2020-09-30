@@ -16,4 +16,6 @@ export default {
   white: '#FFFFFF',
   tintColorGreyed: '#f4f8ff',
   tintColorGreyedDark: '#d8e8ff',
+  inactiveTintGrey: '#4a4e70',
+  activeTintRed: '#ed3946'
 };
