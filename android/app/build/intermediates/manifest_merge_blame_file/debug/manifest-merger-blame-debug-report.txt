@@ -1,0 +1,114 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.trustlesscapital"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="29" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/debug/AndroidManifest.xml:5:5-77
+11-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/debug/AndroidManifest.xml:5:22-75
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:4:5-67
+12-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:4:22-64
+13    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+13-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:5:5-73
+13-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:5:22-71
+14    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+14-->[com.facebook.flipper:flipper:0.33.1] /Users/ayushagrawal/.gradle/caches/transforms-2/files-2.1/b02b5c28dd820cc0e7cc1f8075b16406/jetified-flipper-0.33.1/AndroidManifest.xml:16:5-76
+14-->[com.facebook.flipper:flipper:0.33.1] /Users/ayushagrawal/.gradle/caches/transforms-2/files-2.1/b02b5c28dd820cc0e7cc1f8075b16406/jetified-flipper-0.33.1/AndroidManifest.xml:16:22-73
+15    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+15-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:5-81
+15-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:22-78
+16    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+16-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:14:5-80
+16-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:14:22-77
+17    <uses-permission android:name="android.permission.STORAGE" />
+17-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:5-66
+17-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:22-63
+18    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+18-->[:expo-local-authentication] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-local-authentication/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-72
+18-->[:expo-local-authentication] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-local-authentication/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:22-69
+19
+20    <application
+20-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:7:5-28:19
+21        android:name="com.trustlesscapital.MainApplication"
+21-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:8:7-38
+22        android:allowBackup="false"
+22-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:12:7-34
+23        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+23-->[androidx.core:core:1.1.0] /Users/ayushagrawal/.gradle/caches/transforms-2/files-2.1/4f509a65121478d6153615d7ef5b7c5f/core-1.1.0/AndroidManifest.xml:24:18-86
+24        android:debuggable="true"
+25        android:icon="@mipmap/ic_launcher"
+25-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:10:7-41
+26        android:label="@string/app_name"
+26-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:9:7-39
+27        android:roundIcon="@mipmap/ic_launcher_round"
+27-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:11:7-52
+28        android:theme="@style/AppTheme"
+28-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:13:7-38
+29        android:usesCleartextTraffic="true" > <!-- This Activity's 'android:theme' attribute is handled by 'expo-splash-screen' command and it's discouraged to modify it manually -->
+29-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/debug/AndroidManifest.xml:7:18-53
+30        <activity
+30-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:16:7-26:18
+31            android:name="com.trustlesscapital.MainActivity"
+31-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:17:9-37
+32            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+32-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:19:9-86
+33            android:label="@string/app_name"
+33-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:18:9-41
+34            android:launchMode="singleTask"
+34-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:20:9-40
+35            android:windowSoftInputMode="adjustResize" >
+35-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:21:9-51
+36            <intent-filter>
+36-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:22:9-25:25
+37                <action android:name="android.intent.action.MAIN" />
+37-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:23:13-65
+37-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:23:21-62
+38
+39                <category android:name="android.intent.category.LAUNCHER" />
+39-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:24:13-73
+39-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:24:23-70
+40            </intent-filter>
+41        </activity>
+42        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+42-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:27:7-84
+42-->/Users/ayushagrawal/code/tcap-react-native/android/app/src/main/AndroidManifest.xml:27:17-81
+43
+44        <provider
+44-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:18:9-27:20
+45            android:name="expo.modules.filesystem.FileSystemFileProvider"
+45-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:19:13-74
+46            android:authorities="com.trustlesscapital.FileSystemFileProvider"
+46-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:20:13-74
+47            android:exported="false"
+47-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:21:13-37
+48            android:grantUriPermissions="true" >
+48-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:22:13-47
+49            <meta-data
+49-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:24:13-26:70
+50                android:name="android.support.FILE_PROVIDER_PATHS"
+50-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:25:17-67
+51                android:resource="@xml/file_system_provider_paths" />
+51-->[:expo-file-system] /Users/ayushagrawal/code/tcap-react-native/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:26:17-67
+52        </provider>
+53
+54        <activity android:name="com.proyecto26.inappbrowser.ChromeTabsManagerActivity" >
+54-->[:react-native-inappbrowser-reborn] /Users/ayushagrawal/code/tcap-react-native/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:14:9-15:20
+54-->[:react-native-inappbrowser-reborn] /Users/ayushagrawal/code/tcap-react-native/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:14:19-87
+55        </activity> <!-- suppress AndroidDomInspection -->
+56        <activity
+56-->[:react-native-keychain] /Users/ayushagrawal/code/tcap-react-native/node_modules/react-native-keychain/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:17:9-20:67
+57            android:name="androidx.biometric.DeviceCredentialHandlerActivity"
+57-->[:react-native-keychain] /Users/ayushagrawal/code/tcap-react-native/node_modules/react-native-keychain/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:18:13-78
+58            android:exported="true"
+58-->[:react-native-keychain] /Users/ayushagrawal/code/tcap-react-native/node_modules/react-native-keychain/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:19:13-36
+59            android:theme="@style/DeviceCredentialHandlerTheme" />
+59-->[:react-native-keychain] /Users/ayushagrawal/code/tcap-react-native/node_modules/react-native-keychain/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:20:13-64
+60    </application>
+61
+62</manifest>
