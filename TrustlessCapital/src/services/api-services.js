@@ -1,6 +1,7 @@
 //const SERVICE_HOST = "http://10.0.2.2:7001";
 const SERVICE_HOST = 'http://localhost:7001';
 //const SERVICE_HOST = 'http://3.15.205.156';
+const SERVICE_HOST2 = 'http://localhost:7002';
 const API_PREFIX = "/api";
 
 function processResponse(response) {
@@ -96,6 +97,18 @@ function mnemonicGenerated(email, phone) {
   }).then(processResponse);
 }
 
+function getExchangePrice() {
+  return fetch(SERVICE_HOST2 + '/v1/price/all', {
+    method: 'GET',
+  }).then(processResponse);
+}
+
+function getEtheriumBalance(address) {
+  return fetch(SERVICE_HOST2 + '/v1/l1/balance/all/' + address, {
+    method: 'GET',
+  }).then(processResponse);
+}
+
 
 export default (APIService = {
   signUp,
@@ -104,4 +117,6 @@ export default (APIService = {
   resendOTP,
   verifyOTP,
   mnemonicGenerated,
+  getExchangePrice,
+  getEtheriumBalance,
 });

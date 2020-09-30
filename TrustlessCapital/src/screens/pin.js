@@ -18,6 +18,7 @@ import SecurityServices from '../services/security';
 import { PIN_SCREEN_MODE } from '../constants';
 import WalletUtils from '../services/wallet-utils';
 import StatusBarColor from '../components/status-bar-color';
+import WalletService from '../services/wallet-service';
 
 export default class PINScreen extends Component {
   email = null;
@@ -420,9 +421,9 @@ export default class PINScreen extends Component {
                         },
                       );
                     }
+                    WalletService.getInstance().setPk(pk);
                     this.props.navigation.replace('DashboardScreen', {
-                      accountDetails: accountDetails,
-                      pk: pk
+                      accountDetails: accountDetails
                     });
                   });
                 }

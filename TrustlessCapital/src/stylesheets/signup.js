@@ -71,19 +71,23 @@ export default (styles = StyleSheet.create({
   textInputRoot: {
     marginTop: 20,
     width: Dimensions.get('window').width - 40,
-    borderBottomWidth: 1,
+    borderWidth: 1,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderColor: Colors.tintColorLight,
   },
   phoneTextInputWrapper: {
     marginTop: 20,
   },
   phoneTextInputRoot: {
-    width: Dimensions.get('window').width - 40,
-    borderBottomWidth: 1,
+    paddingStart: 85
   },
   countryPickerButtonWrapper: {
     position: 'absolute',
     zIndex: 99,
-    top: 15,
+    top: 30,
+    left: 10
   },
   countryPickerButton: {
     padding: 5,
@@ -149,7 +153,6 @@ export default (styles = StyleSheet.create({
     borderRadius: 30,
   },
   footerContainer: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
