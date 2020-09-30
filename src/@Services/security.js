@@ -1,7 +1,7 @@
 import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NativeModules } from 'react-native';
-import {PIN_SCREEN_MODE} from '../constants';
+import { PIN_SCREEN_MODE } from '../@Constants';
 var Aes = NativeModules.Aes;
 
 const handleLocalAuthorization = (
@@ -17,7 +17,7 @@ const handleLocalAuthorization = (
     if (!authState.isAuthAsked) authenticateWithTouchID(component, authState);
     authState.isAuthAsked = false;
   }
-  component.setState({appState: nextAppState});
+  component.setState({ appState: nextAppState });
 };
 
 const authenticateWithTouchID = async (component, authState) => {
@@ -34,7 +34,7 @@ const authenticateWithTouchID = async (component, authState) => {
       });
     });
     if (authenticationResult.success) {
-      component.setState({locked: false});
+      component.setState({ locked: false });
     }
   }
 };
@@ -86,22 +86,22 @@ const fetchAccountDetails = (pin) => {
       try {
         encryptedData = JSON.parse(encryptedData);
       } catch (e) {
-        throw {error: 'Corrupted Data', status: -1};
+        throw { error: 'Corrupted Data', status: -1 };
       }
       return decryptData(encryptedData, key)
         .then(data => {
           try {
             data = JSON.parse(data);
           } catch (e) {
-            throw {error: 'Corrupted Data', status: -1};
+            throw { error: 'Corrupted Data', status: -1 };
           }
           if (!data.email || !data.phoneNumber) {
-            throw {error: 'Corrupted Data', status: -1};
+            throw { error: 'Corrupted Data', status: -1 };
           }
           return data;
         })
         .catch(e => {
-          throw {error: 'Invalid PIN', status: -2};
+          throw { error: 'Invalid PIN', status: -2 };
         });
     });
   });

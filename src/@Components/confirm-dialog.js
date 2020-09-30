@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import Colors from '../constants/Colors';
+import Colors from '../@Constants/Colors';
 import Dialog, {
   DialogContent,
   DialogTitle,
@@ -8,7 +8,7 @@ import Dialog, {
   DialogButton,
 } from 'react-native-popup-dialog';
 
-const ConfirmDialog = ({title, visible, message, onOk, onDismiss, onOkText, onDismissText}) => {
+const ConfirmDialog = ({ title, visible, message, onOk, onDismiss, onOkText, onDismissText }) => {
   return (
     <Dialog
       visible={visible}
