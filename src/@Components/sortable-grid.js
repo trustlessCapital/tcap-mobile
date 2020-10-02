@@ -11,7 +11,7 @@ import {
 import _ from 'lodash';
 
 // Default values
-const ITEMS_PER_ROW = 4;
+const ITEMS_PER_ROW = 2;
 const DRAG_ACTIVATION_THRESHOLD = 200; // Milliseconds
 const BLOCK_TRANSITION_DURATION = 300; // Milliseconds
 const ACTIVE_BLOCK_CENTERING_DURATION = 200; // Milliseconds

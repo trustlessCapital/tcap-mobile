@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   AppState,
+  BackHandler
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -45,6 +46,7 @@ export default class PINScreen extends Component {
 
   constructor(props) {
     super(props);
+    console.log('this.props.route.params',this.props.route.params);
     if (this.props.route && this.props.route.params) {
       if (this.props.route.params.mode)
         this.state.mode = this.props.route.params.mode;
@@ -69,11 +71,18 @@ export default class PINScreen extends Component {
         this.allowLogin = true;
       });
     }
+    BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange);
+    BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton);
   }
+
+  _handleBackButton = () =>{
+    if(this.state.disableBackButton) return true;
+    else return false;
+  };
 
   _handleAppStateChange = (nextAppState) => {
     if (!this.isPinFallback) {
@@ -426,9 +435,10 @@ export default class PINScreen extends Component {
                       );
                     }
                     WalletService.getInstance().setPk(pk);
-                    this.props.navigation.replace('DashboardScreen', {
-                      accountDetails: accountDetails
-                    });
+                    this.props.navigation.navigate('App',{
+                      screen:'Dashboard',
+                      params: { accountDetails: accountDetails },
+                    })
                   });
                 }
               }

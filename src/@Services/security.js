@@ -28,10 +28,10 @@ const authenticateWithTouchID = async (component, authState) => {
   if (hasHardware && isEnrolled) {
     authState.isAuthAsked = true;
     let authenticationResult = await LocalAuthentication.authenticateAsync().catch((e) => {
-      component.props.navigation.popToTop();
-      component.props.navigation.replace('PINScreen', {
-        mode: PIN_SCREEN_MODE.LOGIN_PIN,
-      });
+      component.props.navigation.navigate('Auth',{
+        screen:'PINScreen',
+        params: { mode: PIN_SCREEN_MODE.LOGIN_PIN, },
+      })
     });
     if (authenticationResult.success) {
       component.setState({ locked: false });

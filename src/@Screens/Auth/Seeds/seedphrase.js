@@ -4,7 +4,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  KeyboardAvoidingView,
   Dimensions,
 } from 'react-native';
 import styles from './styles';
@@ -20,6 +19,7 @@ import APIService from '../../../@Services/api-services';
 import SecurityServices from '../../../@Services/security';
 import StatusBarColor from '../../../@Components/status-bar-color';
 import Colors from '../../../@Constants/Colors';
+import { moderateScale } from 'react-native-size-matters';
 
 const WAIT_SEEDPHRASE = 'Please wait.. while we create your seed phrase!';
 const WAIT_CREATEWALLET = 'Please wait.. while we create your wallet!';
@@ -113,10 +113,10 @@ export default class SeedPhraseScreen extends Component {
       this.setState({
         isLoading: false,
       });
-      this.props.navigation.popToTop();
-      this.props.navigation.replace('DashboardScreen', {
-        accountDetails: this.accountDetails,
-      });
+      this.props.navigation.navigate('App',{
+        screen:'Dashboard',
+        params: { accountDetails: this.accountDetails },
+      })
     }); 
   }
 
@@ -142,7 +142,7 @@ export default class SeedPhraseScreen extends Component {
       <SortableGrid
         style={styles.phrasesWrapper}
         itemWidth={Dimensions.get('window').width / 2}
-        itemHeight={Dimensions.get('window').height / 12}
+        itemHeight={moderateScale(60)}
         itemsPerRow={2}
         onDragRelease={itemOrder =>
           (this.seedPhraseOrder = itemOrder.itemOrder)
@@ -171,13 +171,12 @@ export default class SeedPhraseScreen extends Component {
           backgroundColor={Colors.primary_bg}
           barStyle="light-content"
         />
-        <KeyboardAvoidingView style={{flex: 1}}>
           <View style={styles.container}>
             <Text style={styles.mainTitle}>
               {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
               Phrase
             </Text>
-            <View style={styles.header}>
+            <View style={styles.disclaimerHeader}>
               <Text style={styles.title}>Disclaimer</Text>
               <Text style={styles.subTitle}>
                 {this.state.isVerificationMode
@@ -204,7 +203,12 @@ export default class SeedPhraseScreen extends Component {
                 </Text>
               </TouchableOpacity>
             </View>
-            <ConfirmDialog
+            <LoadingIndicator
+              visible={this.state.isLoading}
+              message={this.state.loadingMessage}
+            />
+          </View>
+        <ConfirmDialog
               title={'Reset Mnemonic Phrase'}
               visible={this.state.confirmResetDialog}
               message={'Are you sure you want to reset mnemonic phrase?'}
@@ -215,23 +219,17 @@ export default class SeedPhraseScreen extends Component {
                 this._onResetButtonClick();
                 this.setState({confirmResetDialog: false});
               }}
-            />
-            <LoadingIndicator
-              visible={this.state.isLoading}
-              message={this.state.loadingMessage}
-            />
-            <ErrorDialog
-              title={'Invalid seed phrase order'}
-              visible={this.state.invalidOrder}
-              message={
-                'Please ensure the correct order of your 12 word seed phrase!'
-              }
-              onDismiss={() => {
-                this.setState({invalidOrder: false});
-              }}
-            />
-          </View>
-        </KeyboardAvoidingView>
+          />
+        <ErrorDialog
+            title={'Invalid seed phrase order'}
+            visible={this.state.invalidOrder}
+            message={
+              'Please ensure the correct order of your 12 word seed phrase!'
+            }
+            onDismiss={() => {
+              this.setState({invalidOrder: false});
+            }}
+        />
       </SafeAreaView>
     );
   }

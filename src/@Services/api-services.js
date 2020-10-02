@@ -1,4 +1,4 @@
-const SERVICE_HOST = 'http://localhost:7001';
+const SERVICE_HOST = 'http://192.168.43.59:7001';
 const API_PREFIX = "/api";
 
 function processResponse(response) {
@@ -10,7 +10,9 @@ function processResponse(response) {
 }
 
 function signUp(email, phone) {
-  return fetch(SERVICE_HOST + API_PREFIX + '/user/signup', {
+  const url = SERVICE_HOST + API_PREFIX + '/user/signup';
+  console.log('URL',url);
+  return fetch(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 import Colors from '../../../@Constants/Colors';
 
 
@@ -10,7 +11,6 @@ export default (styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     marginStart: 20,
     marginEnd: 20,
     backgroundColor: Colors.primaryBg,
@@ -90,14 +90,16 @@ export default (styles = StyleSheet.create({
     color: Colors.title,
   },
   header: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  disclaimerHeader:{
   },
   footer: {
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 20,
+    position:'absolute',
+    bottom:moderateScale(5)
   },
   primaryButtonStyle: {
     borderRadius: 5,

@@ -12,7 +12,7 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Colors from './src/@Constants/Colors';
 import StatusBarColor from './src/@Components/status-bar-color';
-import Controller from './src/@Routing';
+import AppRouter from './src/@Routing';
 import { NavigationContainer } from '@react-navigation/native';
 
 
@@ -24,7 +24,7 @@ export default function App() {
                 barStyle="light-content"
             />
             <NavigationContainer>
-                <Controller />
+                <AppRouter />
             </NavigationContainer>
         </SafeAreaProvider>
     );

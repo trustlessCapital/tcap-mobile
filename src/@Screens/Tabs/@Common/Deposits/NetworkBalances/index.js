@@ -67,11 +67,13 @@ export default class DepositEthBalanceScreen extends Component {
   }
 
   goToDashboard = () => {
-    this.props.navigation.popToTop();
-    this.props.navigation.replace('DashboardScreen', {
-      pk: this.pk,
-      accountDetails: this.accountDetails,
-    });
+    this.props.navigation.navigate('App',{
+      screen:'Dashboard',
+      params: { 
+        accountDetails: this.accountDetails,
+        pk: this.pk, 
+      },
+    })
   }
 
   cancelTx = () => {
