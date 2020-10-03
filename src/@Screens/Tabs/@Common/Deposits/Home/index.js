@@ -24,7 +24,7 @@ export default class DepositHomeScreen extends Component {
   navigateBack = () => { this.props.navigation.goBack(); }
 
   goToDepositFromEthScreen = () => {
-    this.props.navigation.push('DepositEthBalanceScreen', {
+    this.props.navigation.navigate('DepositEthBalanceScreen', {
       accountDetails: this.accountDetails,
       pk: this.pk,
     });

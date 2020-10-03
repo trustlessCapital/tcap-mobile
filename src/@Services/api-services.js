@@ -1,4 +1,5 @@
 const SERVICE_HOST = 'http://192.168.43.59:7001';
+const ACCOUNTX_HOST = 'http://192.168.43.59:7002';
 const API_PREFIX = "/api";
 
 function processResponse(response) {
@@ -97,13 +98,13 @@ function mnemonicGenerated(email, phone) {
 }
 
 function getExchangePrice() {
-  return fetch(SERVICE_HOST + '/v1/price/all', {
+  return fetch(ACCOUNTX_HOST + '/v1/price/all', {
     method: 'GET',
   }).then(processResponse);
 }
 
 function getEtheriumBalance(address) {
-  return fetch(SERVICE_HOST + '/v1/l1/balance/all/' + address, {
+  return fetch(ACCOUNTX_HOST + '/v1/l1/balance/all/' + address, {
     method: 'GET',
   }).then(processResponse);
 }

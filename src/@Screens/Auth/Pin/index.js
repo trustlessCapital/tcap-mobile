@@ -397,6 +397,7 @@ export default class PINScreen extends Component {
   };
 
   loginUser = async () => {
+    console.log('login User API');
     this.setState({ isLoading: true, loadingMessage: 'Please wait!!' });
     SecurityServices.fetchAccountDetails(this.state.pin)
       .then((account) => {
@@ -445,6 +446,7 @@ export default class PINScreen extends Component {
             });
           })
           .catch((error) => {
+            console.log('Err',err);
             if (error.status == 409) {
               this.setState({
                 isLoading: false,
@@ -465,6 +467,7 @@ export default class PINScreen extends Component {
           .finally(() => this.setState({ isLoading: false }));
       })
       .catch((error) => {
+        console.log('Err',error);
         let errMsg = 'Error occured in signing you in! Please try later!';
         if (error.status == -1) {
           errMsg = 'Error occured in signing you in!';

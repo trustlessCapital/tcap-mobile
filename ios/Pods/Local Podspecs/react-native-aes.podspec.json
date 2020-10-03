@@ -1,0 +1,21 @@
+{
+  "name": "react-native-aes",
+  "version": "1.3.9",
+  "summary": "Native module for AES encryption",
+  "authors": "tectiv3",
+  "license": "MIT",
+  "requires_arc": true,
+  "homepage": "https://github.com/tectiv3/react-native-aes",
+  "source": {
+    "git": "https://github.com/tectiv3/react-native-aes"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "ios/**/*.{h,m}",
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}

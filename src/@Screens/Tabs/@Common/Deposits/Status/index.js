@@ -49,14 +49,14 @@ export default class DepositStatusScreen extends Component {
   navigateBack = () => { this.props.navigation.goBack(); }
 
   goToDepositFromEthScreen = (type) => {
-    this.props.navigation.push('DepositEthScreen', {
+    this.props.navigation.navigate('DepositEthScreen', {
       accountDetails: this.accountDetails,
       type
     });
   }
 
   goToDashboard = () => {
-    this.props.navigation.push('Dashboard', {
+    this.props.navigation.navigate('Dashboard', {
       accountDetails: this.accountDetails,
     });
   }

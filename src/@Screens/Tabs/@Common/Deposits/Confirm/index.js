@@ -64,7 +64,7 @@ export default class DepositConfirmScreen extends Component {
   }
 
   goToDepositStatusScreen = (txDetails) => {
-    this.props.navigation.push('DepositStatusScreen', {
+    this.props.navigation.navigate('DepositStatusScreen', {
       accountDetails: this.accountDetails,
       amount: this.state.amount,
       txDetails
@@ -72,7 +72,7 @@ export default class DepositConfirmScreen extends Component {
   }
 
   goToDashboard = () => {
-    this.props.navigation.push('Dashboard', {
+    this.props.navigation.navigate('Dashboard', {
       accountDetails: this.accountDetails,
     });
   }
