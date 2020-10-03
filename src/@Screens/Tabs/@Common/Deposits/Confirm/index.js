@@ -72,10 +72,9 @@ export default class DepositConfirmScreen extends Component {
   }
 
   goToDashboard = () => {
-    this.props.navigation.navigate('App',{
-      screen:'Dashboard',
-      params: { accountDetails: this.accountDetails },
-    })
+    this.props.navigation.push('Dashboard', {
+      accountDetails: this.accountDetails,
+    });
   }
 
   cancelTx = () => {
