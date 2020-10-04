@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import {Platform} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator, } from '@react-navigation/stack';
 import { moderateScale } from 'react-native-size-matters';
@@ -49,9 +50,11 @@ const getTabBarIcon = (route, focused) => {
   return <TabIcons focused={focused} imageOption={imageName} />;
 }
 
-const TabStack = () => {
+const TabStack = ({...props}) => {
+  const {route:{params}} = props;
   return (
     <Tab.Navigator
+      initialRouteName={'Dashboard'}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => getTabBarIcon(route, focused)
       })}
@@ -60,23 +63,26 @@ const TabStack = () => {
         activeBackgroundColor: Colors.primaryBg,
         inactiveBackgroundColor: Colors.primaryBg,
         showLabel: false,
-        style: { height: moderateScale(70), borderTopWidth: 0 },
+        // showIcon: true,
+        style: { height: Platform.OS === 'ios' ? moderateScale(90)  : moderateScale(70), borderTopWidth: 0 },
       }}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen name="Dashboard" initialParams={params} component={DashboardScreen} />
       <Tab.Screen name="Tansactions" component={TransactionScreen} />
       <Tab.Screen name="Contacts" component={ContactsScreens} />
-      <Tab.Screen name="Accounts" component={AccountsScreen} />
+      <Tab.Screen name="Accounts" initialParams={params} component={AccountsScreen} />
     </Tab.Navigator>
   );
 }
 
-const MixNavigator = () => {
+const MixNavigator = ({...props}) => {
+  const {navigation:{state:{params}}} = props;
+
   return (
     <Stack.Navigator initialRouteName={'Tabs'} options={navigationOptions} headerMode="none">
-      <Stack.Screen component={TabStack} name="Tabs" />
+      <Stack.Screen component={TabStack} initialParams={params} name="Tabs" />
 
-      <Stack.Screen name="DepositHomeScreen" component={DepositHomeScreen} />
+      <Stack.Screen name="DepositHomeScreen"  component={DepositHomeScreen} />
       <Stack.Screen name="DepositConfirmScreen" component={DepositConfirmScreen} />
       <Stack.Screen name="DepositStatusScreen" component={DepositStatusScreen} />
       <Stack.Screen name="DepositEthBalanceScreen" component={DepositEthBalanceScreen} />

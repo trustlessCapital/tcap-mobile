@@ -103,6 +103,18 @@ export default class DepositEthBalanceScreen extends Component {
     );
   }
 
+  checkNoBalance = () =>{
+    const {ethBalance,isLoading} = this.state;
+    if(!isLoading)
+    {
+      const sum = ethBalance.map(item => item.value).reduce((prev, curr) => prev + curr, 0);
+      if(!sum)
+        return <Text style={styles.title}>No Balance is found</Text>
+      else return null;
+    }
+    return null;
+  }
+
   get depositContent() {
     return (
       <>
@@ -155,7 +167,7 @@ export default class DepositEthBalanceScreen extends Component {
               )
             }
             {/* TO DO  */}
-            <Text style={styles.title}>No balance for now</Text>
+            {this.checkNoBalance()}
           </View>
         </View>
       </>
@@ -207,6 +219,7 @@ export default class DepositEthBalanceScreen extends Component {
               />
               <LoadingIndicator
                 visible={this.state.isLoading}
+                message={'Refreshing Balance..'}
               />
             </View>
           </KeyboardAvoidingView>

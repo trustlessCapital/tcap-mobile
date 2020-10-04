@@ -2,21 +2,59 @@
  * Create By @name Sukumar_Abhijeet 
  */
 
-import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import {
+  SafeAreaView,
+  Text,
+  AppState
+} from 'react-native';
+import styles from './styles';
+import SecurityServices from '../../../@Services/security';
+import Colors from '../../../@Constants/Colors';
+import StatusBarColor from '../../../@Components/status-bar-color';
 
-const AccountsScreen = () => {
-    return (
-        <TouchableOpacity style={{ padding: moderateScale(8) }}>
-            <Text>Accounts</Text>
-        </TouchableOpacity>
+export default class AccountsScreen extends Component {
+  state = {
+    appState: AppState.currentState,
+    index: 0,
+  };
+  authState = {};
+
+  constructor(props) {
+    super(props);
+    if (this.props.route && this.props.route.params) {
+      if (this.props.route.params.accountDetails)
+        this.accountDetails = this.props.route.params.accountDetails;
+    }
+  }
+
+  componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+
+  _handleAppStateChange = nextAppState => {
+    SecurityServices.handleLocalAuthorization(
+      this,
+      nextAppState,
+      this.state,
+      this.authState,
     );
-};
+  };
 
-AccountsScreen.propTypes = {
-    navigation: PropTypes.object.isRequired,
-};
-
-export default AccountsScreen;
+  render() {
+    return (
+      <SafeAreaView style={styles.wrapper}>
+        <StatusBarColor
+          backgroundColor={Colors.primary_bg}
+          barStyle="light-content"
+        />
+        <Text style={{color:'#fff',alignSelf:'center'}}>Accounts Screen</Text>
+      </SafeAreaView>
+    );
+  }
+}

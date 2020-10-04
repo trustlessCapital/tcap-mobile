@@ -436,10 +436,8 @@ export default class PINScreen extends Component {
                       );
                     }
                     WalletService.getInstance().setPk(pk);
-                    this.props.navigation.navigate('App',{
-                      screen:'Dashboard',
-                      params: { accountDetails: accountDetails },
-                    })
+                    console.log('accountDetails',accountDetails);
+                    this.props.navigation.navigate('App',{ accountDetails: accountDetails })
                   });
                 }
               }

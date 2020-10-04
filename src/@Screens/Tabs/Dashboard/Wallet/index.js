@@ -23,7 +23,7 @@ export default class DashboardWallet extends Component {
   goToDepositHomeScreen = () => {
     this.props.navigation.push('DepositHomeScreen', {
       accountDetails: this.accountDetails,
-      pk: this.pk,
+      pk: this.walletService.pk,
     });
   }
 
@@ -34,7 +34,8 @@ export default class DashboardWallet extends Component {
   loadData() {
     let promises = [this.fetchAccountBalance(), this.getExchangeRates()];
     this.state.isLoading = true;
-    Promise.all(promises).then(() => {
+
+    Promise.all(promises).then((data) => {
       if (this.state.balanceObj) {
         let total = 0;
         _.forOwn(this.state.balanceObj, (val, key) => {
@@ -51,15 +52,18 @@ export default class DashboardWallet extends Component {
   }
 
   getExchangeRates = async () => {
-    await apiServices.getExchangePrice().then((exchangeRates) => {
+    const address = walletUtils.createAddressFromPrivateKey(this.walletService.pk);
+    await apiServices.getExchangePrice(address).then((exchangeRates) => {
       this.exchangeRates = exchangeRates;
       StorageUtils.exchangeRates(exchangeRates);
     });
   }
 
   fetchAccountBalance = async () => {
+    console.log('Fetch Account Balance');
     const walletService = WalletService.getInstance();
     await walletService.getZkSyncBalance().then(balanceObj => {
+      console.log('balance Obj',balanceObj);
       if (!balanceObj) {
         this.state.totalBalance = 0.0;
       } else {

@@ -113,10 +113,7 @@ export default class SeedPhraseScreen extends Component {
       this.setState({
         isLoading: false,
       });
-      this.props.navigation.navigate('App',{
-        screen:'Dashboard',
-        params: { accountDetails: this.accountDetails },
-      })
+      this.props.navigation.navigate('App',{ accountDetails: accountDetails })
     }); 
   }
 

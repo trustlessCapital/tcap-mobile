@@ -3,9 +3,9 @@
  */
 
 import React from 'react';
+import {Platform} from 'react-native';
 import { Image, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import PropTypes from 'prop-types';
 
 const iconStyle = { width: moderateScale(25), height: moderateScale(25) }
 
@@ -51,7 +51,7 @@ const TabIcons = ({ ...props }) => {
     }
 
     return (
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', }}>
             {renderIcons(imageOption, focused)}
         </View>
     );

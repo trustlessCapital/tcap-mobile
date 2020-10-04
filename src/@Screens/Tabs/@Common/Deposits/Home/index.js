@@ -14,6 +14,7 @@ export default class DepositHomeScreen extends Component {
 
   constructor(props) {
     super(props);
+    console.log('this.props.route.params',this.props.route.params);
     if (this.props.route && this.props.route.params) {
       if (this.props.route.params.accountDetails)
         this.accountDetails = this.props.route.params.accountDetails;
