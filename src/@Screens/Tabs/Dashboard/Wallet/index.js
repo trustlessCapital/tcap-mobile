@@ -52,8 +52,7 @@ export default class DashboardWallet extends Component {
   }
 
   getExchangeRates = async () => {
-    const address = walletUtils.createAddressFromPrivateKey(this.walletService.pk);
-    await apiServices.getExchangePrice(address).then((exchangeRates) => {
+    await apiServices.getExchangePrice().then((exchangeRates) => {
       this.exchangeRates = exchangeRates;
       StorageUtils.exchangeRates(exchangeRates);
     });

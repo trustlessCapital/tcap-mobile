@@ -97,8 +97,8 @@ function mnemonicGenerated(email, phone) {
   }).then(processResponse);
 }
 
-function getExchangePrice(address='') {
-  const url =  `${ACCOUNTX_HOST}/v1/price/all/${address}`;
+function getExchangePrice() {
+  const url =  `${ACCOUNTX_HOST}/v1/price/all`;
   console.log('Address url',url);
   return fetch(url, {
     method: 'GET',
