@@ -1,0 +1,1 @@
+../../../../../node_modules/react-native-ec-encryption/ios/RNECEncryption.h
