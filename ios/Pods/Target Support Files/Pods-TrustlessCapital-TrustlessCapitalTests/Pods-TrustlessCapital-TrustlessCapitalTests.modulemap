@@ -1,0 +1,6 @@
+module Pods_TrustlessCapital_TrustlessCapitalTests {
+  umbrella header "Pods-TrustlessCapital-TrustlessCapitalTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

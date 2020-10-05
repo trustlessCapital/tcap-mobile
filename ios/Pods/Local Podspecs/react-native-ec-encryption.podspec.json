@@ -1,0 +1,25 @@
+{
+  "name": "react-native-ec-encryption",
+  "version": "1.1.0",
+  "summary": "react-native-ec-encryption",
+  "description": "A secure enclave backed encryption and decryption library",
+  "homepage": "https://github.com/paritytech/React-Native-ECEncryption",
+  "license": "GPL-3.0",
+  "authors": {
+    "hanwencheng": "heawen.cheng@gmail.com"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "git": "https://github.com/paritytech/React-Native-ECEncryption.git",
+    "tag": "v1.1.0"
+  },
+  "source_files": "ios/**/*.{h,m,swift}",
+  "requires_arc": true,
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}
