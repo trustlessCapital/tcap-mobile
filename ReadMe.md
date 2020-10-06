@@ -41,7 +41,7 @@ After pods installation is completed, Run the below command in the root director
 react-native run-ios 
 ``` 
 ## ZKSync Setup 
-[ZKSync](https://github.com/trustlessCapital/tcap-mobile/blob/master/TrustlessCapital/zksync-setup.md)
+[ZKSync](https://github.com/trustlessCapital/tcap-mobile/blob/master/ZKSync-Setup.md)
 
 
 ## License
