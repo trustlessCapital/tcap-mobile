@@ -45,4 +45,4 @@ react-native run-ios
 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[GPL3](https://github.com/trustlessCapital/tcap-mobile/blob/master/LICENSE)
