@@ -1,0 +1,5 @@
+# Set language
+*.js linguist-language=JavaScript
+
+# Normalize line endings for all text files.
+* text=auto
