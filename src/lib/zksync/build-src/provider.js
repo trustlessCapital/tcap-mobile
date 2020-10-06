@@ -86,6 +86,13 @@ class Provider {
             return yield this.transport.request("tx_submit", [tx, signature, fastProcessing]);
         });
     }
+    // Requests `zkSync` server to execute several transactions together.
+    // return transaction hash (e.g. sync-tx:dead..beef)
+    submitTxsBatch(transactions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.transport.request("submit_txs_batch", [transactions]);
+        });
+    }
     getContractAddress() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.transport.request("contract_address", null);
@@ -117,12 +124,19 @@ class Provider {
             return yield this.transport.request("get_confirmations_for_eth_op_amount", []);
         });
     }
+    getEthTxForWithdrawal(withdrawal_hash) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.transport.request("get_eth_tx_for_withdrawal", [withdrawal_hash]);
+        });
+    }
     notifyPriorityOp(serialId, action) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.transport.subscriptionsSupported()) {
                 return yield new Promise((resolve) => {
                     const subscribe = this.transport.subscribe("ethop_subscribe", [serialId, action], "ethop_unsubscribe", (resp) => {
-                        subscribe.then((sub) => sub.unsubscribe());
+                        subscribe
+                            .then((sub) => sub.unsubscribe())
+                            .catch((err) => console.log(`WebSocket connection closed with reason: ${err}`));
                         resolve(resp);
                     });
                 });
@@ -148,7 +162,9 @@ class Provider {
             if (this.transport.subscriptionsSupported()) {
                 return yield new Promise((resolve) => {
                     const subscribe = this.transport.subscribe("tx_subscribe", [hash, action], "tx_unsubscribe", (resp) => {
-                        subscribe.then((sub) => sub.unsubscribe());
+                        subscribe
+                            .then((sub) => sub.unsubscribe())
+                            .catch((err) => console.log(`WebSocket connection closed with reason: ${err}`));
                         resolve(resp);
                     });
                 });
@@ -180,6 +196,12 @@ class Provider {
                 zkpFee: ethers_1.BigNumber.from(transactionFee.zkpFee),
                 totalFee: ethers_1.BigNumber.from(transactionFee.totalFee),
             };
+        });
+    }
+    getTransactionsBatchFee(txTypes, addresses, tokenLike) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const batchFee = yield this.transport.request("get_txs_batch_fee_in_wei", [txTypes, addresses, tokenLike]);
+            return ethers_1.BigNumber.from(batchFee.totalFee);
         });
     }
     getTokenPrice(tokenLike) {

@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loadZkSyncCrypto = exports.privateKeyToPubKeyHash = exports.signTransactionBytes = void 0;
-const zksync_crypto_1 = require("../../zksync-crypto/zksync_crypto_wasm");
-const zks = require('../../zksync-crypto/zksync_crypto_wasm');
+const zksync_crypto_1 = require("../../zksync-crypto/zksync_crypto_wasm.js");
+const zks = require("../../zksync-crypto/zksync_crypto_wasm.js");
 const ethers_1 = require("ethers");
-var zksync_crypto_2 = require('../../zksync-crypto/zksync_crypto_wasm');
+var zksync_crypto_2 = require("../../zksync-crypto/zksync_crypto_wasm.js");
 Object.defineProperty(exports, "privateKeyFromSeed", { enumerable: true, get: function () { return zksync_crypto_2.privateKeyFromSeed; } });
 function signTransactionBytes(privKey, bytes) {
     const signaturePacked = zksync_crypto_1.sign_musig(privKey, bytes);

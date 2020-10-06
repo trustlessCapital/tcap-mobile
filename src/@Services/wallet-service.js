@@ -67,7 +67,7 @@ export default class WalletService {
     const deposit = await this.syncWallet.depositToSyncFromEthereum({
       depositTo: this.syncWallet.address(),
       token: token.toUpperCase(),
-      amount: ethers.utils.parseEther(amount),
+      amount: ethers.BigNumber.from(amount),
     });
     return await deposit.awaitReceipt();
   }
