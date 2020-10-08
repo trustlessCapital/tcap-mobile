@@ -8,7 +8,7 @@
     "ios8": "react-native run-ios --simulator=\"iPhone 8\"",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint --ext .jsx --ext .js --fix --ignore-path .eslintignore ."
   },
   "dependencies": {
     "@ethersproject/shims": "^5.0.5",
@@ -59,8 +59,10 @@
     "@react-native-community/eslint-config": "^0.0.5",
     "babel-jest": "^24.9.0",
     "eslint": "^6.5.1",
+    "eslint-plugin-react": "^7.13.0",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.58.0",
+    "prop-types": "^15.7.2",
     "react-test-renderer": "16.11.0"
   },
   "jest": {
