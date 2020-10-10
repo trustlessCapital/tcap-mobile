@@ -22,7 +22,6 @@ export default class DashboardScreen extends Component {
       route:PropTypes.object.isRequired,
   };
 
-
   constructor(props) {
       super(props);
       if (this.props.route && this.props.route.params) {

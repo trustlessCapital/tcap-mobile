@@ -178,7 +178,6 @@ export default class DepositEthBalanceScreen extends Component {
                                   ),
                           )
                       }
-                      {/* TO DO  */}
                       {this.checkNoBalance()}
                   </View>
               </View>

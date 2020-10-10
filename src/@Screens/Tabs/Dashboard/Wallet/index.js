@@ -37,8 +37,6 @@ export default class DashboardWallet extends Component {
       });
   }
 
-  
-
   loadData() {
       let promises = [this.fetchAccountBalance(), this.getExchangeRates()];
       this.state.isLoading = true;

@@ -156,6 +156,7 @@ export default class DepositStatusScreen extends Component {
   }
 
   get depositContent() {
+      console.log('transactionDetails',this.state.transactionDetails);
       return (
           <>
               <View style={styles.card}>

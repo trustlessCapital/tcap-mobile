@@ -86,6 +86,7 @@ export default class DepositEthScreen extends Component {
       this.setState({ confirmDialog: true });
   }
 
+
   get titleBar() {
       return (
           <>
@@ -157,7 +158,7 @@ export default class DepositEthScreen extends Component {
                                       styles.greenText,
                                       {marginTop: 10, width: '100%'},
                                   ]}>
-                  ~${WalletUtils.getAssetDisplayTextInUSD(this.token, this.state.amount, this.exchangeRates)}
+                  ~ ${WalletUtils.getAssetDisplayTextInUSD(this.token,this.state.amount, this.exchangeRates)}
                               </Text>
                           </View>
                       </View>
