@@ -9,6 +9,7 @@ import SecurityServices from './security';
 import * as Keychain from 'react-native-keychain';
 import ECEncryption from 'react-native-ec-encryption';
 import base64 from 'react-native-base64';
+import TOKENS from '../@Constants/ZkSyncTokens';
 
 const createWallet = (pk, network) => {
     return new ethers.Wallet(pk, network);
@@ -84,7 +85,20 @@ const getPrivateKey = (pin, email) => {
 };
 
 const getAssetDisplayText = (symbol, value) => {
-    return (parseFloat(value) * 1e-18).toFixed(2);
+    const decimal = getDecimalValueForAsset(symbol);
+    const unitConvertor = Math.pow(10, decimal);
+    const displayText = (parseFloat(value) / unitConvertor).toFixed(4);
+    console.log('displayText',displayText);
+    return displayText;
+};
+
+const getDecimalValueForAsset = (assetSymbol) =>{
+    console.log('Symbol',assetSymbol);
+    let decimal = 18;
+    let result = TOKENS.find(x => x.symbol === assetSymbol.toUpperCase());
+    console.log('Result OF decimal',result);
+    if(result) decimal = result.decimals;
+    return decimal;
 };
 
 const getWeiToEth = (weiAmount) =>{
@@ -110,6 +124,7 @@ export default (WalletUtils = {
     createAddressFromPrivateKey,
     _createPrivateKeyFromMnemonic,
     clearPrivateKey,
+    getDecimalValueForAsset,
     getAssetDisplayText,
     getAssetDisplayTextInUSD,
     getWeiToEth,

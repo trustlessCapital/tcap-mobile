@@ -1,4 +1,5 @@
 
+//@flow
 // Copyright (C) 2020  Trustless Pvt Ltd. <https://trustless.capital>
 
 // This program is free software: you can redistribute it and/or modify
@@ -19,7 +20,7 @@
  */
 
 
-import React from 'react';
+import React,{type StatelessFunctionalComponent } from 'react';
 import { SafeAreaView,Text, View,Image } from 'react-native';
 import StatusBarColor from '../../../../../@Components/status-bar-color';
 import Colors from '../../../../../@Constants/Colors';
@@ -27,10 +28,9 @@ import styles from '../Home/styles';
 
 /**
  * @description Initiates the Transaction Processing Loading Screen
- * @type StateLessFunctionalComponent<Node>
  */
 
-const TransactionProcessing = () =>{
+const TransactionProcessing:StatelessFunctionalComponent<Node> = () =>{
     return(
         <SafeAreaView style={styles.wrapper}>
             <StatusBarColor

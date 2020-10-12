@@ -15,6 +15,7 @@ import StorageUtils from '../../../../../@Services/storage-utils';
 import apiServices from '../../../../../@Services/api-services';
 import walletUtils from '../../../../../@Services/wallet-utils';
 import PropTypes from 'prop-types';
+import ErrorDialog from '../../../../../@Components/error-dialog';
 
 export default class DepositEthBalanceScreen extends Component {
     static propTypes = {
@@ -33,6 +34,7 @@ export default class DepositEthBalanceScreen extends Component {
     }
 
   state = {
+      inSufficientEth : false,
       ethBalance: [],
       isLoading: true,
       confirmDialog: false,
@@ -62,6 +64,7 @@ export default class DepositEthBalanceScreen extends Component {
 
   fetchEtheriumBalance = async () => {
       const address = await WalletService.getInstance().getEtheriumAddress();
+      console.log('address',address);
       await apiServices.getEtheriumBalance(address).then(ethBalance => {
           console.log('getEtheriumBalance',ethBalance);
           this.state.ethBalance = ethBalance;
@@ -70,12 +73,15 @@ export default class DepositEthBalanceScreen extends Component {
 
   navigateBack = () => { this.props.navigation.goBack(); }
 
-  goToDepositFromEthScreen = (token) => {
-      this.props.navigation.navigate('DepositEthScreen', {
-          accountDetails: this.accountDetails,
-          pk: this.pk,
-          token,
-      });
+  goToDepositFromEthScreen = async(token) => {
+      const allowDeposit = await  this.checkSuffucientEth();
+      if(allowDeposit)
+          this.props.navigation.navigate('DepositEthScreen', {
+              accountDetails: this.accountDetails,
+              pk: this.pk,
+              token,
+          });
+      else this.setState({inSufficientEth:true});
   }
 
   goToDashboard = () => {
@@ -84,6 +90,20 @@ export default class DepositEthBalanceScreen extends Component {
           pk: this.pk, 
       });
   }
+
+  checkSuffucientEth = (symbol = 'ETH') =>{
+      console.log('this.state.ethBalance',this.state.ethBalance);
+      let result = this.state.ethBalance.find(x => x.symbol.toUpperCase() === symbol);
+      console.log('result',result);
+      if(result)
+      {
+          const ETH =   walletUtils.getAssetDisplayText(result.symbol,result.value);
+          console.log('ETH AVAILABLE',ETH);
+          if(ETH > 0.0002) return true;
+          else return false;
+      }
+      else return false;
+  };
 
   cancelTx = () => {
       this.setState({ confirmDialog: true });
@@ -231,6 +251,14 @@ export default class DepositEthBalanceScreen extends Component {
                           <LoadingIndicator
                               message={'Refreshing Balance..'}
                               visible={this.state.isLoading}
+                          />
+                          <ErrorDialog
+                              message={'Not enough ETH to make transaction'}
+                              onDismiss={() => {
+                                  this.setState({inSufficientEth: false});
+                              }}
+                              title={'Insufficient ETH'}
+                              visible={this.state.inSufficientEth}
                           />
                       </View>
                   </KeyboardAvoidingView>

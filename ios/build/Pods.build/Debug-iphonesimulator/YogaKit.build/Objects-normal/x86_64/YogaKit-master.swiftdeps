@@ -1,5 +1,0 @@
-version: "Apple Swift version 5.3 (swiftlang-1200.0.29.2 clang-1200.0.30.1)"
-options: "4c855049a374b658a6c5fb9d6a50cb59"
-build_time: [1601993449, 929666000]
-inputs:
-  "/Users/ayushagrawal/code/tcap-react-native/ios/Pods/YogaKit/YogaKit/Source/YGLayoutExtensions.swift": [1601914919, 894269438]

@@ -69,6 +69,7 @@ export default class DepositEthScreen extends Component {
   navigateBack = () => { this.props.navigation.goBack(); }
 
   goToDepositConfirmScreen = () => {
+      console.log('This',this.state.amount);
       this.props.navigation.navigate('DepositConfirmScreen', {
           accountDetails: this.accountDetails,
           amount: this.state.amount,
@@ -163,8 +164,9 @@ export default class DepositEthScreen extends Component {
                           </View>
                       </View>
                       <TouchableOpacity
+                          disabled={this.state.amount === undefined}
                           onPress={this.goToDepositConfirmScreen.bind(this)}
-                          style={styles.buttonStyleSecondary}>
+                          style={{...styles.buttonStyleSecondary,opacity:this.state.amount === undefined ? 0.4:1}}>
                           <Text style={styles.buttonText}>Deposit</Text>
                       </TouchableOpacity>
                   </View>

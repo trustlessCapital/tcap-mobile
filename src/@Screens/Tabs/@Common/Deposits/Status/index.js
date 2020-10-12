@@ -8,6 +8,7 @@ import {
     KeyboardAvoidingView, ScrollView, Image,Linking,
     BackHandler
 } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../../../../../@Components/status-bar-color';
 import Colors from '../../../../../@Constants/Colors';
@@ -17,6 +18,13 @@ import WalletService from '../../../../../@Services/wallet-service';
 import StorageUtils from '../../../../../@Services/storage-utils';
 import TransactionProcessing from './TransactionProcess';
 import PropTypes from 'prop-types';
+import WalletUtils from '../../../../../@Services/wallet-utils';
+import { moderateScale } from 'react-native-size-matters';
+import { sendEmail } from '../../../../../@Services/email-service';
+import Support from '../../../../../@Constants/Supports';
+import Toast from 'react-native-simple-toast';
+
+const {supportMail} = Support;
 
 export default class DepositStatusScreen extends Component {
   
@@ -41,6 +49,7 @@ export default class DepositStatusScreen extends Component {
   
   state = {
       isLoading: true,
+      errorOccured:false,
       transactionDetails:{}
   };
 
@@ -64,11 +73,18 @@ export default class DepositStatusScreen extends Component {
   }
 
   initiateTransaction = () =>{
-      this.walletService.depositFundsToZkSync(this.token, this.state.amount).then((txDetails) => {
-          this.setState({ transactionDetails:txDetails,isLoading: false });
-      }).catch(() => {
-          this.setState({isLoading: false});
-      });
+      console.log('Token',this.token);
+      this.walletService.depositFundsToZkSync(this.token, this.state.amount)
+          .then((txDetails) => {
+              const [receipt,txCommit] = txDetails;
+              console.log('txdetails',txDetails);
+              console.log('Receipt',receipt);
+              console.log('txCommit',txCommit);
+              this.setState({ transactionDetails:txCommit,isLoading: false });
+          }).catch((err) => {
+              console.log('Error',err);
+              this.setState({isLoading: false,errorOccured:true});
+          });
   }
 
   getExchangeRates = async () => {
@@ -92,7 +108,7 @@ export default class DepositStatusScreen extends Component {
 
   async openLink() {
       try {
-          const url = this.walletService.getTxStatusUrl(this.state.transactionDetails.txId);
+          const url = this.walletService.getTxStatusUrl(this.state.transactionDetails.transactionHash);
           if (await InAppBrowser.isAvailable()) {
               await InAppBrowser.open(url, {
                   // iOS Properties
@@ -130,109 +146,164 @@ export default class DepositStatusScreen extends Component {
       }
   }
 
-  get titleBar() {
-      return (
-          <>
-              <View style={styles.titleBar}>
-                  <View style={styles.titleBarContentLeft}>
-                      <TouchableOpacity
-                          onPress={this.navigateBack}
-                          style={styles.backButton}>
-                          <Icon
-                              color={Colors.white}
-                              name={'ios-arrow-back'}
-                              size={24}
-                              style={{alignSelf: 'center'}}
-                          />
-                      </TouchableOpacity>
-                  </View>
-                  <View style={styles.titleBarContent}>
-                      <Text style={styles.titleBarTitle}>Deposit Initiated</Text>
-                  </View>
-                  <View style={styles.titleBarContentRight} />
-              </View>
-          </>
-      );
+  openEmailLink = () =>{
+      sendEmail(supportMail)
+          .then(() => {
+              console.log('Our email successful provided to device mail ');
+          });
+  };
+
+  copyToClipboard = () =>{
+      Clipboard.setString(supportMail);
+      Toast.show('Email Copied to Clipboard',Toast.LONG);
   }
 
-  get depositContent() {
-      console.log('transactionDetails',this.state.transactionDetails);
-      return (
-          <>
-              <View style={styles.card}>
-                  <View style={[styles.marginAround]}>
-                      <Image
-                          source={require('../../../../../../assets/images/icons/check.png')}
-                          style={styles.titleIcon}
-                      />
-                  </View>
-                  <Text style={styles.title}>
+    titleBar = (header = 'In-Progress')=> {
+        return (
+            <>
+                <View style={styles.titleBar}>
+                    <View style={styles.titleBarContentLeft}>
+                        <TouchableOpacity
+                            onPress={this.navigateBack}
+                            style={styles.backButton}>
+                            <Icon
+                                color={Colors.white}
+                                name={'ios-arrow-back'}
+                                size={24}
+                                style={{alignSelf: 'center'}}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.titleBarContent}>
+                        <Text style={styles.titleBarTitle}>{header}</Text>
+                    </View>
+                    <View style={styles.titleBarContentRight} />
+                </View>
+            </>
+        );
+    }
+
+    get depositContent() {
+        return (
+            <>
+                <View style={styles.card}>
+                    <View style={[styles.marginAround]}>
+                        <Image
+                            source={require('../../../../../../assets/images/icons/check.png')}
+                            style={styles.titleIcon}
+                        />
+                    </View>
+                    <Text style={styles.title}>
             Your deposit transaction has been mined and will be processed
             after 1 confirmations. Click button below to track the progress
-                  </Text>
-                  <TouchableOpacity
-                      onPress={() => { this.openLink(); }}
-                      style={[styles.buttonStyleSecondary, styles.halfButton]}>
-                      <Text style={styles.buttonText}>Track Status</Text>
-                  </TouchableOpacity>
-                  <View style={styles.cardContent}>
-                      <View
-                          style={[
-                              styles.buttonStyle,
-                              styles.marginButtom,
-                              styles.noBackground,
-                          ]}>
-                          <Text style={[styles.buttonText3, styles.marginLeft]}>
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => { this.openLink(); }}
+                        style={[styles.buttonStyleSecondary, styles.halfButton]}>
+                        <Text style={styles.buttonText}>Track Status</Text>
+                    </TouchableOpacity>
+                    <View style={styles.cardContent}>
+                        <View
+                            style={[
+                                styles.buttonStyle,
+                                styles.marginButtom,
+                                styles.noBackground,
+                            ]}>
+                            <Text style={[styles.buttonText3, styles.marginLeft]}>
                 Amount
-                          </Text>
-                          <View style={[styles.rowFlex, styles.marginRight]}>
-                              <View
-                                  style={[
-                                      styles.columnFlex,
-                                      styles.marginLeft,
-                                      styles.centerAlign,
-                                  ]}>
-                                  <Text style={[styles.buttonText3]}>
-                                      {this.state.amount}
-                                  </Text>
-                                  <Text style={[styles.buttonText2, styles.greenText]}>
-                    $881.25
-                                  </Text>
-                              </View>
-                          </View>
-                      </View>
-                      <View style={[styles.cardFooter]}>
-                          <TouchableOpacity
-                              onPress={this.goToDashboard.bind(this)}
-                              style={[styles.buttonStylePrimary]}>
-                              <Text style={styles.buttonText}>Ok</Text>
-                          </TouchableOpacity>
-                      </View>
-                  </View>
-              </View>
-          </>
-      );
-  }
+                            </Text>
+                            <View style={[styles.rowFlex, styles.marginRight]}>
+                                <View
+                                    style={[
+                                        styles.columnFlex,
+                                        styles.marginLeft,
+                                        styles.centerAlign,
+                                    ]}>
+                                    <Text style={[styles.buttonText3]}>
+                                        {this.state.amount}
+                                    </Text>
+                                    <Text style={[styles.buttonText2, styles.greenText]}>
+                                  ~$ {
+                                            WalletUtils.getAssetDisplayTextInUSD(
+                                                this.token,
+                                                this.state.amount,
+                                                this.exchangeRates,
+                                            )
+                                        }
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={[styles.cardFooter]}>
+                            <TouchableOpacity
+                                onPress={this.goToDashboard.bind(this)}
+                                style={[styles.buttonStylePrimary]}>
+                                <Text style={styles.buttonText}>Ok</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </>
+        );
+    }
 
-  render() {
-    
-      if(this.state.isLoading)
-          return <TransactionProcessing />;
-      return (
-          <SafeAreaView style={styles.wrapper}>
-              <StatusBarColor
-                  backgroundColor={Colors.primary_bg}
-                  barStyle="light-content"
-              />
-              <KeyboardAvoidingView style={{flex: 1}}>
-                  <View style={styles.container}>
-                      {this.titleBar}
-                      <ScrollView style={styles.mainContentWrapper}>
-                          {this.depositContent}
-                      </ScrollView>
-                  </View>
-              </KeyboardAvoidingView>
-          </SafeAreaView>
-      );
-  }
+    get errorContent() {
+        return (
+            <>
+                <View style={styles.card}>
+                    <Text style={styles.title}>
+                    Please try after sometime. 
+                    </Text>
+                    <Text style={styles.title}>
+                    If issue still persists, the please contact at  {supportMail}
+                    </Text>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',width:'90%'}}>
+                        <TouchableOpacity
+                            onPress={() => { this.openEmailLink(); }}
+                            style={[styles.buttonStyleSecondary, styles.halfButton]}>
+                            <Text style={styles.buttonText}>Send Email</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => { this.copyToClipboard(); }}
+                            style={[styles.buttonStyleSecondary, styles.halfButton]}>
+                            <Text style={styles.buttonText}>Copy Email</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{...styles.cardContent,marginTop:moderateScale(30)}}>
+                        <View style={[styles.cardFooter]}>
+                            <TouchableOpacity
+                                onPress={this.goToDashboard.bind(this)}
+                                style={[styles.buttonStylePrimary]}>
+                                <Text style={styles.buttonText}>Visit Dashboard</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </>
+        );
+    }
+
+    render() {
+        const {isLoading,errorOccured} = this.state;
+        if(isLoading)
+            return <TransactionProcessing />;
+
+        return (
+            <SafeAreaView style={styles.wrapper}>
+                <StatusBarColor
+                    backgroundColor={Colors.primary_bg}
+                    barStyle="light-content"
+                />
+                <KeyboardAvoidingView style={{flex: 1}}>
+                    <View style={styles.container}>
+                        {this.titleBar(errorOccured ? 'Transaction Failed' : 'Deposit Initiated')}
+                        <ScrollView style={styles.mainContentWrapper}>
+                            { !errorOccured && this.depositContent}
+                            { errorOccured && this.errorContent}
+                        </ScrollView>
+                    </View>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+        );
+    }
 }
