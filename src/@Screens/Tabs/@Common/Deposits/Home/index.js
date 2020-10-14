@@ -19,7 +19,7 @@ export default class DepositHomeScreen extends Component {
   };
 
   constructor(props) {
-      console.log('DepositEthBalanceScreen');
+      console.log('DepositHomeScreen');
       super(props);
       if (this.props.route && this.props.route.params) {
           if (this.props.route.params.accountDetails)
@@ -95,7 +95,8 @@ export default class DepositHomeScreen extends Component {
             How would you like to add funds to your mobile wallet?
                   </Text>
                   <View style={styles.cardContent}>
-                      <TouchableOpacity
+                      {/* TODO */}
+                      {/* <TouchableOpacity
                           onPress={this.openCountryPicker}
                           style={[styles.buttonStyle, styles.marginButtom]}>
                           <Text style={[styles.buttonText3, styles.marginLeft]}>
@@ -112,8 +113,8 @@ export default class DepositHomeScreen extends Component {
                                   style={[{alignSelf: 'center', marginLeft: 10}]}
                               />
                           </View>
-                      </TouchableOpacity>
-                      <CountryPicker
+                      </TouchableOpacity> */}
+                      {/* <CountryPicker
                           theme={{
                               primaryColor: Colors.title,
                               primaryColorVariant: Colors.primaryBorder,
@@ -142,13 +143,13 @@ export default class DepositHomeScreen extends Component {
                               containerButtonStyle: {height: 0, width: 0},
                           }}
                           visible={this.state.showCountryPicker}
-                      />
-                      <TouchableOpacity
+                      /> */}
+                      {/* <TouchableOpacity
                           style={[styles.buttonStyleSecondary, styles.marginButtom]}>
                           <Text style={styles.buttonText}>
                 Bank and Credit/Debit Card
                           </Text>
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                       <TouchableOpacity
                           onPress={this.goToDepositFromEthScreen.bind(this)}
                           style={styles.buttonStyleSecondary}>
@@ -156,6 +157,7 @@ export default class DepositHomeScreen extends Component {
                 Add from Etherium main network
                           </Text>
                       </TouchableOpacity>
+                      <Text style={styles.optionStyle}>* Other Options will be available soon</Text>
                   </View>
               </View>
           </>

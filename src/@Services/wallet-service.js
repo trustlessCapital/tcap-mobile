@@ -63,20 +63,19 @@ export default class WalletService {
 
   depositFundsToZkSync = async (token, amount) => {
       amount = amount.toString();
-      console.log('receivedAmt',amount);
-      console.log('typeOf amount',typeof amount);
       await this.getSyncWallet();
       const decimalForToken = WalletUtils.getDecimalValueForAsset(token);
-      console.log('decimalForToken',decimalForToken);
+      const addressForToken = WalletUtils.getDecimalValueForAsset(token,true);
       let weiUnit = Math.pow(10,decimalForToken);
       let Wei = (amount * weiUnit).toString();
-      console.log('Wei',Wei);
-      console.log('typeOf Wei',typeof Wei);
-      const deposit = await this.syncWallet.depositToSyncFromEthereum({
+      const body = {
           depositTo: this.syncWallet.address(),
-          token: token.toUpperCase(),
+          approveDepositAmountForERC20: token=== 'eth' ? false :  true,
+          token: addressForToken,
           amount: ethers.BigNumber.from(Wei),
-      });
+      };
+      console.log('bodyParameters',body);
+      const deposit = await this.syncWallet.depositToSyncFromEthereum(body);
       const transactionDetails = Promise.all([
           deposit.awaitReceipt(),
           deposit.awaitEthereumTxCommit() 

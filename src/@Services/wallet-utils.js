@@ -92,13 +92,14 @@ const getAssetDisplayText = (symbol, value) => {
     return displayText;
 };
 
-const getDecimalValueForAsset = (assetSymbol) =>{
-    console.log('Symbol',assetSymbol);
+const getDecimalValueForAsset = (assetSymbol,getAddress=false) =>{
     let decimal = 18;
     let result = TOKENS.find(x => x.symbol === assetSymbol.toUpperCase());
-    console.log('Result OF decimal',result);
+    
     if(result) decimal = result.decimals;
-    return decimal;
+
+    if(getAddress) return result.address || '';
+    else return decimal;
 };
 
 const getWeiToEth = (weiAmount) =>{

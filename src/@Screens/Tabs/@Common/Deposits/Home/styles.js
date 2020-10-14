@@ -63,6 +63,13 @@ export default (styles = StyleSheet.create({
         marginBottom: 20,
         width: '100%',
     },
+    optionStyle:{
+        color: Colors.white,
+        fontFamily: 'Montserrat-Regular',
+        fontSize: moderateScale(11),
+        width: '100%',
+        marginTop:moderateScale(10)
+    },
     titleIcon: {
         width: 100,
         height: 100
