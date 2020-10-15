@@ -20,44 +20,44 @@ const navigationOptions = {headerShown: false};
 
 const AuthNavigator = () => {
     return (
-          <Stack.Navigator initialRouteName={'Splash'} headerMode="none">
-          <Stack.Screen
-            component={SplashScreen}
-            name="Splash"
-            options={navigationOptions}
+        <Stack.Navigator headerMode="none" initialRouteName={'Splash'}>
+            <Stack.Screen
+                component={SplashScreen}
+                name="Splash"
+                options={navigationOptions}
             />
             <Stack.Screen
-              name="SignUp"
-              component={SignUp}
-              options={navigationOptions}
+                component={SignUp}
+                name="SignUp"
+                options={navigationOptions}
             />
             <Stack.Screen
-              name="PINScreen"
-              component={PINScreen}
-              initialParams={{mode: PIN_SCREEN_MODE.LOGIN_PIN}}
-              options={navigationOptions}
+                component={PINScreen}
+                initialParams={{mode: PIN_SCREEN_MODE.LOGIN_PIN}}
+                name="PINScreen"
+                options={navigationOptions}
             />
             <Stack.Screen
-              name="VerificationScreen"
-              component={VerificationScreen}
-              options={navigationOptions}
+                component={VerificationScreen}
+                name="VerificationScreen"
+                options={navigationOptions}
             />
             <Stack.Screen
-              name="SeedPhraseNoticeScreen"
-              component={SeedPhraseNoticeScreen}
-              options={navigationOptions}
+                component={SeedPhraseNoticeScreen}
+                name="SeedPhraseNoticeScreen"
+                options={navigationOptions}
             />
             <Stack.Screen
-              name="SeedPhraseScreen"
-              component={SeedPhraseScreen}
-              options={navigationOptions}
+                component={SeedPhraseScreen}
+                name="SeedPhraseScreen"
+                options={navigationOptions}
             />
             <Stack.Screen
-              name="SeedPhraseRecoveryScreen"
-              component={SeedPhraseRecoveryScreen}
-              options={navigationOptions}
+                component={SeedPhraseRecoveryScreen}
+                name="SeedPhraseRecoveryScreen"
+                options={navigationOptions}
             />
-          </Stack.Navigator>
+        </Stack.Navigator>
     );
 };
 
