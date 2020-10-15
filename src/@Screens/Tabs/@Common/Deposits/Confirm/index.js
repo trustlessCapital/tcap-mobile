@@ -21,7 +21,6 @@ export default class DepositConfirmScreen extends Component {
   };
 
   constructor(props) {
-      console.log('DepositConfirmScreen');
       super(props);
       if (this.props.route && this.props.route.params) {
           if (this.props.route.params.accountDetails)

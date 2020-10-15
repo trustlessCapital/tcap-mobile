@@ -74,7 +74,6 @@ export default class WalletService {
           token: addressForToken,
           amount: ethers.BigNumber.from(Wei),
       };
-      console.log('bodyParameters',body);
       const deposit = await this.syncWallet.depositToSyncFromEthereum(body);
       const transactionDetails = Promise.all([
           deposit.awaitReceipt(),

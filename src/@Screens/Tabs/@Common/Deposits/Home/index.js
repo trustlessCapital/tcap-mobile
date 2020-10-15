@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../../../../../@Components/status-bar-color';
 import Colors from '../../../../../@Constants/Colors';
 import styles from './styles';
-import CountryPicker from 'react-native-country-picker-modal';
+// import CountryPicker from 'react-native-country-picker-modal';
 import PropTypes from 'prop-types';
 
 export default class DepositHomeScreen extends Component {
@@ -19,7 +19,6 @@ export default class DepositHomeScreen extends Component {
   };
 
   constructor(props) {
-      console.log('DepositHomeScreen');
       super(props);
       if (this.props.route && this.props.route.params) {
           if (this.props.route.params.accountDetails)

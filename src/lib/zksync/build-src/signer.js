@@ -1,18 +1,18 @@
-"use strict";
+'use strict';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator['throw'](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, '__esModule', { value: true });
 exports.Signer = void 0;
-const crypto_1 = require("./crypto");
-const ethers_1 = require("ethers");
-const utils_1 = require("./utils");
+const crypto_1 = require('./crypto');
+const ethers_1 = require('ethers');
+const utils_1 = require('./utils');
 class Signer {
     constructor(privKey) {
         this.privateKey = privKey;
@@ -32,7 +32,7 @@ class Signer {
         const msgBytes = ethers_1.ethers.utils.concat([type, accountId, from, to, token, amount, fee, nonce]);
         const signature = crypto_1.signTransactionBytes(this.privateKey, msgBytes);
         return {
-            type: "Transfer",
+            type: 'Transfer',
             accountId: transfer.accountId,
             from: transfer.from,
             to: transfer.to,
@@ -64,7 +64,7 @@ class Signer {
         ]);
         const signature = crypto_1.signTransactionBytes(this.privateKey, msgBytes);
         return {
-            type: "Withdraw",
+            type: 'Withdraw',
             accountId: withdraw.accountId,
             from: withdraw.from,
             to: withdraw.ethAddress,
@@ -92,7 +92,7 @@ class Signer {
         ]);
         const signature = crypto_1.signTransactionBytes(this.privateKey, msgBytes);
         return {
-            type: "ForcedExit",
+            type: 'ForcedExit',
             initiatorAccountId: forcedExit.initiatorAccountId,
             target: forcedExit.target,
             token: forcedExit.tokenId,
@@ -120,7 +120,7 @@ class Signer {
         ]);
         const signature = crypto_1.signTransactionBytes(this.privateKey, msgBytes);
         return {
-            type: "ChangePubKey",
+            type: 'ChangePubKey',
             accountId: changePubKey.accountId,
             account: changePubKey.account,
             newPkHash: changePubKey.newPkHash,
@@ -144,7 +144,7 @@ class Signer {
                 const network = yield ethSigner.provider.getNetwork();
                 chainID = network.chainId;
             }
-            let message = "Access zkSync account.\n\nOnly sign this message for a trusted client!";
+            let message = 'Access zkSync account.\n\nOnly sign this message for a trusted client!';
             if (chainID !== 1) {
                 message += `\nChain ID: ${chainID}.`;
             }

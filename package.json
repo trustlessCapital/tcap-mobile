@@ -51,6 +51,9 @@
     "react-native-textinput-effects": "^0.6.1",
     "react-native-unimodules": "^0.9.0",
     "react-native-vector-icons": "^7.1.0",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "text-encoding-polyfill": "^0.6.7",
     "websocket": "^1.0.30",
     "websocket-as-promised": "^0.10.1",
@@ -64,6 +67,7 @@
     "eslint": "^6.5.1",
     "eslint-plugin-react": "^7.13.0",
     "flow-bin": "^0.135.0",
+    "husky": "^4.3.0",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.58.0",
     "prop-types": "^15.7.2",
@@ -71,6 +75,11 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
   },
   "license": "MIT"
 }

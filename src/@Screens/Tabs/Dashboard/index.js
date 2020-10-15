@@ -15,9 +15,12 @@ import Colors from '../../../@Constants/Colors';
 import StatusBarColor from '../../../@Components/status-bar-color';
 import DashboardWallet from './Wallet/index';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as ZkSyncTokenActions from '../../../@Redux/actions/zkSyncTokenActions';
 
-export default class DashboardScreen extends Component {
+class DashboardScreen extends Component {
   static propTypes = {
+      SyncZkSyncTokensFromServer:PropTypes.func.isRequired,
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
   };
@@ -37,13 +40,13 @@ export default class DashboardScreen extends Component {
   authState = {};
 
   componentDidMount() {
+      this.props.SyncZkSyncTokensFromServer();
       AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   componentWillUnmount() {
       AppState.removeEventListener('change', this._handleAppStateChange);
   }
-
 
   _handleAppStateChange = nextAppState => {
       SecurityServices.handleLocalAuthorization(
@@ -73,3 +76,17 @@ export default class DashboardScreen extends Component {
       );
   }
 }
+
+function mapStateToProps(){    
+    return{
+    };
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        SyncZkSyncTokensFromServer:() =>
+            dispatch(ZkSyncTokenActions.updateZkSyncTokens()),
+    };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(DashboardScreen);

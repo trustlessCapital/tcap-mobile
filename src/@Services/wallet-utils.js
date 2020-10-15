@@ -9,7 +9,7 @@ import SecurityServices from './security';
 import * as Keychain from 'react-native-keychain';
 import ECEncryption from 'react-native-ec-encryption';
 import base64 from 'react-native-base64';
-import TOKENS from '../@Constants/ZkSyncTokens';
+import reduxStore from '../@Redux/store';
 
 const createWallet = (pk, network) => {
     return new ethers.Wallet(pk, network);
@@ -93,6 +93,8 @@ const getAssetDisplayText = (symbol, value) => {
 };
 
 const getDecimalValueForAsset = (assetSymbol,getAddress=false) =>{
+    const reduxState = reduxStore.getState();
+    const { TOKENS } = reduxState.zkSyncTokens;
     let decimal = 18;
     let result = TOKENS.find(x => x.symbol === assetSymbol.toUpperCase());
     

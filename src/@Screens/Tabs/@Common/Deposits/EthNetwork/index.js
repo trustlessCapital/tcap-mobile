@@ -30,7 +30,6 @@ export default class DepositEthScreen extends Component {
   };
   
   constructor(props) {
-      console.log('DepositEthScreen');
       super(props);
       if (this.props.route && this.props.route.params) {
           if (this.props.route.params.accountDetails)
@@ -69,7 +68,6 @@ export default class DepositEthScreen extends Component {
   navigateBack = () => { this.props.navigation.goBack(); }
 
   goToDepositConfirmScreen = () => {
-      console.log('This',this.state.amount);
       this.props.navigation.navigate('DepositConfirmScreen', {
           accountDetails: this.accountDetails,
           amount: this.state.amount,

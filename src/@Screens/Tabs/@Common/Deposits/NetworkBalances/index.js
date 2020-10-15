@@ -24,7 +24,6 @@ export default class DepositEthBalanceScreen extends Component {
     };
 
     constructor(props) {
-        console.log('DepositEthBalanceScreen');
         super(props);
         if (this.props.route && this.props.route.params) {
             if (this.props.route.params.accountDetails)
@@ -64,9 +63,7 @@ export default class DepositEthBalanceScreen extends Component {
 
   fetchEtheriumBalance = async () => {
       const address = await WalletService.getInstance().getEtheriumAddress();
-      console.log('address',address);
       await apiServices.getEtheriumBalance(address).then(ethBalance => {
-          console.log('getEtheriumBalance',ethBalance);
           this.state.ethBalance = ethBalance;
       });
   }
@@ -92,13 +89,10 @@ export default class DepositEthBalanceScreen extends Component {
   }
 
   checkSuffucientEth = (symbol = 'ETH') =>{
-      console.log('this.state.ethBalance',this.state.ethBalance);
       let result = this.state.ethBalance.find(x => x.symbol.toUpperCase() === symbol);
-      console.log('result',result);
       if(result)
       {
           const ETH =   walletUtils.getAssetDisplayText(result.symbol,result.value);
-          console.log('ETH AVAILABLE',ETH);
           if(ETH > 0.0002) return true;
           else return false;
       }

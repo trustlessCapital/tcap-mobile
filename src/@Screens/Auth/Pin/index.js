@@ -34,7 +34,6 @@ export default class PINScreen extends Component {
 
     constructor(props) {
         super(props);
-        console.log('this.props.route.params',this.props.route.params);
         if (this.props.route && this.props.route.params) {
             if (this.props.route.params.mode)
                 this.state.mode = this.props.route.params.mode;
@@ -403,7 +402,6 @@ export default class PINScreen extends Component {
   };
 
   loginUser = async () => {
-      console.log('login User API');
       this.setState({ isLoading: true, loadingMessage: 'Please wait!!' });
       SecurityServices.fetchAccountDetails(this.state.pin)
           .then((account) => {
@@ -442,7 +440,6 @@ export default class PINScreen extends Component {
                                           );
                                       }
                                       WalletService.getInstance().setPk(pk);
-                                      console.log('accountDetails',accountDetails);
                                       this.props.navigation.navigate('App',{ accountDetails: accountDetails });
                                   });
                               }

@@ -32,6 +32,8 @@ const setEnv = env === 'development';
 
 export default {
 
+    AsyncStorageKey:'Tcap',
+
     BASE_PATH:  useLocalIP ?  localIp  : setEnv ? devServerIp : prodServerIp,
 
     API_PREFIX : '/api',

@@ -73,13 +73,9 @@ export default class DepositStatusScreen extends Component {
   }
 
   initiateTransaction = () =>{
-      console.log('Token',this.token);
       this.walletService.depositFundsToZkSync(this.token, this.state.amount)
           .then((txDetails) => {
               const [receipt,txCommit] = txDetails;
-              console.log('txdetails',txDetails);
-              console.log('Receipt',receipt);
-              console.log('txCommit',txCommit);
               this.setState({ transactionDetails:txCommit,isLoading: false });
           }).catch((err) => {
               console.log('Error',err);

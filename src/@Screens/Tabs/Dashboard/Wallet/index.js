@@ -65,10 +65,8 @@ export default class DashboardWallet extends Component {
   }
 
   fetchAccountBalance = async () => {
-      console.log('Fetch Account Balance');
       const walletService = WalletService.getInstance();
       await walletService.getZkSyncBalance().then(balanceObj => {
-          console.log('balance Obj',balanceObj);
           if (!balanceObj) {
               this.state.totalBalance = 0.0;
           } else {

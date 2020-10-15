@@ -15,7 +15,6 @@ function processResponse(response) {
 
 function signUp(email, phone) {
     const url = BASE_PATH + API_PREFIX + '/user/signup';
-    console.log('URL',url);
     return fetch(url, {
         method: 'POST',
         headers: {
@@ -102,7 +101,6 @@ function mnemonicGenerated(email, phone) {
 
 function getExchangePrice() {
     const url =  `${BASE_PATH}/v1/price/all`;
-    console.log('Address url',url);
     return fetch(url, {
         method: 'GET',
     }).then(processResponse);
@@ -110,12 +108,17 @@ function getExchangePrice() {
 
 function getEtheriumBalance(address) {
     const url = `${BASE_PATH}/v1/l1/balance/all/${address}`;
-    console.log('URL FOR BALANCE',url);
     return fetch(url, {
         method: 'GET',
     }).then(processResponse);
 }
 
+function getZkSyncTokens() {
+    const url =  `${BASE_PATH}/v1/zksync/tokens`;
+    return fetch(url, {
+        method: 'GET',
+    }).then(processResponse);
+}
 
 export default (APIService = {
     signUp,
@@ -126,4 +129,5 @@ export default (APIService = {
     mnemonicGenerated,
     getExchangePrice,
     getEtheriumBalance,
+    getZkSyncTokens,
 });
