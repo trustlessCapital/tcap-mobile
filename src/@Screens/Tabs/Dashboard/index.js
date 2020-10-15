@@ -5,9 +5,9 @@
 import React, {Component} from 'react';
 import {
     SafeAreaView,
-    View,
-    KeyboardAvoidingView,
-    AppState
+    ScrollView,
+    AppState,
+    RefreshControl
 } from 'react-native';
 import styles from './styles';
 import SecurityServices from '../../../@Services/security';
@@ -17,6 +17,7 @@ import DashboardWallet from './Wallet/index';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as ZkSyncTokenActions from '../../../@Redux/actions/zkSyncTokenActions';
+import DashboardAsset from './Asset';
 
 class DashboardScreen extends Component {
   static propTypes = {
@@ -36,6 +37,7 @@ class DashboardScreen extends Component {
   state = {
       appState: AppState.currentState,
       index: 0,
+      refreshing:false,
   };
   authState = {};
 
@@ -57,21 +59,34 @@ class DashboardScreen extends Component {
       );
   };
 
+  onRefresh = () =>{
+      this.setState({refreshing:true});
+      setTimeout(()=>{this.setState({refreshing:false});},500);
+  };
+
   render() {
+      const {refreshing} = this.state;
       return (
           <SafeAreaView style={styles.wrapper}>
               <StatusBarColor
                   backgroundColor={Colors.primary_bg}
                   barStyle="light-content"
               />
-              <KeyboardAvoidingView style={{flex: 1}}>
-                  <View style={{ flex: 1 }}>
-                      <DashboardWallet
-                          accountDetails={this.accountDetails}
-                          navigation={this.props.navigation}
-                      />
-                  </View>
-              </KeyboardAvoidingView>
+              <ScrollView 
+                  refreshControl={
+                      <RefreshControl
+                          onRefresh={this.onRefresh} refreshing={refreshing} tintColor={Colors.white}
+                          title="Refreshing Dashboard"
+                          titleColor={Colors.white} />
+                  } 
+                  showsVerticalScrollIndicator={false} style={{ flex: 1 }}
+              >
+                  <DashboardWallet
+                      accountDetails={this.accountDetails}
+                      navigation={this.props.navigation}
+                  />
+                  <DashboardAsset />
+              </ScrollView>
           </SafeAreaView>
       );
   }
