@@ -1,5 +1,5 @@
 import { BigNumberish, ethers } from "ethers";
-import { Address, EthSignerType, PubKeyHash, Transfer, Withdraw } from "./types";
+import { Address, EthSignerType, PubKeyHash, Transfer, Withdraw, ForcedExit, ChangePubKey } from "./types";
 export declare class Signer {
     readonly privateKey: Uint8Array;
     private constructor();
@@ -22,6 +22,21 @@ export declare class Signer {
         fee: BigNumberish;
         nonce: number;
     }): Withdraw;
+    signSyncForcedExit(forcedExit: {
+        initiatorAccountId: number;
+        target: Address;
+        tokenId: number;
+        fee: BigNumberish;
+        nonce: number;
+    }): ForcedExit;
+    signSyncChangePubKey(changePubKey: {
+        accountId: number;
+        account: Address;
+        newPkHash: PubKeyHash;
+        feeTokenId: number;
+        fee: BigNumberish;
+        nonce: number;
+    }): ChangePubKey;
     static fromPrivateKey(pk: Uint8Array): Signer;
     static fromSeed(seed: Uint8Array): Signer;
     static fromETHSignature(ethSigner: ethers.Signer): Promise<{

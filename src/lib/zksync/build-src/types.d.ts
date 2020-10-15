@@ -65,12 +65,24 @@ export interface Withdraw {
     nonce: number;
     signature: Signature;
 }
+export interface ForcedExit {
+    type: "ForcedExit";
+    initiatorAccountId: number;
+    target: Address;
+    token: number;
+    fee: BigNumberish;
+    nonce: number;
+    signature: Signature;
+}
 export interface ChangePubKey {
     type: "ChangePubKey";
     accountId: number;
     account: Address;
     newPkHash: PubKeyHash;
+    feeToken: number;
+    fee: BigNumberish;
     nonce: number;
+    signature: Signature;
     ethSignature: string;
 }
 export interface CloseAccount {
@@ -80,7 +92,7 @@ export interface CloseAccount {
     signature: Signature;
 }
 export interface SignedTransaction {
-    tx: Transfer | Withdraw | ChangePubKey | CloseAccount;
+    tx: Transfer | Withdraw | ChangePubKey | CloseAccount | ForcedExit;
     ethereumSignature?: TxEthSignature;
 }
 export interface BlockInfo {
@@ -110,11 +122,19 @@ export interface Tokens {
         decimals: number;
     };
 }
+export interface ChangePubKeyFee {
+    "ChangePubKey": {
+        onchainPubkeyAuth: boolean;
+    };
+}
 export interface Fee {
-    feeType: "Withdraw" | "Transfer" | "TransferToNew" | "FastWithdraw";
+    feeType: "Withdraw" | "Transfer" | "TransferToNew" | "FastWithdraw" | ChangePubKeyFee;
     gasTxAmount: BigNumber;
     gasPriceWei: BigNumber;
     gasFee: BigNumber;
     zkpFee: BigNumber;
+    totalFee: BigNumber;
+}
+export interface BatchFee {
     totalFee: BigNumber;
 }

@@ -25,6 +25,25 @@ export declare class Wallet {
         fee: BigNumberish;
         nonce: number;
     }): Promise<SignedTransaction>;
+    signSyncForcedExit(forcedExit: {
+        target: Address;
+        token: TokenLike;
+        fee: BigNumberish;
+        nonce: number;
+    }): Promise<SignedTransaction>;
+    syncForcedExit(forcedExit: {
+        target: Address;
+        token: TokenLike;
+        fee?: BigNumberish;
+        nonce?: Nonce;
+    }): Promise<Transaction>;
+    syncMultiTransfer(transfers: {
+        to: Address;
+        token: TokenLike;
+        amount: BigNumberish;
+        fee: BigNumberish;
+        nonce?: Nonce;
+    }[]): Promise<Transaction[]>;
     syncTransfer(transfer: {
         to: Address;
         token: TokenLike;
@@ -48,8 +67,18 @@ export declare class Wallet {
         fastProcessing?: boolean;
     }): Promise<Transaction>;
     isSigningKeySet(): Promise<boolean>;
-    signSetSigningKey(nonce: number, onchainAuth?: boolean): Promise<SignedTransaction>;
-    setSigningKey(nonce?: Nonce, onchainAuth?: boolean): Promise<Transaction>;
+    signSetSigningKey(changePubKey: {
+        feeToken: TokenLike;
+        fee: BigNumberish;
+        nonce: number;
+        onchainAuth: boolean;
+    }): Promise<SignedTransaction>;
+    setSigningKey(changePubKey: {
+        feeToken: TokenLike;
+        fee?: BigNumberish;
+        nonce?: Nonce;
+        onchainAuth?: boolean;
+    }): Promise<Transaction>;
     isOnchainAuthSigningKeySet(nonce?: Nonce): Promise<boolean>;
     onchainAuthSigningKey(nonce?: Nonce, ethTxOptions?: ethers.providers.TransactionRequest): Promise<ContractTransaction>;
     getCurrentPubKeyHash(): Promise<PubKeyHash>;
