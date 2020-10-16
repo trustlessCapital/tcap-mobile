@@ -45,7 +45,9 @@ export default (styles = StyleSheet.create({
         backgroundColor:Colors.primaryBg,
         width:moderateScale(60),
         height:moderateScale(60),
-        borderRadius:moderateScale(10)
+        borderRadius:moderateScale(10),
+        justifyContent:'center',
+        alignItems:'center'
     },
     title: {
         color: Colors.white,
@@ -66,7 +68,9 @@ export default (styles = StyleSheet.create({
         padding:moderateScale(6),
         paddingHorizontal:moderateScale(10),
         borderRadius:moderateScale(5),
-        marginTop:moderateScale(5)
+        marginTop:moderateScale(5),
+        width:moderateScale(60),
+        alignSelf:'flex-end'
     },
     percent:{
         color: Colors.subTitle,
@@ -74,8 +78,8 @@ export default (styles = StyleSheet.create({
         fontSize: moderateScale(14),
     },
     iconStyle:{
-        width:moderateScale(20),
-        height:moderateScale(20)
+        width:moderateScale(30),
+        height:moderateScale(30)
     }
 }));
   

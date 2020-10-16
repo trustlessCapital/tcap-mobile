@@ -25,21 +25,20 @@ import PropTypes from 'prop-types';
 import styles from './styles';
 import walletUtils from '../../../../@Services/wallet-utils';
  
-const AssetCard = ({asset,exchangeRates}) =>{    
+const AssetCard = ({asset,exchangeRates}) =>{ 
     const {symbol,value} = asset;
     const loadAssetValue = (defaultVal) =>{
-        const value = walletUtils.getAssetDisplayTextInUSD(
+        const cost = walletUtils.getAssetDisplayTextInUSD(
             symbol.toLowerCase(),
             defaultVal ? 0.1 : walletUtils.getAssetDisplayText(symbol,value),
             exchangeRates,
         );
-        if(value)
-            return value;
+        if(cost)
+            return cost;
         return null; 
     };
 
     const renderImage = () =>{
-        console.log('symbol',symbol);
         if(symbol === 'ETH')
             return <Image resizeMode={'contain'} source ={require('../../../../../assets/images/assetLogos/eth.svg')} style={styles.iconStyle} />;
         if(symbol === 'USDC')
@@ -53,7 +52,7 @@ const AssetCard = ({asset,exchangeRates}) =>{
                     {renderImage()}
                 </View>
                 <View style={styles.leftWrapper}>
-                    <Text style={styles.title}>$ {loadAssetValue()}</Text>
+                    <Text style={styles.title}>$ {loadAssetValue(0)}</Text>
                     <Text style={styles.subTitle}>
                         {walletUtils.getAssetDisplayText( symbol,value)}
                         {' '+symbol.toUpperCase()} 
