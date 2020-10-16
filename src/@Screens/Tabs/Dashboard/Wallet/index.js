@@ -8,11 +8,15 @@ import apiServices from '../../../../@Services/api-services';
 import walletUtils from '../../../../@Services/wallet-utils';
 import * as _ from 'lodash';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as DashboardActions from '../../../../@Redux/actions/dashboardActions';
 
-export default class DashboardWallet extends Component {
+class DashboardWallet extends Component {
+
   static propTypes = {
       accountDetails:PropTypes.object.isRequired,
       navigation:PropTypes.object.isRequired,
+      updateExchangeRates:PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -60,6 +64,7 @@ export default class DashboardWallet extends Component {
   getExchangeRates = async () => {
       await apiServices.getExchangePrice().then((exchangeRates) => {
           this.exchangeRates = exchangeRates;
+          this.props.updateExchangeRates(exchangeRates);
           StorageUtils.exchangeRates(exchangeRates);
       });
   }
@@ -125,3 +130,17 @@ export default class DashboardWallet extends Component {
       );
   }
 }
+
+function mapStateToProps(){
+    return{
+    };
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        updateExchangeRates:rates =>
+            dispatch(DashboardActions.updateExchangeRates(rates)),
+    };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(DashboardWallet);

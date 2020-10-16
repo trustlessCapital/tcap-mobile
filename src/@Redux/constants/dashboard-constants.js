@@ -18,14 +18,9 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import { combineReducers } from 'redux';
+export const  UPDATE_EXCHANGE_RATES = 'UPDATE_EXCHANGE_RATES';
 
-import dashboardReducer from './dashboardReducer';
-import zkSyncTokenReducer from './zkSyncTokenReducer';
-
-const rootReducer = combineReducers({
-    zkSyncTokens:zkSyncTokenReducer,
-    dashboard:dashboardReducer,
-});
-
-export default rootReducer;
+export const  FETCH_ZK_SYNC_ACCOUNT_ASSETS = 'FETCH_ZK_SYNC_ACCOUNT_ASSETS';
+export const  FETCH_ZK_SYNC_ACCOUNT_ASSETS_REQUEST = 'FETCH_ZK_SYNC_ACCOUNT_ASSETS_REQUEST';
+export const  FETCH_ZK_SYNC_ACCOUNT_ASSETS_SUCCESS = 'FETCH_ZK_SYNC_ACCOUNT_ASSETS_SUCCESS';
+export const  FETCH_ZK_SYNC_ACCOUNT_ASSETS_FAILURE = 'FETCH_ZK_SYNC_ACCOUNT_ASSETS_FAILURE';

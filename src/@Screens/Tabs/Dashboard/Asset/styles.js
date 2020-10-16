@@ -12,12 +12,12 @@ export default (styles = StyleSheet.create({
         marginLeft:moderateScale(30)
     },
     Wrapper:{
-        marginTop:moderateScale(20)
+        marginTop:moderateScale(20),
     },
     cardWrapper:{
         backgroundColor:'#1a2360',
-        borderTopLeftRadius:moderateScale(30),
-        borderTopRightRadius:moderateScale(30),
+        borderRadius:moderateScale(30),
+        // borderTopRightRadius:moderateScale(30),
         marginTop:moderateScale(30),
         padding:moderateScale(25),
     },
@@ -56,7 +56,7 @@ export default (styles = StyleSheet.create({
         paddingLeft:moderateScale(15),
     },
     subTitle: {
-        color: Colors.primaryBorder,
+        color: Colors.darkGrey,
         fontFamily: 'Montserrat-Bold',
         fontSize: moderateScale(14),
         marginTop:moderateScale(10)
@@ -72,6 +72,10 @@ export default (styles = StyleSheet.create({
         color: Colors.subTitle,
         fontFamily: 'Montserrat-Bold',
         fontSize: moderateScale(14),
+    },
+    iconStyle:{
+        width:moderateScale(20),
+        height:moderateScale(20)
     }
 }));
   

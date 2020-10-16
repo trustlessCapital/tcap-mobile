@@ -88,7 +88,6 @@ const getAssetDisplayText = (symbol, value) => {
     const decimal = getDecimalValueForAsset(symbol);
     const unitConvertor = Math.pow(10, decimal);
     const displayText = (parseFloat(value) / unitConvertor).toFixed(4);
-    console.log('displayText',displayText);
     return displayText;
 };
 

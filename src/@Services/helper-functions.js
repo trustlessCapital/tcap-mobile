@@ -18,14 +18,13 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import { combineReducers } from 'redux';
+const objectToArray = (object) =>{
+    let result = Object.keys(object).map(each => (
+        {value: object[each],symbol:each}
+    ));
+    return result;
+};
 
-import dashboardReducer from './dashboardReducer';
-import zkSyncTokenReducer from './zkSyncTokenReducer';
-
-const rootReducer = combineReducers({
-    zkSyncTokens:zkSyncTokenReducer,
-    dashboard:dashboardReducer,
+export default (HelperFunctions = {
+    objectToArray, 
 });
-
-export default rootReducer;

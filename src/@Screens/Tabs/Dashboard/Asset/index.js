@@ -19,34 +19,70 @@
  */
 
 
-import React,{useState} from 'react';
+import React,{useEffect} from 'react';
 import { View,Text,ScrollView } from 'react-native';
-import { moderateScale } from 'react-native-size-matters';
 import PropTypes from 'prop-types';
 import styles from './styles';
 import AssetCard from './AssetCard';
+import WalletService from '../../../../@Services/wallet-service';
+import walletUtils from '../../../../@Services/wallet-utils';
+import { connect } from 'react-redux';
+import * as DashboardActions from '../../../../@Redux/actions/dashboardActions';
 
-const DashboardAsset = () =>{
+const DashboardAsset = ({...props}) =>{
 
-    const [assets,setAssets] = useState([1,2,3,4,5]);
+    const {
+        updateCommitedAccountBalances,verifiedBalances,
+        exchangeRates
+    } = props;
 
-    return(
-        <View style={styles.Wrapper}>
-            <Text style={styles.titleBar_title}>Assets</Text>
-            <View style={styles.redBar} />
-            <ScrollView style={styles.cardWrapper}>
-                {
-                    assets.map((item,index)=>(
-                        <AssetCard asset={item} key={index} />
-                    ))
-                }
-            </ScrollView>
-        </View>
-    );
+    const walletService = WalletService.getInstance();
+
+    useEffect(()=>{
+        getAccountAddress();
+    },[]);
+
+    const getAccountAddress = () =>{
+        const pk = walletService.pk;
+        const address = walletUtils.createAddressFromPrivateKey(pk);
+        updateCommitedAccountBalances(address);
+    };
+
+    if(verifiedBalances.length)
+        return(
+            <View style={styles.Wrapper}>
+                <Text style={styles.titleBar_title}>Assets</Text>
+                <View style={styles.redBar} />
+                <ScrollView style={styles.cardWrapper}>
+                    {
+                        verifiedBalances.map((item,index)=>(
+                            <AssetCard asset={item} exchangeRates={exchangeRates} key={index} />
+                        ))
+                    }
+                </ScrollView>
+            </View>
+        );
+    return null;
 };
 
 DashboardAsset.propTypes = {
-    navigation:PropTypes.object.isRequired,
+    exchangeRates:PropTypes.array.isRequired,
+    updateCommitedAccountBalances:PropTypes.func.isRequired,
+    verifiedBalances:PropTypes.array.isRequired,
 };
 
-export default DashboardAsset;
+function mapStateToProps(state){
+    return{
+        verifiedBalances : state.dashboard.verifiedBalances,
+        exchangeRates : state.dashboard.exchangeRates
+    };
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        updateCommitedAccountBalances:address =>
+            dispatch(DashboardActions.updateCommitedAccountBalances(address)),
+    };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(DashboardAsset);

@@ -120,6 +120,13 @@ function getZkSyncTokens() {
     }).then(processResponse);
 }
 
+function getAccountBalances(address) {
+    const url =  `${BASE_PATH}/v1/zksync/account/${address}`;
+    return fetch(url, {
+        method: 'GET',
+    }).then(processResponse);
+}
+
 export default (APIService = {
     signUp,
     recoverAccount,
@@ -130,4 +137,5 @@ export default (APIService = {
     getExchangePrice,
     getEtheriumBalance,
     getZkSyncTokens,
+    getAccountBalances
 });

@@ -18,14 +18,19 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import { combineReducers } from 'redux';
+import { FETCH_ZK_SYNC_ACCOUNT_ASSETS,UPDATE_EXCHANGE_RATES } from '../constants/dashboard-constants';
+import APIService from '../../@Services/api-services';
 
-import dashboardReducer from './dashboardReducer';
-import zkSyncTokenReducer from './zkSyncTokenReducer';
+export const updateCommitedAccountBalances =(address) =>{
+    return{
+        type: FETCH_ZK_SYNC_ACCOUNT_ASSETS,
+        promise:APIService.getAccountBalances(address),
+    };
+};
 
-const rootReducer = combineReducers({
-    zkSyncTokens:zkSyncTokenReducer,
-    dashboard:dashboardReducer,
-});
-
-export default rootReducer;
+export const updateExchangeRates =(rates) =>{
+    return{
+        type: UPDATE_EXCHANGE_RATES,
+        rates,
+    };
+};

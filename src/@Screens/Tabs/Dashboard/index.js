@@ -79,7 +79,7 @@ class DashboardScreen extends Component {
                           title="Refreshing Dashboard"
                           titleColor={Colors.white} />
                   } 
-                  showsVerticalScrollIndicator={false} style={{ flex: 1 }}
+                  showsVerticalScrollIndicator={false}
               >
                   <DashboardWallet
                       accountDetails={this.accountDetails}

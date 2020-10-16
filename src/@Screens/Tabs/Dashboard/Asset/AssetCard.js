@@ -20,24 +20,48 @@
 
 
 import React from 'react';
-import { View,Text } from 'react-native';
+import { View,Text,Image } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './styles';
+import walletUtils from '../../../../@Services/wallet-utils';
  
-const AssetCard = () =>{
+const AssetCard = ({asset,exchangeRates}) =>{    
+    const {symbol,value} = asset;
+    const loadAssetValue = (defaultVal) =>{
+        const value = walletUtils.getAssetDisplayTextInUSD(
+            symbol.toLowerCase(),
+            defaultVal ? 0.1 : walletUtils.getAssetDisplayText(symbol,value),
+            exchangeRates,
+        );
+        if(value)
+            return value;
+        return null; 
+    };
+
+    const renderImage = () =>{
+        console.log('symbol',symbol);
+        if(symbol === 'ETH')
+            return <Image resizeMode={'contain'} source ={require('../../../../../assets/images/assetLogos/eth.svg')} style={styles.iconStyle} />;
+        if(symbol === 'USDC')
+            return <Image resizeMode={'contain'} source ={require('../../../../../assets/images/assetLogos/usdc.svg')}  style={styles.iconStyle} />;
+    };
+
     return(
         <View style={styles.assetCard}>
             <View style={styles.imageWrapper}>
                 <View style={styles.imageHolder}> 
-
+                    {renderImage()}
                 </View>
                 <View style={styles.leftWrapper}>
-                    <Text style={styles.title}>$5000</Text>
-                    <Text style={styles.subTitle}>0.1 ETH</Text>
+                    <Text style={styles.title}>$ {loadAssetValue()}</Text>
+                    <Text style={styles.subTitle}>
+                        {walletUtils.getAssetDisplayText( symbol,value)}
+                        {' '+symbol.toUpperCase()} 
+                    </Text>
                 </View>
             </View>
             <View style={styles.detailWrapper}>
-                <Text style={styles.title}>$5000</Text>
+                <Text style={styles.title}>$ {loadAssetValue(0.1)}</Text>
                 <View style={styles.percentBox}>
                     <Text style={styles.percent}>2.5 %</Text>
                 </View>
@@ -47,7 +71,8 @@ const AssetCard = () =>{
 };
  
 AssetCard.propTypes = {
-    navigation:PropTypes.object.isRequired,
+    asset:PropTypes.object.isRequired,
+    exchangeRates:PropTypes.array.isRequired,
 };
  
 export default AssetCard;
