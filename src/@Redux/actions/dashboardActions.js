@@ -18,7 +18,7 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import { FETCH_ZK_SYNC_ACCOUNT_ASSETS,UPDATE_EXCHANGE_RATES } from '../constants/dashboard-constants';
+import { FETCH_ZK_SYNC_ACCOUNT_ASSETS,UPDATE_EXCHANGE_RATES,UPDATE_WALLET_BALANCE } from '../constants/dashboard-constants';
 import APIService from '../../@Services/api-services';
 
 export const updateCommitedAccountBalances =(address) =>{
@@ -32,5 +32,12 @@ export const updateExchangeRates =(rates) =>{
     return{
         type: UPDATE_EXCHANGE_RATES,
         rates,
+    };
+};
+
+export const updateBalanceObject =(balanceObj) =>{
+    return{
+        type: UPDATE_WALLET_BALANCE,
+        balanceObj,
     };
 };

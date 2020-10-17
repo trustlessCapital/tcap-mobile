@@ -17,9 +17,9 @@ export default (styles = StyleSheet.create({
     cardWrapper:{
         backgroundColor:'#1a2360',
         borderRadius:moderateScale(30),
-        // borderTopRightRadius:moderateScale(30),
         marginTop:moderateScale(30),
         padding:moderateScale(25),
+        paddingBottom:moderateScale(10)
     },
     redBar:{
         backgroundColor:Colors.error,

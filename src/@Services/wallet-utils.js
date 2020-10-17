@@ -115,7 +115,7 @@ const getAssetDisplayTextInUSD = (symbol, value, exchangeRates) => {
     value = parseFloat(value);
     let exchangeRate = _.find(exchangeRates, { symbol });
     if (!exchangeRate) return 0;
-    return (value * parseFloat(exchangeRate.value) * 1e-8).toFixed(2);
+    return (value * parseFloat(exchangeRate.value) * 1e-8).toFixed(4);
 };
 
 export default (WalletUtils = {

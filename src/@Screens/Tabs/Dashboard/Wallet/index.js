@@ -10,12 +10,24 @@ import * as _ from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as DashboardActions from '../../../../@Redux/actions/dashboardActions';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { moderateScale } from 'react-native-size-matters';
+
+const buttons = [
+    {name : 'Send' , icon:'paper-plane' , navigation:''},
+    {name : 'Add funds' , icon:'plus' , navigation:''},
+    {name : 'Withdraw' , icon:'angle-double-down' , navigation:''}
+];
 
 class DashboardWallet extends Component {
 
   static propTypes = {
       accountDetails:PropTypes.object.isRequired,
+      balanceObj:PropTypes.object.isRequired,
+      exchangeRates:PropTypes.array.isRequired,
       navigation:PropTypes.object.isRequired,
+      updateBalanceObject:PropTypes.func.isRequired,
       updateExchangeRates:PropTypes.func.isRequired,
   };
 
@@ -34,6 +46,30 @@ class DashboardWallet extends Component {
       this.loadData();
   }
 
+  componentDidUpdate(prevProps) {
+      const {balanceObj} = prevProps;
+      if (this.props.balanceObj !== balanceObj) {
+          this.calculateBalance();
+      }
+  }
+
+  checkNavigation = (indexValue) =>{
+
+      switch (indexValue) {
+      case 0:
+          break;
+      case 1:
+          this.goToDepositHomeScreen();
+          break;
+      case 2:
+          break;
+    
+      default:
+          break;
+      }
+
+  }
+
   goToDepositHomeScreen = () => {
       this.props.navigation.push('DepositHomeScreen', {
           accountDetails: this.accountDetails,
@@ -41,19 +77,26 @@ class DashboardWallet extends Component {
       });
   }
 
+  calculateBalance = () =>{
+      this.setState({isLoading:true});
+      const {balanceObj,exchangeRates} = this.props;
+      if (balanceObj) {
+          let total = 0;
+          _.forOwn(balanceObj, (val, key) => {
+              let value = walletUtils.getAssetDisplayText(key.toLowerCase(), val);
+              let price = walletUtils.getAssetDisplayTextInUSD(key.toLowerCase(), value, exchangeRates);
+              console.log('Price',typeof price,price);
+              total +=parseFloat(price);
+              console.log('Total',total);
+          });
+          this.setState({totalBalance:total,isLoading:false});
+      }
+  }
+
   loadData() {
       let promises = [this.fetchAccountBalance(), this.getExchangeRates()];
-      this.state.isLoading = true;
-
+      this.setState({isLoading:true});
       Promise.all(promises).then(() => {
-          if (this.state.balanceObj) {
-              let total = 0;
-              _.forOwn(this.state.balanceObj, (val, key) => {
-                  let value = walletUtils.getAssetDisplayText(key.toLowerCase(), val);
-                  total += walletUtils.getAssetDisplayTextInUSD(key.toLowerCase(), value, this.exchangeRates);
-              });
-              this.state.totalBalance = parseFloat(total);
-          }
           this.setState({isLoading: false});
       }).catch((e) => {
           console.log('Error ', e);
@@ -72,10 +115,10 @@ class DashboardWallet extends Component {
   fetchAccountBalance = async () => {
       const walletService = WalletService.getInstance();
       await walletService.getZkSyncBalance().then(balanceObj => {
+          this.props.updateBalanceObject(balanceObj);
+          console.log('balanceObj',balanceObj);
           if (!balanceObj) {
-              this.state.totalBalance = 0.0;
-          } else {
-              this.state.balanceObj = balanceObj;
+              this.setState({totalBalance:0});
           } 
       });
   }
@@ -93,29 +136,34 @@ class DashboardWallet extends Component {
   get balanceCard() {
       return (
           <>
-              <View style={styles.balanceCard}>
+              <LinearGradient colors={['#f2935a', '#9845c1', '#844bf6']} end={{x: 1, y: 0}} start={{x: .1, y: 0}} style={styles.balanceCard}>
                   <Text style={styles.balanceTitle}>Total Balance</Text>
                   <View style={styles.balanceWrapper}>
                       <Text style={styles.balanceText}>
               $ {this.state.totalBalance}
                       </Text>
                   </View>
-                  <View style={styles.balanceCardFooter}>
-                      <TouchableOpacity
-                          onPress={this.goToDepositHomeScreen.bind(this)}
-                          style={styles.buttonStylePrimary}>
-                          <Text style={styles.buttonText}>Deposit</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.buttonStyleSecondary}>
-                          <Text style={styles.buttonText}>Withdraw</Text>
-                      </TouchableOpacity>
-                  </View>
                   <LoadingIndicator
                       message={'Please wait while we prepare your wallet dashboard...'}
                       visible={this.state.isLoading}
                   />
-              </View>
+              </LinearGradient>
           </>
+      );
+  }
+
+  get buttons(){
+      return(
+          <View style={styles.buttonWrapper}>
+              {
+                  buttons.map((item,index)=>(
+                      <TouchableOpacity key={index} onPress={()=>{this.checkNavigation(index);}} style={styles.eachButton}>
+                          <Icon name={item.icon} size={moderateScale(20)} style={styles.icons} />
+                          <Text style={styles.itemText}>{item.name}</Text>
+                      </TouchableOpacity>
+                  ))
+              }
+          </View>
       );
   }
 
@@ -125,19 +173,24 @@ class DashboardWallet extends Component {
               <View style={styles.container}>
                   {this.titleBar}
                   {this.balanceCard}
+                  {this.buttons}
               </View>
           </>
       );
   }
 }
 
-function mapStateToProps(){
+function mapStateToProps(state){
     return{
+        balanceObj:state.dashboard.balanceObj,
+        exchangeRates : state.dashboard.exchangeRates
     };
 }
 
 function mapDispatchToProps(dispatch){
     return{
+        updateBalanceObject:balanceObj =>
+            dispatch(DashboardActions.updateBalanceObject(balanceObj)),
         updateExchangeRates:rates =>
             dispatch(DashboardActions.updateExchangeRates(rates)),
     };

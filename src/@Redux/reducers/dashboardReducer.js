@@ -20,22 +20,27 @@
 
 import { 
     FETCH_ZK_SYNC_ACCOUNT_ASSETS_FAILURE,FETCH_ZK_SYNC_ACCOUNT_ASSETS_REQUEST,FETCH_ZK_SYNC_ACCOUNT_ASSETS_SUCCESS, 
-    UPDATE_EXCHANGE_RATES
+    UPDATE_EXCHANGE_RATES,UPDATE_WALLET_BALANCE
 } from '../constants/dashboard-constants';
 
 import HelperFunctions from '../../@Services/helper-functions';
 
 const initialState = {
     verifiedBalances:[],
-    exchangeRates:[]
+    exchangeRates:[],
+    balanceObj:{}
 };
 
+
 const  dashboardReducer = (state = initialState,action) =>{
-    const {type,rates=[]} = action;
+    const {type,rates=[],balanceObj={}} = action;
     switch(type)
     {
     case UPDATE_EXCHANGE_RATES :
         return {...state,exchangeRates:rates}; 
+    case UPDATE_WALLET_BALANCE:
+        return { ...state,balanceObj:balanceObj};
+
     case  FETCH_ZK_SYNC_ACCOUNT_ASSETS_REQUEST:
         return { ...state};   
     case FETCH_ZK_SYNC_ACCOUNT_ASSETS_SUCCESS:

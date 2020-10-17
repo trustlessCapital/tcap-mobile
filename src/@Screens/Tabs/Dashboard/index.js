@@ -18,12 +18,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as ZkSyncTokenActions from '../../../@Redux/actions/zkSyncTokenActions';
 import DashboardAsset from './Asset';
+import WalletService from '../../../@Services/wallet-service';
+import * as DashboardActions from '../../../@Redux/actions/dashboardActions';
+
 
 class DashboardScreen extends Component {
   static propTypes = {
       SyncZkSyncTokensFromServer:PropTypes.func.isRequired,
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
+      updateBalanceObject:PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -61,8 +65,17 @@ class DashboardScreen extends Component {
 
   onRefresh = () =>{
       this.setState({refreshing:true});
+      this.fetchAccountBalance();
       setTimeout(()=>{this.setState({refreshing:false});},500);
   };
+
+  fetchAccountBalance = async () => {
+      const walletService = WalletService.getInstance();
+      await walletService.getZkSyncBalance().then(balanceObj => {
+          this.props.updateBalanceObject(balanceObj);
+      });
+  }
+
 
   render() {
       const {refreshing} = this.state;
@@ -101,6 +114,8 @@ function mapDispatchToProps(dispatch){
     return{
         SyncZkSyncTokensFromServer:() =>
             dispatch(ZkSyncTokenActions.updateZkSyncTokens()),
+        updateBalanceObject:balanceObj =>
+            dispatch(DashboardActions.updateBalanceObject(balanceObj)),
     };
 }
 

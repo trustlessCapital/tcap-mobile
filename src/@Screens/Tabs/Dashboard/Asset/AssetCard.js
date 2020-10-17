@@ -24,6 +24,40 @@ import { View,Text,Image } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './styles';
 import walletUtils from '../../../../@Services/wallet-utils';
+
+const assetSet = [
+    {symbol:'ETH',imageAsset : require('../../../../../assets/images/assetLogos/eth.svg')},
+    {symbol:'DAI',imageAsset : require('../../../../../assets/images/assetLogos/dai.svg')},
+    {symbol:'USDC',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
+    {symbol:'TUSD',imageAsset : require('../../../../../assets/images/assetLogos/tusd.svg')},
+    {symbol:'USDT',imageAsset : require('../../../../../assets/images/assetLogos/usdt.svg')},
+    // {symbol:'SUSD',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
+    {symbol:'BUSD',imageAsset : require('../../../../../assets/images/assetLogos/busd.svg')},
+    {symbol:'LEND',imageAsset : require('../../../../../assets/images/assetLogos/lend.svg')},
+    {symbol:'BAT',imageAsset : require('../../../../../assets/images/assetLogos/bat.svg')},
+    {symbol:'KNC',imageAsset : require('../../../../../assets/images/assetLogos/knc.svg')},
+    {symbol:'LINK',imageAsset : require('../../../../../assets/images/assetLogos/link.svg')},
+    {symbol:'MANA',imageAsset : require('../../../../../assets/images/assetLogos/mana.svg')},
+    {symbol:'MKR',imageAsset : require('../../../../../assets/images/assetLogos/mkr.svg')},
+    {symbol:'REP',imageAsset : require('../../../../../assets/images/assetLogos/rep.svg')},
+    {symbol:'SNX',imageAsset : require('../../../../../assets/images/assetLogos/snx.svg')},
+    {symbol:'WBTC',imageAsset : require('../../../../../assets/images/assetLogos/wbtc.svg')},
+    {symbol:'ZRX',imageAsset : require('../../../../../assets/images/assetLogos/zrx.svg')},
+    // {symbol:'MLTT',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
+    {symbol:'LRC',imageAsset : require('../../../../../assets/images/assetLogos/lrc.svg')},
+    {symbol:'HEX',imageAsset : require('../../../../../assets/images/assetLogos/hex.svg')},
+    // {symbol:'PAN',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
+    {symbol:'SNT',imageAsset : require('../../../../../assets/images/assetLogos/snt.svg')},
+    {symbol:'YFI',imageAsset : require('../../../../../assets/images/assetLogos/yfi.svg')},
+    {symbol:'UNI',imageAsset : require('../../../../../assets/images/assetLogos/uni.svg')},
+    {symbol:'STORJ',imageAsset : require('../../../../../assets/images/assetLogos/storj.svg')},
+    // {symbol:'TBTC',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
+    // {symbol:'EURS',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
+    {symbol:'GUSD',imageAsset : require('../../../../../assets/images/assetLogos/gusd.svg')},
+    // {symbol:'RENBTC',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
+];
+
+
  
 const AssetCard = ({asset,exchangeRates}) =>{ 
     const {symbol,value} = asset;
@@ -39,10 +73,11 @@ const AssetCard = ({asset,exchangeRates}) =>{
     };
 
     const renderImage = () =>{
-        if(symbol === 'ETH')
-            return <Image resizeMode={'contain'} source ={require('../../../../../assets/images/assetLogos/eth.svg')} style={styles.iconStyle} />;
-        if(symbol === 'USDC')
-            return <Image resizeMode={'contain'} source ={require('../../../../../assets/images/assetLogos/usdc.svg')}  style={styles.iconStyle} />;
+        let result = assetSet.find(x => x.symbol === symbol);
+        if(result) 
+            return <Image resizeMode={'contain'} source ={result.imageAsset} style={styles.iconStyle} />;
+        return null;
+       
     };
 
     return(
