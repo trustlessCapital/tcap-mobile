@@ -32,7 +32,7 @@ import * as DashboardActions from '../../../../@Redux/actions/dashboardActions';
 const DashboardAsset = ({...props}) =>{
 
     const {
-        updateCommitedAccountBalances,verifiedBalances,
+        updateVerifiedAccountBalances,verifiedBalances,
         exchangeRates
     } = props;
 
@@ -45,7 +45,7 @@ const DashboardAsset = ({...props}) =>{
     const getAccountAddress = () =>{
         const pk = walletService.pk;
         const address = walletUtils.createAddressFromPrivateKey(pk);
-        updateCommitedAccountBalances(address);
+        updateVerifiedAccountBalances(address);
     };
 
     if(verifiedBalances.length)
@@ -67,7 +67,7 @@ const DashboardAsset = ({...props}) =>{
 
 DashboardAsset.propTypes = {
     exchangeRates:PropTypes.array.isRequired,
-    updateCommitedAccountBalances:PropTypes.func.isRequired,
+    updateVerifiedAccountBalances:PropTypes.func.isRequired,
     verifiedBalances:PropTypes.array.isRequired,
 };
 
@@ -80,8 +80,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return{
-        updateCommitedAccountBalances:address =>
-            dispatch(DashboardActions.updateCommitedAccountBalances(address)),
+        updateVerifiedAccountBalances:address =>
+            dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
     };
 }
 

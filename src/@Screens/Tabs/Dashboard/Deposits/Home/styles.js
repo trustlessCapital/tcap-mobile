@@ -12,12 +12,8 @@ export default (styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        height: Dimensions.get('window').height,
         backgroundColor: Colors.primaryBg,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginStart: 20,
-        marginEnd: 20,
+        padding:moderateScale(20)
     },
     backButtonWrapper: {
         flexDirection: 'row',
@@ -92,7 +88,9 @@ export default (styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        marginBottom: 20
+        position:'absolute',
+        bottom:0,
+        alignSelf:'center'
     },
     buttonStylePrimary: {
         borderRadius: 5,
@@ -186,8 +184,6 @@ export default (styles = StyleSheet.create({
     mainContentWrapper: {
         flex: 1,
         width: Dimensions.get('window').width - 40,
-        marginStart: 20,
-        marginEnd: 20,
     },
     mainContent: {
         flex: 1,

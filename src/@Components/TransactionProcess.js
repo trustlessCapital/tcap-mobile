@@ -22,9 +22,9 @@
 
 import React,{type StatelessFunctionalComponent } from 'react';
 import { SafeAreaView,Text, View,Image } from 'react-native';
-import StatusBarColor from '../../../../../@Components/status-bar-color';
-import Colors from '../../../../../@Constants/Colors';
-import styles from '../Home/styles';
+import StatusBarColor from './status-bar-color';
+import Colors from '../@Constants/Colors';
+import styles from '../@Screens/Tabs/Dashboard/Deposits/Home/styles';
 
 /**
  * @description Initiates the Transaction Processing Loading Screen
@@ -39,7 +39,7 @@ const TransactionProcessing:StatelessFunctionalComponent<Node> = () =>{
             />
             <View style={styles.viewBox}>
                 <Text style={styles.walletText}>My Wallet</Text>
-                <Image source={require('../../../../../../assets/giffs/loader.gif')} style={styles.Loader} />
+                <Image source={require('../../assets/giffs/loader.gif')} style={styles.Loader} />
                 <Text style={styles.transactText}>Transaction In Progress...</Text>
                 <Text style={styles.secondsText}>This may take some time, Please wait</Text>
                 <Text style={styles.infoText}>Please dont press back button.</Text>

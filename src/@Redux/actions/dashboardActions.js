@@ -21,7 +21,7 @@
 import { FETCH_ZK_SYNC_ACCOUNT_ASSETS,UPDATE_EXCHANGE_RATES,UPDATE_WALLET_BALANCE } from '../constants/dashboard-constants';
 import APIService from '../../@Services/api-services';
 
-export const updateCommitedAccountBalances =(address) =>{
+export const updateVerifiedAccountBalances =(address) =>{
     return{
         type: FETCH_ZK_SYNC_ACCOUNT_ASSETS,
         promise:APIService.getAccountBalances(address),

@@ -15,9 +15,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { moderateScale } from 'react-native-size-matters';
 
 const buttons = [
-    {name : 'Send' , icon:'paper-plane' , navigation:''},
-    {name : 'Add funds' , icon:'plus' , navigation:''},
-    {name : 'Withdraw' , icon:'angle-double-down' , navigation:''}
+    {name : 'Send' , icon:'paper-plane' },
+    {name : 'Add funds' , icon:'plus' },
+    {name : 'Withdraw' , icon:'angle-double-down' }
 ];
 
 class DashboardWallet extends Component {
@@ -57,6 +57,7 @@ class DashboardWallet extends Component {
 
       switch (indexValue) {
       case 0:
+          this.goToTransferHomeScreen();
           break;
       case 1:
           this.goToDepositHomeScreen();
@@ -76,6 +77,13 @@ class DashboardWallet extends Component {
           pk: this.walletService.pk,
       });
   }
+  goToTransferHomeScreen = () => {
+      this.props.navigation.push('TransferHomeScreen', {
+          accountDetails: this.accountDetails,
+          pk: this.walletService.pk,
+      });
+  }
+  
 
   calculateBalance = () =>{
       this.setState({isLoading:true});
@@ -140,7 +148,7 @@ class DashboardWallet extends Component {
                   <Text style={styles.balanceTitle}>Total Balance</Text>
                   <View style={styles.balanceWrapper}>
                       <Text style={styles.balanceText}>
-              $ {this.state.totalBalance}
+              $ {this.state.totalBalance.toFixed(4)}
                       </Text>
                   </View>
                   <LoadingIndicator

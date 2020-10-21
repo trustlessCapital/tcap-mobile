@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../../../../../@Components/status-bar-color';
 import Colors from '../../../../../@Constants/Colors';
@@ -163,15 +163,6 @@ export default class DepositHomeScreen extends Component {
       );
   }
 
-  get mainContent() {
-      return (
-          <>
-              <View style={styles.mainContent}>
-          
-              </View>
-          </>
-      );
-  }
 
   render() {
       return (
@@ -181,21 +172,18 @@ export default class DepositHomeScreen extends Component {
                       backgroundColor={Colors.primary_bg}
                       barStyle="light-content"
                   />
-                  <KeyboardAvoidingView style={{flex: 1}}>
-                      <View style={styles.container}>
-                          {this.titleBar}
-                          {this.headerContent}
-                          {this.depositContent}
-                          {this.mainContent}
-                          <View style={styles.cardFooter}>
-                              <TouchableOpacity
-                                  onPress={this.navigateBack.bind(this)}
-                                  style={[styles.buttonStylePrimary]}>
-                                  <Text style={styles.buttonText}>Cancel</Text>
-                              </TouchableOpacity>
-                          </View>
+                  <View style={styles.container}>
+                      {this.titleBar}
+                      {this.headerContent}
+                      {this.depositContent}
+                      <View style={styles.cardFooter}>
+                          <TouchableOpacity
+                              onPress={this.navigateBack.bind(this)}
+                              style={[styles.buttonStylePrimary]}>
+                              <Text style={styles.buttonText}>Cancel</Text>
+                          </TouchableOpacity>
                       </View>
-                  </KeyboardAvoidingView>
+                  </View>
               </SafeAreaView>
           </>
       );

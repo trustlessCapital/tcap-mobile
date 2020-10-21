@@ -9,7 +9,6 @@ import {
     TextInput,
     TouchableOpacity,
     SafeAreaView,
-    KeyboardAvoidingView,
     ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -191,36 +190,34 @@ export default class DepositEthScreen extends Component {
                       backgroundColor={Colors.primary_bg}
                       barStyle="light-content"
                   />
-                  <KeyboardAvoidingView style={{flex: 1}}>
-                      <View style={styles.container}>
-                          {this.titleBar}
-                          <ScrollView style={styles.mainContentWrapper}>
-                              {this.depositContent}
-                          </ScrollView>
-                          <View style={styles.cardFooter}>
-                              <TouchableOpacity
-                                  onPress={this.cancelTx.bind(this)}
-                                  style={[styles.buttonStylePrimary]}>
-                                  <Text style={styles.buttonText}>Cancel</Text>
-                              </TouchableOpacity>
-                          </View>
-                          <ConfirmDialog
-                              message={this.state.confirmDialogMessage}
-                              onDismiss={() => {
-                                  this.setState({confirmDialog: false});
-                              }}
-                              onOk={() => {
-                                  this.goToDashboard();
-                                  this.setState({confirmDialog: false});
-                              }}
-                              title={this.state.confirmDialogTitle}
-                              visible={this.state.confirmDialog}
-                          />
-                          <LoadingIndicator
-                              visible={this.state.isLoading}
-                          />
+                  <View style={styles.container}>
+                      {this.titleBar}
+                      <ScrollView style={styles.mainContentWrapper}>
+                          {this.depositContent}
+                      </ScrollView>
+                      <View style={styles.cardFooter}>
+                          <TouchableOpacity
+                              onPress={this.cancelTx.bind(this)}
+                              style={[styles.buttonStylePrimary]}>
+                              <Text style={styles.buttonText}>Cancel</Text>
+                          </TouchableOpacity>
                       </View>
-                  </KeyboardAvoidingView>
+                      <ConfirmDialog
+                          message={this.state.confirmDialogMessage}
+                          onDismiss={() => {
+                              this.setState({confirmDialog: false});
+                          }}
+                          onOk={() => {
+                              this.goToDashboard();
+                              this.setState({confirmDialog: false});
+                          }}
+                          title={this.state.confirmDialogTitle}
+                          visible={this.state.confirmDialog}
+                      />
+                      <LoadingIndicator
+                          visible={this.state.isLoading}
+                      />
+                  </View>
               </SafeAreaView>
           </>
       );

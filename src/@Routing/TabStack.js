@@ -15,13 +15,21 @@ import TabIcons from './TabIcons';
 import AccountsScreen from '../@Screens/Tabs/Accounts';
 import DashboardScreen from '../@Screens/Tabs/Dashboard';
 
-// COMMON STACK
-import DepositHomeScreen from '../@Screens/Tabs/@Common/Deposits/Home';
-import DepositConfirmScreen from '../@Screens/Tabs/@Common/Deposits/Confirm';
-import DepositStatusScreen from '../@Screens/Tabs/@Common/Deposits/Status';
-import DepositEthBalanceScreen from '../@Screens/Tabs/@Common/Deposits/NetworkBalances';
-import DepositEthScreen from '../@Screens/Tabs/@Common/Deposits/EthNetwork';
+
+// DEPOSIT FUNDS
+import DepositHomeScreen from '../@Screens/Tabs/Dashboard/Deposits/Home';
+import DepositConfirmScreen from '../@Screens/Tabs/Dashboard/Deposits/Confirm';
+import DepositStatusScreen from '../@Screens/Tabs/Dashboard/Deposits/Status';
+import DepositEthBalanceScreen from '../@Screens/Tabs/Dashboard/Deposits/NetworkBalances';
+import DepositEthScreen from '../@Screens/Tabs/Dashboard/Deposits/EthNetwork';
+
+//TRANSFER FUNDS 
+import TransferHomeScreen from '../@Screens/Tabs/Dashboard/Transfers/Home';
+
+
 import TransactionScreen from '../@Screens/Tabs/Transactions';
+
+
 import ContactsScreens from '../@Screens/Tabs/Contacts';
 
 
@@ -37,7 +45,7 @@ const getTabBarIcon = (route, focused) => {
     case 'Dashboard':
         imageName = 1;
         break;
-    case 'Tansactions':
+    case 'Transactions':
         imageName = 2;
         break;
     case 'Contacts':
@@ -68,7 +76,7 @@ const TabStack = ({...props}) => {
             }}
         >
             <Tab.Screen component={DashboardScreen} initialParams={params} name="Dashboard" />
-            <Tab.Screen component={TransactionScreen} name="Tansactions" />
+            <Tab.Screen component={TransactionScreen} name="Transactions" />
             <Tab.Screen component={ContactsScreens} name="Contacts" />
             <Tab.Screen component={AccountsScreen} initialParams={params} name="Accounts" />
         </Tab.Navigator>
@@ -82,11 +90,17 @@ const MixNavigator = ({...props}) => {
         <Stack.Navigator headerMode="none" initialRouteName={'Tabs'} options={navigationOptions}>
             <Stack.Screen component={TabStack} initialParams={params} name="Tabs" />
 
+            {/* DEPOSIT STACK */}
             <Stack.Screen component={DepositHomeScreen}  name="DepositHomeScreen" />
             <Stack.Screen component={DepositConfirmScreen} name="DepositConfirmScreen" />
             <Stack.Screen component={DepositStatusScreen} name="DepositStatusScreen" />
             <Stack.Screen component={DepositEthBalanceScreen} name="DepositEthBalanceScreen" />
             <Stack.Screen component={DepositEthScreen} name="DepositEthScreen" />
+
+            {/* TRANSFER STACK */}
+            <Stack.Screen component={TransferHomeScreen}  name="TransferHomeScreen" />
+
+
         </Stack.Navigator>
     );
 };

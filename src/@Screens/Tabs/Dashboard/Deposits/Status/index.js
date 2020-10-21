@@ -16,7 +16,7 @@ import styles from '../Home/styles';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import WalletService from '../../../../../@Services/wallet-service';
 import StorageUtils from '../../../../../@Services/storage-utils';
-import TransactionProcessing from './TransactionProcess';
+import TransactionProcessing from '../../../../../@Components/TransactionProcess';
 import PropTypes from 'prop-types';
 import WalletUtils from '../../../../../@Services/wallet-utils';
 import { moderateScale } from 'react-native-size-matters';
