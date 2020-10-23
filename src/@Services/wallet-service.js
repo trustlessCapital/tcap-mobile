@@ -27,7 +27,7 @@ export default class WalletService {
   }
 
   getProvider = async () => {
-      this.syncProvider = await zksync.getDefaultProvider(NETWORK);
+      this.syncProvider = await zksync.getDefaultProvider(NETWORK,'WS');
   }
 
   getEthersProvider = async () => {
@@ -48,17 +48,22 @@ export default class WalletService {
       return this.syncWallet.getAccountState();
   }
 
-  unlockZksyncWallet = async () => {
+  unlockZksyncWallet = async (token) => {
+      console.log('Token');
       await this.getSyncWallet();
+      //this.syncWallet.isSigningKeySet() - true (unlocked)
       if (!(await this.syncWallet.isSigningKeySet())) {
           if ((await this.syncWallet.getAccountId()) == undefined) {
               return;
           }
-
-          const changePubkey = await this.syncWallet.setSigningKey();
-
-          return await changePubkey.awaitReceipt();
+          const signingKeyTx = await this.syncWallet.setSigningKey({ feeToken: token.toUpperCase(), });
+          const receipt = await signingKeyTx.awaitReceipt();
+          console.log('Receipt',receipt);
+          return receipt.success; // true - unlocked
       }
+      return true;
+      
+
   }
 
   depositFundsToZkSync = async (token, amount) => {
@@ -80,6 +85,22 @@ export default class WalletService {
           deposit.awaitEthereumTxCommit() 
       ]);
       return transactionDetails;
+  }
+
+  transferFundsToZkSync = async (destination,token,amount) =>{
+      amount = amount.toString();
+      await this.getSyncWallet();
+      const decimalForToken = WalletUtils.getDecimalValueForAsset(token);
+      let weiUnit = Math.pow(10,decimalForToken);
+      let Wei = (amount * weiUnit).toString();
+      const txAmount = ethers.BigNumber.from(Wei);
+      const body = {
+          to: destination, token: token.toUpperCase(), amount: txAmount
+      };
+      console.log('Body',body);
+      const transfer = await this.syncWallet.syncTransfer(body);
+      const txRcpt = await transfer.awaitReceipt();
+      return txRcpt;
   }
 
   getZkSyncBalance = async () => {

@@ -54,18 +54,81 @@ export default (styles = StyleSheet.create({
         position:'absolute',
         bottom:moderateScale(10),
         width:'100%',
-        paddingVertical:moderateScale(20),
+        paddingVertical:moderateScale(10),
         borderRadius:moderateScale(10),
         justifyContent:'center',alignItems:'center',
         backgroundColor:Colors.activeTintRed,
         alignSelf:'center'
     },
     proceedText:{
-        fontSize:moderateScale(20),
+        fontSize:moderateScale(15),
         fontWeight:'bold',
         fontFamily: 'Montserrat-Bold',
         color:Colors.white
-    }
+    },
+    feeText:{
+        alignSelf:'center',
+        marginTop:moderateScale(10),
+        fontWeight:'bold',
+        color:Colors.activeTintRed,
+        fontSize:moderateScale(12),
+        position:'absolute',
+        bottom:moderateScale(80)
+    },
+    dataRow:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        marginBottom:moderateScale(10)
+    },
+    titleDetails:{
+        color: Colors.textColorGrey,
+        fontFamily: 'Montserrat-Regular',
+        fontSize: moderateScale(12),
+    },
+    titleText:{
+        color: Colors.white,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: moderateScale(14),
+    },
+    titleIcon: {
+        width: moderateScale(100),
+        height: moderateScale(100),
+        alignSelf:'center',
+        marginBottom:moderateScale(10)
+    },
+    title: {
+        color: Colors.white,
+        fontFamily: 'Montserrat-Regular',
+        fontSize: moderateScale(14),
+        textAlign: 'center',
+        marginBottom: moderateScale(20),
+        width: '100%',
+    },
+    buttonStyleSecondary: {
+        borderRadius: 5,
+        backgroundColor: Colors.tintColor,
+        width: '50%',
+        alignSelf:'center',
+        paddingVertical: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonText: {
+        color: Colors.white,
+        fontFamily: 'Montserrat-Bold',
+        fontWeight: 'bold',
+        fontSize: moderateScale(14),
+    },
+    buttonStylePrimary: {
+        borderRadius: 5,
+        width: '100%',
+        backgroundColor: Colors.tintColorSecondary,
+        paddingVertical: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop:moderateScale(10)
+    },
 }));
   
   

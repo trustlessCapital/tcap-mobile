@@ -14,6 +14,8 @@ import TabIcons from './TabIcons';
 // TABS
 import AccountsScreen from '../@Screens/Tabs/Accounts';
 import DashboardScreen from '../@Screens/Tabs/Dashboard';
+import TransactionScreen from '../@Screens/Tabs/Transactions';
+import ContactsScreens from '../@Screens/Tabs/Contacts';
 
 
 // DEPOSIT FUNDS
@@ -25,12 +27,8 @@ import DepositEthScreen from '../@Screens/Tabs/Dashboard/Deposits/EthNetwork';
 
 //TRANSFER FUNDS 
 import TransferHomeScreen from '../@Screens/Tabs/Dashboard/Transfers/Home';
-
-
-import TransactionScreen from '../@Screens/Tabs/Transactions';
-
-
-import ContactsScreens from '../@Screens/Tabs/Contacts';
+import TransferConfirmationScreen from '../@Screens/Tabs/Dashboard/Transfers/Confirm';
+import TransferStatusScreen from '../@Screens/Tabs/Dashboard/Transfers/Status';
 
 
 
@@ -99,6 +97,9 @@ const MixNavigator = ({...props}) => {
 
             {/* TRANSFER STACK */}
             <Stack.Screen component={TransferHomeScreen}  name="TransferHomeScreen" />
+            <Stack.Screen component={TransferConfirmationScreen}  name="TransferConfirmationScreen" />
+            <Stack.Screen component={TransferStatusScreen}  name="TransferStatusScreen" />
+            
 
 
         </Stack.Navigator>

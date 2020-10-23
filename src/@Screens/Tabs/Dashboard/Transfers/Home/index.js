@@ -17,7 +17,6 @@
 /**
  * Created By @name Sukumar_Abhijeet,
  */
-
  
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView,View,Text,TextInput,TouchableOpacity } from 'react-native';
@@ -33,68 +32,111 @@ import Colors from '../../../../../@Constants/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { moderateScale } from 'react-native-size-matters';
 import Modal from 'react-native-modal';
+import apiServices from '../../../../../@Services/api-services';
+import LoadingIndicator from '../../../../../@Components/loading-indicator';
+import ErrorDialog from '../../../../../@Components/error-dialog';
  
 const TransferHomeScreen = ({...props}) =>{
+    const {
+        updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation
+    } = props;
+
     const walletService = WalletService.getInstance();
-
-    const {updateVerifiedAccountBalances,verifiedBalances,exchangeRates} = props;
+    const pk = walletService.pk;    
+    const accAddress = walletUtils.createAddressFromPrivateKey(pk);
+    
     const [selectedAsset, setSelectedAsset] = useState(verifiedBalances[0]);
-
     const [amountToTransfer, setAmountToTransfer] = useState(0.00);
+    const [address, setAddress] = useState('');
+    const [remarks , setRemarks] = useState('');
     const [modal, setModal] = useState(false);
+    const [fee , setFee] = useState(0);
+
+    const [errorMessage, setErrorMessage] = useState('');
+    const [errorTitle, setErrorTitle] = useState('');
+    const [showError, setShowError] = useState(false);
+    const [loader, setLoader] = useState(true);
+    const [indicatingMssg , setIndicatingMsg] = useState('Please Wait...');
+
+    const [showTransactionUi , setShowTransactionUi] = useState(false);
 
     useEffect(()=>{
-        getAccountAddress();
+        if(verifiedBalances.length) setShowTransactionUi(true);
+        updateVerifiedAccountBalances(accAddress);
     },[]);
 
-    const getAccountAddress = () =>{
-        const pk = walletService.pk;
-        const address = walletUtils.createAddressFromPrivateKey(pk);
-        updateVerifiedAccountBalances(address);
+    useEffect(()=>{
+        if(verifiedBalances.length) {
+            setSelectedAsset(verifiedBalances[0]);
+            setTimeout(()=>{
+                setShowTransactionUi(true);
+                refreshAssets(verifiedBalances[0]);
+            },200);
+        }
+    },[verifiedBalances.length]);
+
+    const checkAccountIsUnlocked = async() =>{
+        const isUnlocked = await walletService.unlockZksyncWallet(selectedAsset.symbol);
+        if(isUnlocked)
+        {
+            setLoader(false);
+            const data = { selectedAsset,address,remarks,fee,amountToTransfer};
+            navigation.navigate('TransferConfirmationScreen',{transactionData:data});
+        }
+        else{
+            setShowError(true);
+            setLoader(false);
+            setErrorMessage('Please try after sometimes!');
+            setErrorTitle('Account is Locked');
+        }
+    };  
+
+    const refreshAssets = (currentAsset) =>{
+        setIndicatingMsg('Please Wait...');
+        setLoader(true);
+        updateVerifiedAccountBalances(accAddress);
+        apiServices.getTransferFundProcessingFee(currentAsset.symbol,accAddress)
+            .then(data=>{
+                setLoader(false);
+                setFee(data.totalFee);
+            })
+            .catch(()=>{
+                setLoader(false);
+            });
     };
 
-    const renderAssets = () =>{
-        if(verifiedBalances.length)
-            return (
-                <View style={GlobalStyles.primaryCard}>
-                    <Text style={GlobalStyles.titleTypo}> Amount / Asset</Text>
-                    <View style={GlobalStyles.inputBox}>
-                        <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:'100%'}}>
-                            <TextInput
-                                keyboardType={'numeric'}
-                                onChangeText={amt => {
-                                    setAmountToTransfer(amt);
-                                }}
-                                placeholder={'Enter Amount'}
-                                placeholderTextColor={Colors.tintColorGreyedDark}
-                                style={styles.inputText}
-                                value={amountToTransfer}
-                            />
-                            <TouchableOpacity onPress={()=>setModal(true)} style={{flexDirection:'row',alignItems:'center'}}>
-                                <Text style={styles.assetTitle}>{selectedAsset.symbol.toUpperCase()}</Text>
-                                <Icon color={Colors.green} name={'angle-down'} size={moderateScale(22)} style={{marginLeft:moderateScale(5)}} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.bottomInputBar}>
-                            <Text style={{color:Colors.white,maxWidth:moderateScale(150)}}> ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),amountToTransfer, exchangeRates)}</Text>
-                            <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.primaryBg}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
-                        </View>
-                    </View>
-                    <Text style={GlobalStyles.titleTypo}> To Addess</Text>
-                    <View style={GlobalStyles.inputBox}>
-                        <TextInput
-                            placeholder={'Enter Address'}
-                            style={{color:Colors.white}}
-                        />
-                    </View>       
-                </View>
-            );
-        return (
-            <View style={GlobalStyles.primaryCard}>
-                <Text style={{...GlobalStyles.titleTypo,textAlign:'center'}}> Your Account donot have</Text>
-                <Text style={{...GlobalStyles.titleTypo,textAlign:'center'}}> sufficient balance</Text>
-            </View>
-        );
+    const checkValidData = () =>{
+        const max = walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value);
+        const totalAmt = parseFloat(amountToTransfer) + parseFloat(fee);
+        if(!amountToTransfer)
+        {
+            setShowError(true);
+            setErrorMessage('Please enter an Amount to begin Transfer');
+            setErrorTitle('Amount cannot be empty');
+        }
+        else if(totalAmt > max)
+        {
+            setShowError(true);
+            setErrorMessage('Please add more funds to account before this transaction');
+            setErrorTitle('Insufficient balance');
+        }
+        else if(!address.length)
+        {
+            setShowError(true);
+            setErrorMessage('Please enter a valid address');
+            setErrorTitle('Invalid Addess');
+        }
+        else{
+            setLoader(true);
+            setIndicatingMsg('Checking Account Please Wait..');
+            checkAccountIsUnlocked();
+        }
+    };
+
+    const setNewAsset = (item) =>{
+        setSelectedAsset(item);
+        setModal(false);
+        refreshAssets(item);
     };
 
     const renderAssetOptions = () => {
@@ -105,7 +147,7 @@ const TransferHomeScreen = ({...props}) =>{
                 </View>
                 {
                     verifiedBalances.map((item,index)=>(
-                        <TouchableOpacity key={index} onPress={()=>{setSelectedAsset(item),setModal(false);}} style={styles.eachAsset}>
+                        <TouchableOpacity key={index} onPress={()=>setNewAsset(item)} style={styles.eachAsset}>
                             <Text style={{fontSize:moderateScale(16),fontWeight:'bold'}}>{item.symbol.toUpperCase()}</Text>
                             <Text style={{fontSize:moderateScale(16),fontWeight:'bold'}}>{walletUtils.getAssetDisplayText( item.symbol,item.value)}</Text>
                         </TouchableOpacity>
@@ -115,12 +157,69 @@ const TransferHomeScreen = ({...props}) =>{
         );
     };
 
-    const checkDisabled = () =>{
-        const maxAmt = walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value);
-        if(amountToTransfer === 0 || amountToTransfer > maxAmt )
-            return true;
-        
-        return false;
+    const renderAssets = () =>{
+        if(showTransactionUi)
+            return (
+                <>
+                    <View style={GlobalStyles.primaryCard}>
+                        <Text style={GlobalStyles.titleTypo}> Amount / Asset</Text>
+                        <View style={GlobalStyles.inputBox}>
+                            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:'100%'}}>
+                                <TextInput
+                                    keyboardType={'numeric'}
+                                    onChangeText={amt => {
+                                        setAmountToTransfer(amt);
+                                    }}
+                                    placeholder={'Enter Amount'}
+                                    placeholderTextColor={Colors.tintColorGreyedDark}
+                                    style={styles.inputText}
+                                    value={amountToTransfer}
+                                />
+                                <TouchableOpacity onPress={()=>setModal(true)} style={{flexDirection:'row',alignItems:'center'}}>
+                                    <Text style={styles.assetTitle}>{selectedAsset.symbol.toUpperCase()}</Text>
+                                    <Icon color={Colors.green} name={'angle-down'} size={moderateScale(22)} style={{marginLeft:moderateScale(5)}} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.bottomInputBar}>
+                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),amountToTransfer, exchangeRates)}</Text>
+                                <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
+                            </View>
+                        </View>
+                        <Text style={GlobalStyles.titleTypo}> To Addess</Text>
+                        <View style={GlobalStyles.inputBox}>
+                            <TextInput
+                                onChangeText={addr => {
+                                    setAddress(addr);
+                                }}
+                                placeholder={'Enter Address'}
+                                placeholderTextColor={Colors.tintColorGreyedDark}
+                                style={{color:Colors.white,width:'100%'}}
+                            />
+                        </View>    
+                        <Text style={GlobalStyles.titleTypo}> Any Remarks</Text>
+                        <View style={GlobalStyles.inputBox}>
+                            <TextInput
+                                onChangeText={remarks => {
+                                    setRemarks(remarks);
+                                }}
+                                placeholder={'Short Remarks'}
+                                placeholderTextColor={Colors.tintColorGreyedDark}
+                                style={{color:Colors.white,width:'100%'}}
+                            />
+                        </View>     
+                    </View>
+                    <Text style={styles.feeText}>
+                    Fee : {fee}{' '+selectedAsset.symbol.toUpperCase()+' '}
+                    ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
+                    </Text>
+                </>
+            );
+        return (
+            <View style={GlobalStyles.primaryCard}>
+                <Text style={{...GlobalStyles.titleTypo,textAlign:'center'}}> Your Account donot have</Text>
+                <Text style={{...GlobalStyles.titleTypo,textAlign:'center'}}> sufficient balance</Text>
+            </View>
+        );
     };
 
     return(
@@ -128,7 +227,7 @@ const TransferHomeScreen = ({...props}) =>{
             <View style={styles.wrapper}>
                 <AppHeader headerTitle={'Transfer Funds'}  />
                 {renderAssets()}
-                <TouchableOpacity disabled={checkDisabled()} style={{...styles.transferButton,opacity:checkDisabled() ? .4:1}}>
+                <TouchableOpacity onPress={()=>checkValidData()} style={styles.transferButton}>
                     <Text style={styles.proceedText}>Proceed</Text>
                 </TouchableOpacity>
             </View>
@@ -145,6 +244,18 @@ const TransferHomeScreen = ({...props}) =>{
             >
                 {renderAssetOptions()}
             </Modal>
+            <LoadingIndicator
+                message={indicatingMssg}
+                visible={loader}
+            />
+            <ErrorDialog
+                message={errorMessage}
+                onDismiss={() => {
+                    setShowError(false);
+                }}
+                title={errorTitle}
+                visible={showError}
+            />
         </SafeAreaView>
     );
 };
@@ -160,7 +271,7 @@ TransferHomeScreen.propTypes = {
 function mapStateToProps(state){
     return{
         verifiedBalances : state.dashboard.verifiedBalances,
-        exchangeRates : state.dashboard.exchangeRates
+        exchangeRates : state.dashboard.exchangeRates,
     };
 }
 

@@ -176,7 +176,7 @@ export default class DepositHomeScreen extends Component {
                       {this.titleBar}
                       {this.headerContent}
                       {this.depositContent}
-                      <View style={styles.cardFooter}>
+                      <View style={{...styles.cardFooter,position:'absolute',bottom:20}}>
                           <TouchableOpacity
                               onPress={this.navigateBack.bind(this)}
                               style={[styles.buttonStylePrimary]}>

@@ -88,8 +88,6 @@ export default (styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        position:'absolute',
-        bottom:0,
         alignSelf:'center'
     },
     buttonStylePrimary: {
