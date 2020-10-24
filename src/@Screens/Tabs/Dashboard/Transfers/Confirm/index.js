@@ -49,7 +49,7 @@ const TransferConfirmationScreen = ({...props}) =>{
             <View style={GlobalStyles.primaryCard}>
                 <View style={styles.dataRow}>
                     <Text style={styles.titleDetails}>ADDRESS</Text>
-                    <Text style={styles.titleText}>{address}</Text>
+                    <Text style={{...styles.titleText,width:'60%'}}>{address}</Text>
                 </View>
                 <View style={styles.dataRow}>
                     <Text style={styles.titleDetails}>AMOUNT ENTERED</Text>
@@ -61,7 +61,7 @@ const TransferConfirmationScreen = ({...props}) =>{
                 </View>
                 <View style={styles.dataRow}>
                     <Text style={styles.titleDetails}>TOTAL</Text>
-                    <Text style={styles.titleText}>~ $ {total}</Text>
+                    <Text style={styles.titleText}>~ $ {total.toFixed(4)}</Text>
                 </View>
                 <View style={styles.dataRow}>
                     <Text style={styles.titleDetails}>REMARKS</Text>

@@ -188,17 +188,22 @@ const TransferHomeScreen = ({...props}) =>{
                         <Text style={GlobalStyles.titleTypo}> To Addess</Text>
                         <View style={GlobalStyles.inputBox}>
                             <TextInput
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
+                                keyboardType={'email-address'}
                                 onChangeText={addr => {
                                     setAddress(addr);
                                 }}
                                 placeholder={'Enter Address'}
                                 placeholderTextColor={Colors.tintColorGreyedDark}
                                 style={{color:Colors.white,width:'100%'}}
+                                value={address}
                             />
                         </View>    
                         <Text style={GlobalStyles.titleTypo}> Any Remarks</Text>
                         <View style={GlobalStyles.inputBox}>
                             <TextInput
+                                autoCorrect={false}
                                 onChangeText={remarks => {
                                     setRemarks(remarks);
                                 }}

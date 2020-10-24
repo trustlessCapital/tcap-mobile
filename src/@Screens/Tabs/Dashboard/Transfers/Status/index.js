@@ -20,7 +20,7 @@
 
  
 import React, { useEffect, useState } from 'react';
-import { View,SafeAreaView,TouchableOpacity,Text,Image } from 'react-native';
+import { View,SafeAreaView,TouchableOpacity,Text,Image,Linking } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import PropTypes from 'prop-types';
 import GlobalStyles from '../../../../../@GlobalStyles';
@@ -31,6 +31,9 @@ import Support from '../../../../../@Constants/Supports';
 import Toast from 'react-native-simple-toast';
 import { moderateScale } from 'react-native-size-matters';
 import WalletService from '../../../../../@Services/wallet-service';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import Colors from '../../../../../@Constants/Colors';
+import { sendEmail } from '../../../../../@Services/email-service';
 
 const {supportMail} = Support;
  
@@ -47,6 +50,7 @@ const TransferStatusScreen = ({...props}) =>{
     const {symbol} = selectedAsset;
     const [isLoading,setIsLoading] = useState(true);
     const [errorOccured,setErrorOccured] = useState(false);
+    const [transactionHash , setTransactionHash] = useState();
 
     useEffect(()=>{
         initiateTransaction();
@@ -55,13 +59,21 @@ const TransferStatusScreen = ({...props}) =>{
     const initiateTransaction = () =>{
         walletService.transferFundsToZkSync(address,symbol,amountToTransfer)
             .then(data =>{
-                setIsLoading(false);
-                console.log('data',data);
+                const [receipt, txHash] = data;
+                if(receipt.success)
+                {
+                    setTransactionHash(txHash);
+                    setIsLoading(false);
+                }
+                else{
+                    setErrorOccured(true);
+                    setIsLoading(false);
+                }
+                
             })
-            .catch(err =>{
+            .catch(() =>{
                 setErrorOccured(true);
                 setIsLoading(false);
-                console.log('err',err);
             });
 
     };
@@ -69,6 +81,53 @@ const TransferStatusScreen = ({...props}) =>{
     const copyToClipboard = () =>{
         Clipboard.setString(supportMail);
         Toast.show('Email Copied to Clipboard',Toast.LONG);
+    };
+
+    const openEmailLink = () =>{
+        sendEmail(supportMail)
+            .then(() => {
+                console.log('Our email successful provided to device mail ');
+            });
+    };
+
+    const openLink = async ()=>{
+        try {
+            const url = walletService.getFundTransferStatusUrl(transactionHash);
+            if (await InAppBrowser.isAvailable()) {
+                await InAppBrowser.open(url, {
+                    // iOS Properties
+                    dismissButtonStyle: 'done',
+                    preferredBarTintColor: Colors.white,
+                    preferredControlTintColor: Colors.tintColor,
+                    readerMode: false,
+                    animated: true,
+                    modalPresentationStyle: 'pageSheet',
+                    modalTransitionStyle: 'coverVertical',
+                    modalEnabled: true,
+                    enableBarCollapsing: true,
+                    // Android Properties
+                    showTitle: true,
+                    toolbarColor: Colors.primaryBg,
+                    secondaryToolbarColor: 'white',
+                    enableUrlBarHiding: true,
+                    enableDefaultShare: true,
+                    forceCloseOnRedirection: false,
+                    // Animations
+                    animations: {
+                        startEnter: 'slide_in_right',
+                        startExit: 'slide_out_left',
+                        endEnter: 'slide_in_left',
+                        endExit: 'slide_out_right',
+                    },
+                    headers: {
+                        'my-custom-header': 'Track Status',
+                    },
+                });
+            }
+            else Linking.openURL(url);
+        } catch (error) {
+            console.log(error.message);
+        }
     };
 
     const getTransferContent = () =>{
@@ -84,7 +143,7 @@ const TransferStatusScreen = ({...props}) =>{
             after 1 confirmations. Click button below to track the progress
                 </Text>
                 <TouchableOpacity
-                    // onPress={() => { this.openLink(); }}
+                    onPress={() => openLink()}
                     style={[styles.buttonStyleSecondary]}>
                     <Text style={styles.buttonText}>Track Status</Text>
                 </TouchableOpacity>
@@ -112,7 +171,7 @@ const TransferStatusScreen = ({...props}) =>{
                 </Text>
                 <View style={{flexDirection:'row',justifyContent:'space-between',width:'90%'}}>
                     <TouchableOpacity
-                        // onPress={() => { this.openEmailLink(); }}
+                        onPress={() => openEmailLink()}
                         style={[styles.buttonStyleSecondary]}>
                         <Text style={styles.buttonText}>Send Email</Text>
                     </TouchableOpacity>

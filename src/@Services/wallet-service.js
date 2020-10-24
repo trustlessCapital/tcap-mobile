@@ -2,9 +2,10 @@ import '@ethersproject/shims';
 import {ethers} from 'ethers';
 import WalletUtils from './wallet-utils';
 import * as zksync from '../lib/zksync/build-src/index';
+import Config from '../@Config/default';
 
-const NETWORK = 'rinkeby';
-//const NETWORK = 'mainnet';
+const { NETWORK , SUBNET } = Config;
+
 export default class WalletService {
 
     constructor() {}
@@ -27,7 +28,7 @@ export default class WalletService {
   }
 
   getProvider = async () => {
-      this.syncProvider = await zksync.getDefaultProvider(NETWORK,'WS');
+      this.syncProvider = await zksync.getDefaultProvider(NETWORK,SUBNET);
   }
 
   getEthersProvider = async () => {
@@ -97,10 +98,12 @@ export default class WalletService {
       const body = {
           to: destination, token: token.toUpperCase(), amount: txAmount
       };
-      console.log('Body',body);
       const transfer = await this.syncWallet.syncTransfer(body);
-      const txRcpt = await transfer.awaitReceipt();
-      return txRcpt;
+      const transactionDetails = Promise.all([
+          transfer.awaitReceipt(),
+          transfer.txHash,
+      ]);
+      return transactionDetails;
   }
 
   getZkSyncBalance = async () => {
@@ -118,4 +121,9 @@ export default class WalletService {
   getTxStatusUrl(txId) {
       return `https://${NETWORK}.etherscan.io/tx/${txId}`;
   }
+
+  getFundTransferStatusUrl(txId) {
+      return `https://${NETWORK}.zkscan.io/explorer/transactions/${txId}`;
+  }
+
 }

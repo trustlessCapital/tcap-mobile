@@ -34,6 +34,10 @@ export default {
 
     AsyncStorageKey:'Tcap',
 
+    NETWORK : 'rinkeby',
+
+    SUBNET : 'WS',
+
     BASE_PATH:  useLocalIP ?  localIp  : setEnv ? devServerIp : prodServerIp,
 
     API_PREFIX : '/api',
