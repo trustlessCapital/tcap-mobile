@@ -193,6 +193,7 @@ export default class SeedPhraseNoticeScreen extends Component {
   }
 
   _goToSeedPhraseScreen() {
+      console.log('accountDetails',this.accountDetails);
       this.props.navigation.navigate('SeedPhraseScreen', {
           pin: this.pin,
           accountDetails: this.accountDetails,

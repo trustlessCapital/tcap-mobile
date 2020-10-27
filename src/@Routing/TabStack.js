@@ -30,6 +30,9 @@ import TransferHomeScreen from '../@Screens/Tabs/Dashboard/Transfers/Home';
 import TransferConfirmationScreen from '../@Screens/Tabs/Dashboard/Transfers/Confirm';
 import TransferStatusScreen from '../@Screens/Tabs/Dashboard/Transfers/Status';
 
+//TRANSACTION -HISTORY
+import TransactionStatusScreen from '../@Screens/Tabs/Transactions/Status';
+
 
 
 const Tab = createBottomTabNavigator();
@@ -99,6 +102,10 @@ const MixNavigator = ({...props}) => {
             <Stack.Screen component={TransferHomeScreen}  name="TransferHomeScreen" />
             <Stack.Screen component={TransferConfirmationScreen}  name="TransferConfirmationScreen" />
             <Stack.Screen component={TransferStatusScreen}  name="TransferStatusScreen" />
+
+            {/* TRANSACTION HISTORY STACK */}
+            <Stack.Screen component={TransactionStatusScreen}  name="TransactionStatusScreen" />
+            
             
 
 

@@ -25,6 +25,7 @@ const objectToArray = (object) =>{
     return result;
 };
 
+
 export default (HelperFunctions = {
-    objectToArray, 
+    objectToArray
 });

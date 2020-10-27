@@ -23,6 +23,9 @@ import { moderateScale } from 'react-native-size-matters';
 import { sendEmail } from '../../../../../@Services/email-service';
 import Support from '../../../../../@Constants/Supports';
 import Toast from 'react-native-simple-toast';
+import apiServices from '../../../../../@Services/api-services';
+import walletUtils from '../../../../../@Services/wallet-utils';
+import { ethers } from 'ethers';
 
 const {supportMail} = Support;
 
@@ -73,9 +76,29 @@ export default class DepositStatusScreen extends Component {
   }
 
   initiateTransaction = () =>{
+      const address =  walletUtils.createAddressFromPrivateKey(this.walletService.pk);
+      const decimalForToken = WalletUtils.getDecimalValueForAsset(this.token);
+      let weiUnit = Math.pow(10,decimalForToken);
+      let Wei = (this.state.amount * weiUnit).toString();
+
       this.walletService.depositFundsToZkSync(this.token, this.state.amount)
-          .then((txDetails) => {
+          .then(async(txDetails) => {
               const [receipt,txCommit] = txDetails;
+              console.log('txCommit',txCommit);
+              console.log('receipt',receipt);
+              const body = {
+                  'walletAddress': address,
+                  'txnType': 'deposit',
+                  'amount': Wei,
+                  'asset': this.token.toUpperCase(),
+                  'status': receipt.executed ? 'complete' : 'pending',
+                  'ethTxnId': txCommit.transactionHash,
+              };
+              apiServices.setTransactionDetailsWithServer(body)
+                  .then(data=>{
+                      console.log('Deposit',data);
+                  })
+                  .catch();
               this.setState({ transactionDetails:txCommit,isLoading: false });
           }).catch((err) => {
               console.log('Error',err);

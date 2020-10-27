@@ -47,7 +47,9 @@ const TransferHomeScreen = ({...props}) =>{
     
     const [selectedAsset, setSelectedAsset] = useState(verifiedBalances[0]);
     const [amountToTransfer, setAmountToTransfer] = useState(0.00);
-    const [address, setAddress] = useState('');
+    // testAddress  (for testing)
+    const testAddress = '0xDD624396D018fffB7369341f73e9e8B6F65de7bf';
+    const [address, setAddress] = useState(testAddress);
     const [remarks , setRemarks] = useState('');
     const [modal, setModal] = useState(false);
     const [fee , setFee] = useState(0);
@@ -61,6 +63,7 @@ const TransferHomeScreen = ({...props}) =>{
     const [showTransactionUi , setShowTransactionUi] = useState(false);
 
     useEffect(()=>{
+        console.log('accAddress',accAddress);
         if(verifiedBalances.length) setShowTransactionUi(true);
         updateVerifiedAccountBalances(accAddress);
     },[]);
@@ -73,6 +76,7 @@ const TransferHomeScreen = ({...props}) =>{
                 refreshAssets(verifiedBalances[0]);
             },200);
         }
+        else setLoader(false);
     },[verifiedBalances.length]);
 
     const checkAccountIsUnlocked = async() =>{
@@ -232,9 +236,11 @@ const TransferHomeScreen = ({...props}) =>{
             <View style={styles.wrapper}>
                 <AppHeader headerTitle={'Transfer Funds'}  />
                 {renderAssets()}
-                <TouchableOpacity onPress={()=>checkValidData()} style={styles.transferButton}>
-                    <Text style={styles.proceedText}>Proceed</Text>
-                </TouchableOpacity>
+                {
+                    showTransactionUi && (<TouchableOpacity onPress={()=>checkValidData()} style={styles.transferButton}>
+                        <Text style={styles.proceedText}>Proceed</Text>
+                    </TouchableOpacity>)
+                }
             </View>
             <Modal
                 animationIn={'slideInRight'}

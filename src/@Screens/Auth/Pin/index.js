@@ -412,10 +412,7 @@ export default class PINScreen extends Component {
                           this.state.pin
                       ).then(() => {
                           this.setState({ isLoading: false });
-                          if (
-                              !accountDetails.isPhoneVerified ||
-                !accountDetails.isEmailVerified
-                          ) {
+                          if (!accountDetails.isPhoneVerified ||!accountDetails.isEmailVerified) {
                               this.props.navigation.replace('VerificationScreen', {
                                   accountDetails: accountDetails,
                                   mode: !accountDetails.isPhoneVerified

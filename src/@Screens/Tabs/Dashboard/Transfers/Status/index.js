@@ -34,6 +34,8 @@ import WalletService from '../../../../../@Services/wallet-service';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import Colors from '../../../../../@Constants/Colors';
 import { sendEmail } from '../../../../../@Services/email-service';
+import walletUtils from '../../../../../@Services/wallet-utils';
+import apiServices from '../../../../../@Services/api-services';
 
 const {supportMail} = Support;
  
@@ -57,9 +59,28 @@ const TransferStatusScreen = ({...props}) =>{
     },[]);
 
     const initiateTransaction = () =>{
+        const accAddress =  walletUtils.createAddressFromPrivateKey(walletService.pk);
+        const decimalForToken = walletUtils.getDecimalValueForAsset(symbol);
+        let weiUnit = Math.pow(10,decimalForToken);
+        let Wei = (amountToTransfer * weiUnit).toString();
+
         walletService.transferFundsToZkSync(address,symbol,amountToTransfer)
             .then(data =>{
                 const [receipt, txHash] = data;
+
+                const body = {
+                    'walletAddress': accAddress,
+                    'txnType': 'transfer',
+                    'amount': Wei,
+                    'asset': symbol.toUpperCase(),
+                    'status': receipt.executed ? 'complete' : 'pending',
+                    'zksyncTxnId': txHash,
+                    'recipientAddress': address
+                };
+                apiServices.setTransactionDetailsWithServer(body)
+                    .then()
+                    .catch();
+
                 if(receipt.success)
                 {
                     setTransactionHash(txHash);

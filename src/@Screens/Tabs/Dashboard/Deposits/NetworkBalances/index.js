@@ -132,7 +132,7 @@ export default class DepositEthBalanceScreen extends Component {
       const {ethBalance,isLoading} = this.state;
       if(!isLoading)
       {
-          const sum = ethBalance.map(item => item.value).reduce((prev, curr) => prev + curr, 0);
+          const sum = parseInt(ethBalance.map(item => item.value).reduce((prev, curr) => prev + curr, 0));
           if(!sum)
               return <Text style={styles.title}>No Balance is found</Text>;
           else return null;

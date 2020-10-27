@@ -21,11 +21,11 @@
 //MAIN ENVIRONMENT
 const env = process.env.NODE_ENV;
 const localIp = 'http://192.168.43.59:7001';
-const devServerIp = '';
+const stagingServerIp = 'https://q2l2c2cojb.execute-api.us-east-2.amazonaws.com/dev';
 const prodServerIp = '';
 
 // set true to use Local Ip address
-const useLocalIP = true;
+const useLocalIP = false;
 
 //SET ENVIRONMENT
 const setEnv = env === 'development';
@@ -38,7 +38,7 @@ export default {
 
     SUBNET : 'WS',
 
-    BASE_PATH:  useLocalIP ?  localIp  : setEnv ? devServerIp : prodServerIp,
+    BASE_PATH:  useLocalIP ?  localIp  : setEnv ? stagingServerIp : prodServerIp,
 
     API_PREFIX : '/api',
 

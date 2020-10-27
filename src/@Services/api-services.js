@@ -134,6 +134,26 @@ function getTransferFundProcessingFee(symbol,address) {
     }).then(processResponse);
 }
 
+function setTransactionDetailsWithServer(body){
+    const url =  `${BASE_PATH+API_PREFIX}/transactions/create`;
+    const stringifyObj = JSON.stringify(body);
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body : stringifyObj
+    }).then(processResponse);
+}
+
+function getTransactionHistory(address) {
+    const url =  `${BASE_PATH + API_PREFIX}/transactions/list-by-add/${address}`;
+    console.log('URL',url);
+    return fetch(url, {
+        method: 'GET',
+    }).then(processResponse);
+}
+
 export default (APIService = {
     signUp,
     recoverAccount,
@@ -145,5 +165,7 @@ export default (APIService = {
     getEtheriumBalance,
     getZkSyncTokens,
     getAccountBalances,
-    getTransferFundProcessingFee
+    getTransferFundProcessingFee,
+    setTransactionDetailsWithServer,
+    getTransactionHistory
 });

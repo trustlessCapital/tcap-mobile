@@ -77,13 +77,13 @@ class DashboardWallet extends Component {
           pk: this.walletService.pk,
       });
   }
+  
   goToTransferHomeScreen = () => {
       this.props.navigation.push('TransferHomeScreen', {
           accountDetails: this.accountDetails,
           pk: this.walletService.pk,
       });
   }
-  
 
   calculateBalance = () =>{
       this.setState({isLoading:true});

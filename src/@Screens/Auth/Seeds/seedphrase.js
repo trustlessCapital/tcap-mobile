@@ -25,6 +25,19 @@ const WAIT_SEEDPHRASE = 'Please wait.. while we create your seed phrase!';
 const WAIT_CREATEWALLET = 'Please wait.. while we create your wallet!';
 export default class SeedPhraseScreen extends Component {
   
+  
+
+    constructor(props) {
+        super(props);
+        if (this.props.route && this.props.route.params) {
+            if (this.props.route.params.accountDetails)
+                this.accountDetails = this.props.route.params.accountDetails;
+            if (this.props.route.params.pin)
+                this.pin = this.props.route.params.pin;
+        }
+        this._generateMnemonic();
+    }
+
   state = {
       saveButtonText: 'Save',
       resetButtonText: 'Reset',
@@ -36,17 +49,6 @@ export default class SeedPhraseScreen extends Component {
       isLoading: true,
       loadingMessage: WAIT_SEEDPHRASE
   };
-
-  constructor(props) {
-      super(props);
-      if (this.props.route && this.props.route.params) {
-          if (this.props.route.params.accountDetails)
-              this.accountDetails = this.props.route.params.accountDetails;
-          if (this.props.route.params.pin)
-              this.pin = this.props.route.params.pin;
-      }
-      this._generateMnemonic();
-  }
 
   componentDidMount() {
       preventScreenCaptureAsync(); 
@@ -113,7 +115,7 @@ export default class SeedPhraseScreen extends Component {
           this.setState({
               isLoading: false,
           });
-          this.props.navigation.navigate('App',{ accountDetails: accountDetails });
+          this.props.navigation.navigate('App',{ accountDetails: this.accountDetails });
       }); 
   }
 
