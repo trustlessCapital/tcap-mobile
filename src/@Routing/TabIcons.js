@@ -7,7 +7,7 @@ import {Platform} from 'react-native';
 import { Image, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 
-const iconStyle = { width: moderateScale(25), height: moderateScale(25) };
+const iconStyle = { width: moderateScale(25), height: moderateScale(25)};
 
 const TabIcons = ({ ...props }) => {
 

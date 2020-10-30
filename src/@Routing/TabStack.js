@@ -30,8 +30,15 @@ import TransferHomeScreen from '../@Screens/Tabs/Dashboard/Transfers/Home';
 import TransferConfirmationScreen from '../@Screens/Tabs/Dashboard/Transfers/Confirm';
 import TransferStatusScreen from '../@Screens/Tabs/Dashboard/Transfers/Status';
 
+//WITHDRAW FUNDS
+import WithdrawHomeScreen from '../@Screens/Tabs/Dashboard/Withdraw/Home';
+import WithdrawConfirmScreen from '../@Screens/Tabs/Dashboard/Withdraw/Confirm';
+import WithdrawStatusScreen from '../@Screens/Tabs/Dashboard/Withdraw/Status';
+
 //TRANSACTION -HISTORY
 import TransactionStatusScreen from '../@Screens/Tabs/Transactions/Status';
+
+
 
 
 
@@ -72,8 +79,11 @@ const TabStack = ({...props}) => {
                 activeBackgroundColor: Colors.primaryBg,
                 inactiveBackgroundColor: Colors.primaryBg,
                 showLabel: false,
-                // showIcon: true,
-                style: { height: Platform.OS === 'ios' ? moderateScale(90)  : moderateScale(70), borderTopWidth: 0 },
+                showIcon: true,
+                style: { 
+                    height: Platform.OS === 'ios' ? moderateScale(90)  : moderateScale(40), borderTopWidth: 0, 
+                    
+                },
             }}
         >
             <Tab.Screen component={DashboardScreen} initialParams={params} name="Dashboard" />
@@ -102,6 +112,12 @@ const MixNavigator = ({...props}) => {
             <Stack.Screen component={TransferHomeScreen}  name="TransferHomeScreen" />
             <Stack.Screen component={TransferConfirmationScreen}  name="TransferConfirmationScreen" />
             <Stack.Screen component={TransferStatusScreen}  name="TransferStatusScreen" />
+
+            {/* WITHDRAW STACK */}
+            <Stack.Screen component={WithdrawHomeScreen}  name="WithdrawHomeScreen" />
+            <Stack.Screen component={WithdrawConfirmScreen}  name="WithdrawConfirmationScreen" />
+            <Stack.Screen component={WithdrawStatusScreen}  name="WithdrawStatusScreen" />
+
 
             {/* TRANSACTION HISTORY STACK */}
             <Stack.Screen component={TransactionStatusScreen}  name="TransactionStatusScreen" />

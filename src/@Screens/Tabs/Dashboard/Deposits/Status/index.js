@@ -80,27 +80,32 @@ export default class DepositStatusScreen extends Component {
       let weiUnit = Math.pow(10,decimalForToken);
       let Wei = (this.state.amount * weiUnit).toString();
 
-      this.walletService.depositFundsToZkSync(this.token, this.state.amount)
-          .then(async(txDetails) => {
-              const [receipt,txCommit] = txDetails;
-              const body = {
-                  'walletAddress': address,
-                  'txnType': 'deposit',
-                  'amount': Wei,
-                  'asset': this.token.toUpperCase(),
-                  'status': receipt.executed ? 'complete' : 'pending',
-                  'ethTxnId': txCommit.transactionHash,
-              };
-              apiServices.setTransactionDetailsWithServer(body)
-                  .then(data=>{
-                      console.log('Deposit',data);
-                  })
-                  .catch();
-              this.setState({ transactionDetails:txCommit,isLoading: false });
-          }).catch((err) => {
-              console.log('Error',err);
-              this.setState({isLoading: false,errorOccured:true});
-          });
+      try{
+            this.walletService.depositFundsToZkSync(this.token, this.state.amount)
+            .then(async(txDetails) => {
+                const [receipt,txCommit] = txDetails;
+                const body = {
+                    'walletAddress': address,
+                    'txnType': 'deposit',
+                    'amount': Wei,
+                    'asset': this.token.toUpperCase(),
+                    'status': receipt.executed ? 'complete' : 'pending',
+                    'ethTxnId': txCommit.transactionHash,
+                };
+                apiServices.setTransactionDetailsWithServer(body)
+                    .then(data=>{
+                        console.log('Deposit',data);
+                    })
+                    .catch();
+                this.setState({ transactionDetails:txCommit,isLoading: false });
+            }).catch((err) => {
+                console.log('Error',err);
+                this.setState({isLoading: false,errorOccured:true});
+            });
+      }
+      catch(err){
+        console.log('Err',err);
+      }
   }
 
   getExchangeRates = async () => {

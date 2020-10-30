@@ -63,6 +63,7 @@ class DashboardWallet extends Component {
           this.goToDepositHomeScreen();
           break;
       case 2:
+          this.goToWithdrawHomeScreen();
           break;
     
       default:
@@ -80,6 +81,13 @@ class DashboardWallet extends Component {
   
   goToTransferHomeScreen = () => {
       this.props.navigation.push('TransferHomeScreen', {
+          accountDetails: this.accountDetails,
+          pk: this.walletService.pk,
+      });
+  }
+
+  goToWithdrawHomeScreen  = () =>{
+      this.props.navigation.push('WithdrawHomeScreen', {
           accountDetails: this.accountDetails,
           pk: this.walletService.pk,
       });
@@ -123,8 +131,8 @@ class DashboardWallet extends Component {
   fetchAccountBalance = async () => {
       const walletService = WalletService.getInstance();
       await walletService.getZkSyncBalance().then(balanceObj => {
-          this.props.updateBalanceObject(balanceObj);
           console.log('balanceObj',balanceObj);
+          this.props.updateBalanceObject(balanceObj);
           if (!balanceObj) {
               this.setState({totalBalance:0});
           } 
