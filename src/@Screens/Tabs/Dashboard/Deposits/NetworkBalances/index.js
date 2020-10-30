@@ -195,7 +195,7 @@ export default class DepositEthBalanceScreen extends Component {
                   />
                   <KeyboardAvoidingView style={{flex: 1}}>
                       <View style={styles.container}>
-                            <AppHeader headerTitle={'Deposit Funds'}  />
+                          <AppHeader headerTitle={'Deposit Funds'}  />
                           <ScrollView style={styles.mainContentWrapper}>
                               {this.depositContent}
                           </ScrollView>
