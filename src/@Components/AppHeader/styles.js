@@ -41,6 +41,15 @@ export default (styles = StyleSheet.create({
         marginBottom: moderateScale(20),
         width: '100%',
     },
+    backButton:{
+        width:moderateScale(50),
+        height:moderateScale(50),
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:Colors.tintColorDark,
+        borderRadius:moderateScale(30),
+        elevation:moderateScale(5)
+    }
 }));
   
   

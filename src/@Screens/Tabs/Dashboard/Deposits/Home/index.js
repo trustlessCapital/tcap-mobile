@@ -4,9 +4,9 @@
 
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../../../../../@Components/status-bar-color';
 import Colors from '../../../../../@Constants/Colors';
+import AppHeader from '../../../../../@Components/AppHeader';
 import styles from './styles';
 // import CountryPicker from 'react-native-country-picker-modal';
 import PropTypes from 'prop-types';
@@ -53,30 +53,6 @@ export default class DepositHomeScreen extends Component {
       });
   }
 
-  get titleBar() {
-      return (
-          <>
-              <View style={styles.titleBar}>
-                  <View style={styles.titleBarContentLeft}>
-                      <TouchableOpacity
-                          onPress={this.navigateBack}
-                          style={styles.backButton}>
-                          <Icon
-                              color={Colors.white}
-                              name={'ios-arrow-back'}
-                              size={24}
-                              style={{alignSelf: 'center'}}
-                          />
-                      </TouchableOpacity>
-                  </View>
-                  <View style={styles.titleBarContent}>
-                      <Text style={styles.titleBarTitle}>Deposit Funds</Text>
-                  </View>
-                  <View style={styles.titleBarContentRight} />
-              </View>
-          </>
-      );
-  }
 
   get headerContent() {
       return (
@@ -107,7 +83,7 @@ export default class DepositHomeScreen extends Component {
                               </Text>
                               <Icon
                                   color={Colors.tintColorGreyedDark}
-                                  name={'ios-arrow-down'}
+                                  name={'angle-down'}
                                   size={16}
                                   style={[{alignSelf: 'center', marginLeft: 10}]}
                               />
@@ -173,7 +149,7 @@ export default class DepositHomeScreen extends Component {
                       barStyle="light-content"
                   />
                   <View style={styles.container}>
-                      {this.titleBar}
+                      <AppHeader headerTitle={'Deposit Funds'}  />
                       {this.headerContent}
                       {this.depositContent}
                       <View style={{...styles.cardFooter,position:'absolute',bottom:20}}>

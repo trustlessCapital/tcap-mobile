@@ -8,7 +8,7 @@ import {
     KeyboardAvoidingView, TextInput
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import LoadingIndicator from '../../../@Components/loading-indicator';
 import ErrorDialog from '../../../@Components/error-dialog';
 import Colors from '../../../@Constants/Colors';
@@ -182,7 +182,7 @@ export default class SignUp extends Component {
                                           </Text>
                                           <Icon
                                               color={Colors.subTitle}
-                                              name={'ios-arrow-down'}
+                                              name={'arrow-down'}
                                               size={18}
                                               style={{paddingStart: 5}}
                                           />
@@ -247,7 +247,7 @@ export default class SignUp extends Component {
                                           style={this.getSignUpButtonStyle()}>
                                           <Icon
                                               color="#fff"
-                                              name={'md-arrow-forward'}
+                                              name={'arrow-right'}
                                               size={22}
                                           />
                                       </TouchableOpacity>

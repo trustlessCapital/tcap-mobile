@@ -41,7 +41,6 @@ export default (styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     phrasesWrapper: {
-        alignItems: 'center',
         width: Dimensions.get('window').width,
     },
     phraseRow: {

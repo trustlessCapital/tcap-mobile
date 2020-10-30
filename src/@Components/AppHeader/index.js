@@ -20,7 +20,7 @@
  
 import React from 'react';
 import { TouchableOpacity,View,Text } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import PropTypes from 'prop-types';
 import { withNavigation } from '@react-navigation/compat';
 import styles from './styles';
@@ -38,7 +38,7 @@ const AppHeader = ({headerTitle='Loading',...props}) =>{
                     style={styles.backButton}>
                     <Icon
                         color={Colors.white}
-                        name={'ios-arrow-back'}
+                        name={'angle-left'}
                         size={24}
                         style={{alignSelf: 'center'}}
                     />

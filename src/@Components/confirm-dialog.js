@@ -9,6 +9,7 @@ import Dialog, {
 } from 'react-native-popup-dialog';
 
 const ConfirmDialog = ({ title, visible, message, onOk, onDismiss, onOkText, onDismissText }) => {
+    console.log('onDismiss',onDismiss);
     return (
         <Dialog
             dialogTitle={

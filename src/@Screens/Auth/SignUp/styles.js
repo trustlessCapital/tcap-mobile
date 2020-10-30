@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import Colors from '../../../@Constants/Colors';
-
+import {moderateScale} from 'react-native-size-matters';
 
 export default (styles = StyleSheet.create({
     wrapper: {
@@ -69,10 +69,9 @@ export default (styles = StyleSheet.create({
         flex: 1,
     },
     textInputRoot: {
-        marginTop: 20,
         width: Dimensions.get('window').width - 40,
         borderWidth: 1,
-        paddingVertical: 15,
+        paddingVertical: moderateScale(5),
         paddingHorizontal: 20,
         borderRadius: 10,
         borderColor: Colors.tintColorLight,
@@ -86,7 +85,7 @@ export default (styles = StyleSheet.create({
     countryPickerButtonWrapper: {
         position: 'absolute',
         zIndex: 99,
-        top: 30,
+        top: 15,
         left: 10
     },
     countryPickerButton: {
@@ -148,9 +147,10 @@ export default (styles = StyleSheet.create({
         backgroundColor: Colors.tintColorSecondaryLight,
         alignItems: 'center',
         justifyContent: 'center',
-        width: 60,
-        height: 60,
-        borderRadius: 30,
+        width: moderateScale(50),
+        height: moderateScale(50),
+        borderRadius: moderateScale(30),
+        opacity:.4
     },
     footerContainer: {
         flexDirection: 'row',

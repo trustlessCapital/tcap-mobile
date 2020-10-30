@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { moderateScale } from 'react-native-size-matters';
 
 const buttons = [
-    {name : 'Send' , icon:'paper-plane' },
+    {name : 'Send' , icon:'paper-plane'},
     {name : 'Add funds' , icon:'plus' },
     {name : 'Withdraw' , icon:'angle-double-down' }
 ];

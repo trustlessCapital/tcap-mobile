@@ -12,7 +12,7 @@ import {
     AppState,
     BackHandler
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import LoadingIndicator from '../../../@Components/loading-indicator';
 import StatusBarColor from '../../../@Components/status-bar-color';
@@ -115,7 +115,7 @@ export default class PINScreen extends Component {
                           style={styles.backButton}>
                           <Icon
                               color={Colors.title}
-                              name={'ios-arrow-back'}
+                              name={'angle-left'}
                               size={24}
                               style={{alignSelf: 'center'}}
                           />
@@ -214,7 +214,7 @@ export default class PINScreen extends Component {
                               style={styles.key}>
                               <Icon
                                   color="#fff"
-                                  name={'ios-backspace'}
+                                  name={'backspace'}
                                   size={22}
                                   style={{alignSelf: 'center'}}
                               />

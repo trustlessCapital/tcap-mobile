@@ -4,7 +4,6 @@
 
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../../../../../@Components/status-bar-color';
 import Colors from '../../../../../@Constants/Colors';
 import styles from '../Home/styles';
@@ -16,6 +15,7 @@ import apiServices from '../../../../../@Services/api-services';
 import walletUtils from '../../../../../@Services/wallet-utils';
 import PropTypes from 'prop-types';
 import ErrorDialog from '../../../../../@Components/error-dialog';
+import AppHeader from '../../../../../@Components/AppHeader';
 
 export default class DepositEthBalanceScreen extends Component {
     static propTypes = {
@@ -103,30 +103,6 @@ export default class DepositEthBalanceScreen extends Component {
       this.setState({ confirmDialog: true });
   }
 
-  get titleBar() {
-      return (
-          <>
-              <View style={styles.titleBar}>
-                  <View style={styles.titleBarContentLeft}>
-                      <TouchableOpacity
-                          onPress={this.navigateBack}
-                          style={styles.backButton}>
-                          <Icon
-                              color={Colors.white}
-                              name={'ios-arrow-back'}
-                              size={24}
-                              style={{alignSelf: 'center'}}
-                          />
-                      </TouchableOpacity>
-                  </View>
-                  <View style={styles.titleBarContent}>
-                      <Text style={styles.titleBarTitle}>Deposit Funds</Text>
-                  </View>
-                  <View style={styles.titleBarContentRight} />
-              </View>
-          </>
-      );
-  }
 
   checkNoBalance = () =>{
       const {ethBalance,isLoading} = this.state;
@@ -219,7 +195,7 @@ export default class DepositEthBalanceScreen extends Component {
                   />
                   <KeyboardAvoidingView style={{flex: 1}}>
                       <View style={styles.container}>
-                          {this.titleBar}
+                            <AppHeader headerTitle={'Deposit Funds'}  />
                           <ScrollView style={styles.mainContentWrapper}>
                               {this.depositContent}
                           </ScrollView>

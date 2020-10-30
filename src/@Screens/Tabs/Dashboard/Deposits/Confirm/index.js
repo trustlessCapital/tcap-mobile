@@ -3,7 +3,6 @@
  */
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import StatusBarColor from '../../../../../@Components/status-bar-color';
 import Colors from '../../../../../@Constants/Colors';
 import styles from '../Home/styles';
@@ -12,6 +11,7 @@ import LoadingIndicator from '../../../../../@Components/loading-indicator';
 import PropTypes from 'prop-types';
 import StorageUtils from '../../../../../@Services/storage-utils';
 import WalletUtils from '../../../../../@Services/wallet-utils';
+import AppHeader from '../../../../../@Components/AppHeader';
 
 export default class DepositConfirmScreen extends Component {
 
@@ -79,31 +79,6 @@ export default class DepositConfirmScreen extends Component {
 
   cancelTx = () => {
       this.setState({ confirmDialog: true });
-  }
-
-  get titleBar() {
-      return (
-          <>
-              <View style={styles.titleBar}>
-                  <View style={styles.titleBarContentLeft}>
-                      <TouchableOpacity
-                          onPress={this.navigateBack}
-                          style={styles.backButton}>
-                          <Icon
-                              color={Colors.white}
-                              name={'ios-arrow-back'}
-                              size={24}
-                              style={{alignSelf: 'center'}}
-                          />
-                      </TouchableOpacity>
-                  </View>
-                  <View style={styles.titleBarContent}>
-                      <Text style={styles.titleBarTitle}>Confirm Deposit</Text>
-                  </View>
-                  <View style={styles.titleBarContentRight} />
-              </View>
-          </>
-      );
   }
 
   get depositContent() {
@@ -226,7 +201,7 @@ export default class DepositConfirmScreen extends Component {
                   />
                   <KeyboardAvoidingView style={{flex: 1}}>
                       <View style={styles.container}>
-                          {this.titleBar}
+                          <AppHeader headerTitle={'Confirm Deposit'}  />
                           <ScrollView style={styles.mainContentWrapper}>
                               {this.depositContent}
                           </ScrollView>

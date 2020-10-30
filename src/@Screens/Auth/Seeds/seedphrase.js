@@ -140,8 +140,7 @@ export default class SeedPhraseScreen extends Component {
       return (
           <SortableGrid
               itemHeight={moderateScale(60)}
-              itemWidth={Dimensions.get('window').width / 2}
-              itemsPerRow={2}
+              itemWidth={moderateScale(120)}
               onDragRelease={itemOrder =>
                   (this.seedPhraseOrder = itemOrder.itemOrder)
               }
@@ -165,71 +164,74 @@ export default class SeedPhraseScreen extends Component {
 
   render() {
       return (
-          <SafeAreaView style={styles.wrapper}>
-              <StatusBarColor
-                  backgroundColor={Colors.primary_bg}
-                  barStyle="light-content"
-              />
-              <View style={styles.container}>
-                  <Text style={styles.mainTitle}>
-                      {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
+          <>
+              <SafeAreaView style={styles.wrapper}>
+                  <StatusBarColor
+                      backgroundColor={Colors.primary_bg}
+                      barStyle="light-content"
+                  />
+                  <View style={styles.container}>
+                      <Text style={styles.mainTitle}>
+                          {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
               Phrase
-                  </Text>
-                  <View style={styles.disclaimerHeader}>
-                      <Text style={styles.title}>Disclaimer</Text>
-                      <Text style={styles.subTitle}>
-                          {this.state.isVerificationMode
-                              ? 'Press and hold each shuffled phrase and reorder it correctly to your 12 word mnemonic seed phrase to verify.'
-                              : 'Please note down your 12 word mnemonic seed phrase in the displayed order and save it in a secure manner.'}
                       </Text>
-                  </View>
-                  {this._getSortableGrid()}
-                  <View style={styles.footer}>
-                      <TouchableOpacity
-                          onPress={this._onSaveButtonClick.bind(this)}
-                          style={styles.primaryButtonStyle}>
-                          <Text style={styles.primaryButtonText}>
-                              {this.state.saveButtonText}
+                      <View style={styles.disclaimerHeader}>
+                          <Text style={styles.title}>Disclaimer</Text>
+                          <Text style={styles.subTitle}>
+                              {this.state.isVerificationMode
+                                  ? 'Press and hold each shuffled phrase and reorder it correctly to your 12 word mnemonic seed phrase to verify.'
+                                  : 'Please note down your 12 word mnemonic seed phrase in the displayed order and save it in a secure manner.'}
                           </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                          onPress={() => {
-                              this.setState({confirmResetDialog: true});
-                          }}
-                          style={styles.secondaryButtonStyle}>
-                          <Text style={styles.secondaryButtonText}>
-                              {this.state.resetButtonText}
-                          </Text>
-                      </TouchableOpacity>
+                      </View>
+                      {this._getSortableGrid()}
+                      <View style={styles.footer}>
+                          <TouchableOpacity
+                              onPress={this._onSaveButtonClick.bind(this)}
+                              style={styles.primaryButtonStyle}>
+                              <Text style={styles.primaryButtonText}>
+                                  {this.state.saveButtonText}
+                              </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                              onPress={() => {
+                                  this.setState({confirmResetDialog: true});
+                              }}
+                              style={styles.secondaryButtonStyle}>
+                              <Text style={styles.secondaryButtonText}>
+                                  {this.state.resetButtonText}
+                              </Text>
+                          </TouchableOpacity>
+                      </View>
                   </View>
                   <LoadingIndicator
                       message={this.state.loadingMessage}
                       visible={this.state.isLoading}
                   />
-              </View>
-              <ConfirmDialog
-                  message={'Are you sure you want to reset mnemonic phrase?'}
-                  onDismiss={() => {
-                      this.setState({confirmResetDialog: false});
-                  }}
-                  onOk={() => {
-                      this._onResetButtonClick();
-                      this.setState({confirmResetDialog: false});
-                  }}
-                  title={'Reset Mnemonic Phrase'}
-                  visible={this.state.confirmResetDialog}
-              />
-              <ErrorDialog
-                  message={
-                      'Please ensure the correct order of your 12 word seed phrase!'
-                  }
-                  onDismiss={() => {
-                      this.setState({invalidOrder: false});
-                  }}
-                  title={'Invalid seed phrase order'}
-                  visible={this.state.invalidOrder}
-              />
-          </SafeAreaView>
+                  <ConfirmDialog
+                      message={'Are you sure you want to reset mnemonic phrase?'}
+                      onDismiss={() => {
+                          this.setState({confirmResetDialog: false});
+                      }}
+                      onOk={() => {
+                          this._onResetButtonClick();
+                          this.setState({confirmResetDialog: false});
+                      }}
+                      title={'Reset Mnemonic Phrase'}
+                      visible={this.state.confirmResetDialog}
+                  />
+                  <ErrorDialog
+                      message={
+                          'Please ensure the correct order of your 12 word seed phrase!'
+                      }
+                      onDismiss={() => {
+                          this.setState({invalidOrder: false});
+                      }}
+                      title={'Invalid seed phrase order'}
+                      visible={this.state.invalidOrder}
+                  />
+              </SafeAreaView>
+              
+          </>
       );
   }
 }
