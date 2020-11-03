@@ -81,30 +81,30 @@ export default class DepositStatusScreen extends Component {
       let Wei = (this.state.amount * weiUnit).toString();
 
       try{
-            this.walletService.depositFundsToZkSync(this.token, this.state.amount)
-            .then(async(txDetails) => {
-                const [receipt,txCommit] = txDetails;
-                const body = {
-                    'walletAddress': address,
-                    'txnType': 'deposit',
-                    'amount': Wei,
-                    'asset': this.token.toUpperCase(),
-                    'status': receipt.executed ? 'complete' : 'pending',
-                    'ethTxnId': txCommit.transactionHash,
-                };
-                apiServices.setTransactionDetailsWithServer(body)
-                    .then(data=>{
-                        console.log('Deposit',data);
-                    })
-                    .catch();
-                this.setState({ transactionDetails:txCommit,isLoading: false });
-            }).catch((err) => {
-                console.log('Error',err);
-                this.setState({isLoading: false,errorOccured:true});
-            });
+          this.walletService.depositFundsToZkSync(this.token, this.state.amount)
+              .then(async(txDetails) => {
+                  const [receipt,txCommit] = txDetails;
+                  const body = {
+                      'walletAddress': address,
+                      'txnType': 'deposit',
+                      'amount': Wei,
+                      'asset': this.token.toUpperCase(),
+                      'status': receipt.executed ? 'complete' : 'pending',
+                      'ethTxnId': txCommit.transactionHash,
+                  };
+                  apiServices.setTransactionDetailsWithServer(body)
+                      .then(data=>{
+                          console.log('Deposit',data);
+                      })
+                      .catch();
+                  this.setState({ transactionDetails:txCommit,isLoading: false });
+              }).catch((err) => {
+                  console.log('Error',err);
+                  this.setState({isLoading: false,errorOccured:true});
+              });
       }
       catch(err){
-        console.log('Err',err);
+          console.log('Err',err);
       }
   }
 

@@ -235,15 +235,15 @@ const TransferHomeScreen = ({...props}) =>{
                 {renderAssets()}
                 {
                     showTransactionUi && (
-                    <>
-                        <TouchableOpacity onPress={()=>checkValidData()} style={styles.transferButton}>
-                            <Text style={styles.proceedText}>Proceed</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.feeText}>
+                        <>
+                            <TouchableOpacity onPress={()=>checkValidData()} style={styles.transferButton}>
+                                <Text style={styles.proceedText}>Proceed</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.feeText}>
                         Fee : {fee}{' '+selectedAsset.symbol.toUpperCase()+' '}
                         ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
-                        </Text>
-                    </>
+                            </Text>
+                        </>
                     )
                 }
             </View>
