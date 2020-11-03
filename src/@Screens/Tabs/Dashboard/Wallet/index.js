@@ -13,11 +13,12 @@ import * as DashboardActions from '../../../../@Redux/actions/dashboardActions';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { moderateScale } from 'react-native-size-matters';
+import APPICONS from '../../../../@Constants/AppIcons';
 
 const buttons = [
-    {name : 'Send' , icon:'paper-plane'},
-    {name : 'Add funds' , icon:'plus' },
-    {name : 'Withdraw' , icon:'angle-double-down' }
+    {name : 'Send' , icon:APPICONS.Transfer},
+    {name : 'Add funds' , icon:APPICONS.Deposit },
+    {name : 'Withdraw' , icon:APPICONS.Withdraw }
 ];
 
 class DashboardWallet extends Component {

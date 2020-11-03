@@ -20,7 +20,7 @@
 
  
 import React,{useState,useEffect} from 'react';
-import { SafeAreaView,View,Text,TextInput,TouchableOpacity } from 'react-native';
+import { SafeAreaView,View,Text,TextInput,TouchableOpacity,ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import GlobalStyles from '../../../../../@GlobalStyles';
 import styles from './styles';
@@ -116,6 +116,22 @@ const WithdrawHomeScreen = ({...props}) =>{
             });
     };
 
+    const checkAccountIsUnlocked = async() =>{
+        const isUnlocked = await walletService.unlockZksyncWallet(selectedAsset.symbol);
+        if(isUnlocked)
+        {
+            setLoader(false);
+            const data = { selectedAsset,address,fee,amountToWithdraw};
+            navigation.navigate('WithdrawConfirmationScreen',{transactionData:data});
+        }
+        else{
+            setShowError(true);
+            setLoader(false);
+            setErrorMessage('Please try after sometimes!');
+            setErrorTitle('Account is Locked');
+        }
+    };  
+
     const checkValidData = () =>{
         const max = walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value);
         const totalAmt = parseFloat(amountToWithdraw) + parseFloat(fee);
@@ -140,7 +156,7 @@ const WithdrawHomeScreen = ({...props}) =>{
         else{
             setLoader(true);
             setIndicatingMsg('Checking Account Please Wait..');
-            // checkAccountIsUnlocked();
+            checkAccountIsUnlocked();
         }
     };
 
@@ -148,7 +164,7 @@ const WithdrawHomeScreen = ({...props}) =>{
     const renderAssets = () =>{
         if(showTransactionUi)
             return (
-                <>
+                <ScrollView contentContainerStyle={{paddingBottom:moderateScale(100)}} showsVerticalScrollIndicator={false}>
                     <View style={GlobalStyles.primaryCard}>
                         <Text style={GlobalStyles.titleTypo}> Amount / Asset</Text>
                         <View style={GlobalStyles.inputBox}>
@@ -190,7 +206,7 @@ const WithdrawHomeScreen = ({...props}) =>{
                         </View>    
                     </View>
                     
-                </>
+                </ScrollView>
             );
         return (
             <View style={GlobalStyles.primaryCard}>

@@ -32,7 +32,7 @@ import TransferStatusScreen from '../@Screens/Tabs/Dashboard/Transfers/Status';
 
 //WITHDRAW FUNDS
 import WithdrawHomeScreen from '../@Screens/Tabs/Dashboard/Withdraw/Home';
-import WithdrawConfirmScreen from '../@Screens/Tabs/Dashboard/Withdraw/Confirm';
+import WithdrawConfirmationScreen from '../@Screens/Tabs/Dashboard/Withdraw/Confirm';
 import WithdrawStatusScreen from '../@Screens/Tabs/Dashboard/Withdraw/Status';
 
 //TRANSACTION -HISTORY
@@ -115,7 +115,7 @@ const MixNavigator = ({...props}) => {
 
             {/* WITHDRAW STACK */}
             <Stack.Screen component={WithdrawHomeScreen}  name="WithdrawHomeScreen" />
-            <Stack.Screen component={WithdrawConfirmScreen}  name="WithdrawConfirmationScreen" />
+            <Stack.Screen component={WithdrawConfirmationScreen}  name="WithdrawConfirmationScreen" />
             <Stack.Screen component={WithdrawStatusScreen}  name="WithdrawStatusScreen" />
 
 

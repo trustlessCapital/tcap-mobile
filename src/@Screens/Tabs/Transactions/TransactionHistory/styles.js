@@ -32,7 +32,8 @@ export default (styles = StyleSheet.create({
         justifyContent:'space-between'
     },
     assetText:{
-        color:Colors.white
+        color:Colors.white,
+        fontFamily:'Montserrat-Bold'
     },
     typeText:{
         color:Colors.darkGrey , width:moderateScale(120),

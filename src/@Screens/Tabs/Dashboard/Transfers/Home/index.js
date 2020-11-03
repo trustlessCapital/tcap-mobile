@@ -19,7 +19,7 @@
  */
  
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView,View,Text,TextInput,TouchableOpacity } from 'react-native';
+import { SafeAreaView,View,Text,TextInput,TouchableOpacity,ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import GlobalStyles from '../../../../../@GlobalStyles';
 import AppHeader from '../../../../../@Components/AppHeader';
@@ -164,7 +164,7 @@ const TransferHomeScreen = ({...props}) =>{
     const renderAssets = () =>{
         if(showTransactionUi)
             return (
-                <>
+                <ScrollView>
                     <View style={GlobalStyles.primaryCard}>
                         <Text style={GlobalStyles.titleTypo}> Amount / Asset</Text>
                         <View style={GlobalStyles.inputBox}>
@@ -217,11 +217,8 @@ const TransferHomeScreen = ({...props}) =>{
                             />
                         </View>     
                     </View>
-                    <Text style={styles.feeText}>
-                    Fee : {fee}{' '+selectedAsset.symbol.toUpperCase()+' '}
-                    ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
-                    </Text>
-                </>
+                   
+                </ScrollView>
             );
         return (
             <View style={GlobalStyles.primaryCard}>
@@ -237,9 +234,17 @@ const TransferHomeScreen = ({...props}) =>{
                 <AppHeader headerTitle={'Transfer Funds'}  />
                 {renderAssets()}
                 {
-                    showTransactionUi && (<TouchableOpacity onPress={()=>checkValidData()} style={styles.transferButton}>
-                        <Text style={styles.proceedText}>Proceed</Text>
-                    </TouchableOpacity>)
+                    showTransactionUi && (
+                    <>
+                        <TouchableOpacity onPress={()=>checkValidData()} style={styles.transferButton}>
+                            <Text style={styles.proceedText}>Proceed</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.feeText}>
+                        Fee : {fee}{' '+selectedAsset.symbol.toUpperCase()+' '}
+                        ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
+                        </Text>
+                    </>
+                    )
                 }
             </View>
             <Modal

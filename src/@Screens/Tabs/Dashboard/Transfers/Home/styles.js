@@ -93,7 +93,7 @@ export default (styles = StyleSheet.create({
         color:Colors.activeTintRed,
         fontSize:moderateScale(12),
         position:'absolute',
-        bottom:moderateScale(80)
+        bottom:moderateScale(55)
     },
     dataRow:{
         flexDirection:'row',

@@ -26,6 +26,7 @@ import styles from './styles';
 import walletUtils from '../../../../@Services/wallet-utils';
 import Colors from '../../../../@Constants/Colors';
 import { withNavigation } from '@react-navigation/compat';
+import APPICONS from '../../../../@Constants/AppIcons';
 
 const HistoryCard = ({historyData,...props}) =>{
 
@@ -46,11 +47,10 @@ const HistoryCard = ({historyData,...props}) =>{
 
     const getIcon = () =>{
         if(txnType === 'deposit')
-            return 'plus';
+            return APPICONS.Deposit;
         if(txnType === 'transfer')
-            return 'paper-plane';
-
-        return 'angle-double-down';
+            return APPICONS.Transfer;
+        return APPICONS.Withdraw;
     };
 
     const getColor = () =>{
@@ -58,7 +58,6 @@ const HistoryCard = ({historyData,...props}) =>{
             return Colors.green;
         if(txnType === 'transfer')
             return Colors.activeTintRed;
-
         return Colors.activeTintRed;
     };
 
@@ -73,7 +72,7 @@ const HistoryCard = ({historyData,...props}) =>{
                 {renderType()}
             </View>
             <View>
-                <Text style={styles.assetText}>{walletUtils.getAssetDisplayText( asset,amount)}{' '+asset}</Text>
+                <Text style={{...styles.assetText,color:getColor()}}>{walletUtils.getAssetDisplayText( asset,amount)}{' '+asset}</Text>
             </View>
         </TouchableOpacity>
     );
