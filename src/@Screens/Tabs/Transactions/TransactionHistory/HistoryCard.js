@@ -29,7 +29,6 @@ import { withNavigation } from '@react-navigation/compat';
 import APPICONS from '../../../../@Constants/AppIcons';
 
 const HistoryCard = ({historyData,...props}) =>{
-
     const {navigation} = props;
 
     const {asset,amount,txnType,walletAddress='',recipientAddress=''} = historyData;
@@ -40,6 +39,10 @@ const HistoryCard = ({historyData,...props}) =>{
                 <Text numberOfLines={1} style={styles.typeText}>To : {walletAddress}</Text>
             );
         if(txnType === 'transfer')
+            return(
+                <Text numberOfLines={1} style={styles.typeText}>To : {recipientAddress}</Text>
+            );
+        if(txnType === 'withdraw')
             return(
                 <Text numberOfLines={1} style={styles.typeText}>To : {recipientAddress}</Text>
             );

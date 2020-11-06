@@ -19,6 +19,7 @@ import LoadingIndicator from '../../../@Components/loading-indicator';
 import StatusBarColor from '../../../@Components/status-bar-color';
 import * as _ from 'lodash';
 import Colors from '../../../@Constants/Colors';
+import { moderateScale } from 'react-native-size-matters';
 
 const WAIT_RECOVERWALLET = 'Please wait.. while we recover your wallet!';
 
@@ -62,12 +63,13 @@ export default class SeedPhraseRecoveryScreen extends Component {
           this.pin,
           this.accountDetails.email,
       ).then(pk => {
+          console.log('Dashboard Navigation');
           const walletService = WalletService.getInstance();
           walletService.setPk(pk);
           this.setState({
               isLoading: false,
           });
-          this.props.navigation.navigate('App',{ accountDetails: accountDetails });
+          this.props.navigation.navigate('App',{ accountDetails: this.accountDetails });
       }); 
   }
 
@@ -94,7 +96,7 @@ export default class SeedPhraseRecoveryScreen extends Component {
       return (
           <SortableGrid
               itemHeight={Dimensions.get('window').height / 12}
-              itemWidth={Dimensions.get('window').width / 2}
+              itemWidth={moderateScale(150)}
               itemsPerRow={2}
               onDragRelease={itemOrder =>
                   (this.seedPhraseOrder = itemOrder.itemOrder)
@@ -108,6 +110,7 @@ export default class SeedPhraseRecoveryScreen extends Component {
                       <TextInput
                           onChangeText={text => { this.state.seedPhrase[index] = text; this.setState({  }); }}
                           style={styles.seedPhraseInput}
+                          autoCapitalize={'none'}
                           value={this.state.seedPhrase[index]}
                       />
                   </View>

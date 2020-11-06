@@ -13,6 +13,7 @@
   "dependencies": {
     "@ethersproject/shims": "^5.0.5",
     "@react-native-community/async-storage": "^1.9.0",
+    "@react-native-community/checkbox": "^0.5.5",
     "@react-native-community/clipboard": "^1.4.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.9.1",

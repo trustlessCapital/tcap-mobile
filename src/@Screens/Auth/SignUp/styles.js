@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 import Colors from '../../../@Constants/Colors';
 import {moderateScale} from 'react-native-size-matters';
 
@@ -71,8 +71,8 @@ export default (styles = StyleSheet.create({
     textInputRoot: {
         width: Dimensions.get('window').width - 40,
         borderWidth: 1,
-        paddingVertical: moderateScale(5),
-        paddingHorizontal: 20,
+        paddingVertical: Platform.OS === 'ios' ? 20 : moderateScale(5),
+        paddingHorizontal:  20,
         borderRadius: 10,
         borderColor: Colors.tintColorLight,
     },

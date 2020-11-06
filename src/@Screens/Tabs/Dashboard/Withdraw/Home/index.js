@@ -21,6 +21,7 @@
  
 import React,{useState,useEffect} from 'react';
 import { SafeAreaView,View,Text,TextInput,TouchableOpacity,ScrollView } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import PropTypes from 'prop-types';
 import GlobalStyles from '../../../../../@GlobalStyles';
 import styles from './styles';
@@ -46,9 +47,8 @@ const WithdrawHomeScreen = ({...props}) =>{
     const walletService = WalletService.getInstance();
     const pk = walletService.pk;    
     const accAddress = walletUtils.createAddressFromPrivateKey(pk);
-    
 
-    const testAddress = '0xDD624396D018fffB7369341f73e9e8B6F65de7bf';
+    const testAddress = '';
     const [address, setAddress] = useState(testAddress);
     const [selectedAsset, setSelectedAsset] = useState(verifiedBalances[0]);
     const [showTransactionUi , setShowTransactionUi] = useState(false);
@@ -60,6 +60,7 @@ const WithdrawHomeScreen = ({...props}) =>{
     const [errorMessage, setErrorMessage] = useState('');
     const [errorTitle, setErrorTitle] = useState('');
     const [showError, setShowError] = useState(false);
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
 
     const renderAssetOptions = () => {
         return(
@@ -106,8 +107,9 @@ const WithdrawHomeScreen = ({...props}) =>{
         setIndicatingMsg('Please Wait...');
         setLoader(true);
         updateVerifiedAccountBalances(accAddress);
-        apiServices.getTransferFundProcessingFee(currentAsset.symbol,accAddress)
+        apiServices.getTransferFundProcessingFee(currentAsset.symbol,accAddress,'withdraw')
             .then(data=>{
+                console.log('withdraw fee',data);
                 setLoader(false);
                 setFee(data.totalFee);
             })
@@ -159,7 +161,7 @@ const WithdrawHomeScreen = ({...props}) =>{
             checkAccountIsUnlocked();
         }
     };
-
+    
 
     const renderAssets = () =>{
         if(showTransactionUi)
@@ -203,7 +205,19 @@ const WithdrawHomeScreen = ({...props}) =>{
                                 style={{color:Colors.white,width:'100%'}}
                                 value={address}
                             />
-                        </View>    
+                        </View>  
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                            <CheckBox
+                                disabled={false}
+                                value={toggleCheckBox}
+                                onValueChange={(newValue) => {
+                                    setToggleCheckBox(newValue)
+                                    if(newValue) setAddress(accAddress);
+                                    else setAddress('');
+                                }}
+                            />
+                            <Text style={styles.accountText}> Own Account</Text>
+                        </View>
                     </View>
                     
                 </ScrollView>

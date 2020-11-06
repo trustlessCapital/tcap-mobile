@@ -48,35 +48,38 @@ const WithdrawStatusScreen = ({...props}) =>{
         navigation
     } = props;
 
-    const {transactionData:{address='',selectedAsset,amountToTransfer}} = params;
+    const {transactionData:{address='',selectedAsset,amountToWithdraw}} = params;
     const {symbol} = selectedAsset;
-    const [isLoading,setIsLoading] = useState(false);
+    const [isLoading,setIsLoading] = useState(true);
     const [errorOccured,setErrorOccured] = useState(false);
     const [transactionHash , setTransactionHash] = useState();
 
     useEffect(()=>{
-        // initiateTransaction();
+        initiateTransaction();
     },[]);
 
     const initiateTransaction = () =>{
         const accAddress =  walletUtils.createAddressFromPrivateKey(walletService.pk);
         const decimalForToken = walletUtils.getDecimalValueForAsset(symbol);
         let weiUnit = Math.pow(10,decimalForToken);
-        let Wei = (amountToTransfer * weiUnit).toString();
+        let Wei = (amountToWithdraw * weiUnit).toString();
 
-        walletService.transferFundsToZkSync(address,symbol,amountToTransfer)
+        walletService.withdrawFundsToEtherium(address,symbol,amountToWithdraw)
             .then(data =>{
-                const [receipt, txHash] = data;
+
+                console.log('withdraw API calling',data);
+                const [receipt,txHash] = data;
 
                 const body = {
                     'walletAddress': accAddress,
-                    'txnType': 'transfer',
+                    'txnType': 'withdraw',
                     'amount': Wei,
                     'asset': symbol.toUpperCase(),
                     'status': receipt.executed ? 'complete' : 'pending',
                     'zksyncTxnId': txHash,
                     'recipientAddress': address
                 };
+
                 apiServices.setTransactionDetailsWithServer(body)
                     .then()
                     .catch();
@@ -92,7 +95,8 @@ const WithdrawStatusScreen = ({...props}) =>{
                 }
                 
             })
-            .catch(() =>{
+            .catch((err) =>{
+                console.log('Err',err);
                 setErrorOccured(true);
                 setIsLoading(false);
             });

@@ -36,6 +36,12 @@ export default (styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: moderateScale(22),
     },
+    accountText:{
+        color:Colors.white,
+        fontFamily: 'Montserrat-Regular',
+        fontSize:moderateScale(10),
+        marginLeft:moderateScale(10)
+    },
     inputText:{
         color:Colors.white,fontSize:moderateScale(16),
         maxWidth:moderateScale(200)

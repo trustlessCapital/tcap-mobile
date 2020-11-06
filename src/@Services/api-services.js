@@ -127,8 +127,8 @@ function getAccountBalances(address) {
     }).then(processResponse);
 }
 
-function getTransferFundProcessingFee(symbol,address) {
-    const url =  `${BASE_PATH}/v1/zksync/txfee/transfer/${symbol}/${address}`;
+function getTransferFundProcessingFee(symbol,address,type='transfer') {
+    const url =  `${BASE_PATH}/v1/zksync/txfee/${type}/${symbol}/${address}`;
     return fetch(url, {
         method: 'GET',
     }).then(processResponse);
