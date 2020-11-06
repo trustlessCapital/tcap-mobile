@@ -108,9 +108,9 @@ export default class SeedPhraseRecoveryScreen extends Component {
                           <Text style={styles.phraseIndex}>{index + 1}</Text>
                       </View>
                       <TextInput
+                          autoCapitalize={'none'}
                           onChangeText={text => { this.state.seedPhrase[index] = text; this.setState({  }); }}
                           style={styles.seedPhraseInput}
-                          autoCapitalize={'none'}
                           value={this.state.seedPhrase[index]}
                       />
                   </View>

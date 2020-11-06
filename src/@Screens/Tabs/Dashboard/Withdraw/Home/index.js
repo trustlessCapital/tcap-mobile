@@ -60,7 +60,7 @@ const WithdrawHomeScreen = ({...props}) =>{
     const [errorMessage, setErrorMessage] = useState('');
     const [errorTitle, setErrorTitle] = useState('');
     const [showError, setShowError] = useState(false);
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
     const renderAssetOptions = () => {
         return(
@@ -209,12 +209,12 @@ const WithdrawHomeScreen = ({...props}) =>{
                         <View style={{flexDirection:'row',alignItems:'center'}}>
                             <CheckBox
                                 disabled={false}
-                                value={toggleCheckBox}
                                 onValueChange={(newValue) => {
-                                    setToggleCheckBox(newValue)
+                                    setToggleCheckBox(newValue);
                                     if(newValue) setAddress(accAddress);
                                     else setAddress('');
                                 }}
+                                value={toggleCheckBox}
                             />
                             <Text style={styles.accountText}> Own Account</Text>
                         </View>
