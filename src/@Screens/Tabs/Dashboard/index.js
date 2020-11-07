@@ -20,6 +20,7 @@ import * as ZkSyncTokenActions from '../../../@Redux/actions/zkSyncTokenActions'
 import DashboardAsset from './Asset';
 import WalletService from '../../../@Services/wallet-service';
 import * as DashboardActions from '../../../@Redux/actions/dashboardActions';
+import walletUtils from '../../../@Services/wallet-utils';
 
 
 class DashboardScreen extends Component {
@@ -28,6 +29,7 @@ class DashboardScreen extends Component {
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
       updateBalanceObject:PropTypes.func.isRequired,
+      updateVerifiedAccountBalances:PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -66,6 +68,10 @@ class DashboardScreen extends Component {
   onRefresh = () =>{
       this.setState({refreshing:true});
       this.fetchAccountBalance();
+      const walletService = WalletService.getInstance();
+      const pk = walletService.pk;
+      const address = walletUtils.createAddressFromPrivateKey(pk);
+      this.props.updateVerifiedAccountBalances(address);
       setTimeout(()=>{this.setState({refreshing:false});},500);
   };
 
@@ -116,6 +122,8 @@ function mapDispatchToProps(dispatch){
             dispatch(ZkSyncTokenActions.updateZkSyncTokens()),
         updateBalanceObject:balanceObj =>
             dispatch(DashboardActions.updateBalanceObject(balanceObj)),
+        updateVerifiedAccountBalances:address =>
+            dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
     };
 }
 

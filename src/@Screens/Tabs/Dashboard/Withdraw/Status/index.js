@@ -48,7 +48,7 @@ const WithdrawStatusScreen = ({...props}) =>{
         navigation
     } = props;
 
-    const {transactionData:{address='',selectedAsset,amountToWithdraw}} = params;
+    const {transactionData:{address='',selectedAsset,amountToWithdraw,fastWithDraw=false,fee}} = params;
     const {symbol} = selectedAsset;
     const [isLoading,setIsLoading] = useState(true);
     const [errorOccured,setErrorOccured] = useState(false);
@@ -64,12 +64,9 @@ const WithdrawStatusScreen = ({...props}) =>{
         let weiUnit = Math.pow(10,decimalForToken);
         let Wei = (amountToWithdraw * weiUnit).toString();
 
-        walletService.withdrawFundsToEtherium(address,symbol,amountToWithdraw)
+        walletService.withdrawFundsToEtherium(address,symbol,amountToWithdraw,fastWithDraw,fee)
             .then(data =>{
-
-                console.log('withdraw API calling',data);
                 const [receipt,txHash] = data;
-
                 const body = {
                     'walletAddress': accAddress,
                     'txnType': 'withdraw',
@@ -95,8 +92,7 @@ const WithdrawStatusScreen = ({...props}) =>{
                 }
                 
             })
-            .catch((err) =>{
-                console.log('Err',err);
+            .catch(() =>{
                 setErrorOccured(true);
                 setIsLoading(false);
             });
@@ -111,7 +107,6 @@ const WithdrawStatusScreen = ({...props}) =>{
     const openEmailLink = () =>{
         sendEmail(supportMail)
             .then(() => {
-                console.log('Our email successful provided to device mail ');
             });
     };
 

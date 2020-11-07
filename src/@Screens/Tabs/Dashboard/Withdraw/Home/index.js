@@ -61,6 +61,8 @@ const WithdrawHomeScreen = ({...props}) =>{
     const [errorTitle, setErrorTitle] = useState('');
     const [showError, setShowError] = useState(false);
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
+    const [fastWithDraw , setFastWithDraw] =  useState(false);
+    const [NormalWithDraw , setNormalWithDraw] =  useState(true);
 
     const renderAssetOptions = () => {
         return(
@@ -83,7 +85,7 @@ const WithdrawHomeScreen = ({...props}) =>{
     const setNewAsset = (item) =>{
         setSelectedAsset(item);
         setModal(false);
-        refreshAssets(item);
+        refreshAssets(item,fastWithDraw);
     };
 
     useEffect(()=>{
@@ -103,11 +105,12 @@ const WithdrawHomeScreen = ({...props}) =>{
         else setLoader(false);
     },[verifiedBalances.length]);
 
-    const refreshAssets = (currentAsset) =>{
+    const refreshAssets = (currentAsset,fast=false) =>{
+        console.log('fastWithDraw',fast);
         setIndicatingMsg('Please Wait...');
         setLoader(true);
         updateVerifiedAccountBalances(accAddress);
-        apiServices.getTransferFundProcessingFee(currentAsset.symbol,accAddress,'withdraw')
+        apiServices.getTransferFundProcessingFee(currentAsset.symbol,accAddress,fast ? 'fastwithdraw' : 'withdraw')
             .then(data=>{
                 console.log('withdraw fee',data);
                 setLoader(false);
@@ -123,7 +126,7 @@ const WithdrawHomeScreen = ({...props}) =>{
         if(isUnlocked)
         {
             setLoader(false);
-            const data = { selectedAsset,address,fee,amountToWithdraw};
+            const data = { selectedAsset,address,fee,amountToWithdraw,fastWithDraw:fastWithDraw};
             navigation.navigate('WithdrawConfirmationScreen',{transactionData:data});
         }
         else{
@@ -161,7 +164,6 @@ const WithdrawHomeScreen = ({...props}) =>{
             checkAccountIsUnlocked();
         }
     };
-    
 
     const renderAssets = () =>{
         if(showTransactionUi)
@@ -208,16 +210,60 @@ const WithdrawHomeScreen = ({...props}) =>{
                         </View>  
                         <View style={{flexDirection:'row',alignItems:'center'}}>
                             <CheckBox
-                                disabled={false}
                                 onValueChange={(newValue) => {
+                                    
                                     setToggleCheckBox(newValue);
                                     if(newValue) setAddress(accAddress);
                                     else setAddress('');
+                                }}
+                                style={{
+                                    width: moderateScale(25),
+                                    height: moderateScale(25),
                                 }}
                                 value={toggleCheckBox}
                             />
                             <Text style={styles.accountText}> Own Account</Text>
                         </View>
+                    </View>
+                    <View style={{flexDirection:'row',alignItems:'center',marginLeft:moderateScale(20),marginTop:moderateScale(10)}}>
+                        <CheckBox
+                            boxType={'square'}
+                            onValueChange={(newValue) => {
+                                refreshAssets(selectedAsset,!newValue);
+                                if(newValue)
+                                    setFastWithDraw(false);
+                                if(!newValue)
+                                    setFastWithDraw(true);
+
+                                setNormalWithDraw(newValue);
+                            }}
+                            style={{
+                                width: moderateScale(20),
+                                height: moderateScale(20),
+                            }}
+                            value={NormalWithDraw}
+                        />
+                        <Text style={styles.accountText}> Normal, Processing time 12 mins 30 secs </Text>
+                    </View>
+                    <View style={{flexDirection:'row',alignItems:'center',marginLeft:moderateScale(20),marginTop:moderateScale(10)}}>
+                        <CheckBox
+                            boxType={'square'}
+                            onValueChange={(newValue) => {
+                                refreshAssets(selectedAsset,newValue);
+                                if(newValue)
+                                    setNormalWithDraw(false);
+                                if(!newValue)
+                                    setNormalWithDraw(true);
+
+                                setFastWithDraw(newValue);
+                            }}
+                            style={{
+                                width: moderateScale(20),
+                                height: moderateScale(20),
+                            }}
+                            value={fastWithDraw}
+                        />
+                        <Text style={styles.accountText}> Fast, Processing time 5 seconds</Text>
                     </View>
                     
                 </ScrollView>
@@ -229,7 +275,6 @@ const WithdrawHomeScreen = ({...props}) =>{
             </View>
         );
     };
-
 
     return(
         <SafeAreaView style={GlobalStyles.appContainer}>

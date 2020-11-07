@@ -50,17 +50,14 @@ export default class WalletService {
   }
 
   unlockZksyncWallet = async (token) => {
-      console.log('Token',token);
       await this.getSyncWallet();
       //this.syncWallet.isSigningKeySet() - true (unlocked)
       if (!(await this.syncWallet.isSigningKeySet())) {
           if ((await this.syncWallet.getAccountId()) == undefined) {
-              console.log('Inside accountID');
               return;
           }
           const signingKeyTx = await this.syncWallet.setSigningKey({ feeToken: token.toUpperCase(), });
           const receipt = await signingKeyTx.awaitReceipt();
-          console.log('Receipt',receipt);
           return receipt.success; // true - unlocked
       }
       return true;
@@ -107,18 +104,20 @@ export default class WalletService {
       return transactionDetails;
   }
 
-  withdrawFundsToEtherium = async (destination,token,amount) =>{
+  withdrawFundsToEtherium = async (destination,token,amount,fastWithdraw=false,fee) =>{
       amount = amount.toString();
       await this.getSyncWallet();
       const decimalForToken = WalletUtils.getDecimalValueForAsset(token);
       let weiUnit = Math.pow(10,decimalForToken);
       let Wei = (amount * weiUnit).toString();
       const txAmount = ethers.BigNumber.from(Wei);
-      const body = {
+      let body = {
           ethAddress: destination, 
           token: token.toUpperCase(), 
-          amount: txAmount
+          amount: txAmount,
+          fastProcessing:fastWithdraw
       };
+      if(fastWithdraw) body.fee =  ethers.BigNumber.from((fee * weiUnit).toString());
       const withdraw = await this.syncWallet.withdrawFromSyncToEthereum(body);
       const transactionDetails = Promise.all([
           withdraw.awaitReceipt(),
