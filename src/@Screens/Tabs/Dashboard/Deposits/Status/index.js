@@ -25,14 +25,17 @@ import Toast from 'react-native-simple-toast';
 import apiServices from '../../../../../@Services/api-services';
 import walletUtils from '../../../../../@Services/wallet-utils';
 import AppHeader from '../../../../../@Components/AppHeader';
+import { connect } from 'react-redux';
+import * as DashboardActions from '../../../../../@Redux/actions/dashboardActions';
 
 const {supportMail} = Support;
 
-export default class DepositStatusScreen extends Component {
+class DepositStatusScreen extends Component {
   
   static propTypes = {
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
+      updateVerifiedAccountBalances:PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -83,6 +86,7 @@ export default class DepositStatusScreen extends Component {
       try{
           this.walletService.depositFundsToZkSync(this.token, this.state.amount)
               .then(async(txDetails) => {
+                  this.props.updateVerifiedAccountBalances(address);
                   const [receipt,txCommit] = txDetails;
                   const body = {
                       'walletAddress': address,
@@ -304,3 +308,17 @@ export default class DepositStatusScreen extends Component {
       );
   }
 }
+
+function mapStateToProps(){    
+    return{
+    };
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        updateVerifiedAccountBalances:address =>
+            dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
+    };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(DepositStatusScreen);

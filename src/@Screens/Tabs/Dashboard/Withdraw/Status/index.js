@@ -36,6 +36,9 @@ import Colors from '../../../../../@Constants/Colors';
 import { sendEmail } from '../../../../../@Services/email-service';
 import walletUtils from '../../../../../@Services/wallet-utils';
 import apiServices from '../../../../../@Services/api-services';
+import { connect } from 'react-redux';
+import * as DashboardActions from '../../../../../@Redux/actions/dashboardActions';
+
 
 const {supportMail} = Support;
  
@@ -45,7 +48,8 @@ const WithdrawStatusScreen = ({...props}) =>{
 
     const {
         route:{params},
-        navigation
+        navigation,
+        updateVerifiedAccountBalances
     } = props;
 
     const {transactionData:{address='',selectedAsset,amountToWithdraw,fastWithDraw=false,fee}} = params;
@@ -66,6 +70,7 @@ const WithdrawStatusScreen = ({...props}) =>{
 
         walletService.withdrawFundsToEtherium(address,symbol,amountToWithdraw,fastWithDraw,fee)
             .then(data =>{
+                updateVerifiedAccountBalances(accAddress);
                 const [receipt,txHash] = data;
                 const body = {
                     'walletAddress': accAddress,
@@ -231,6 +236,19 @@ const WithdrawStatusScreen = ({...props}) =>{
 WithdrawStatusScreen.propTypes = {
     navigation:PropTypes.object.isRequired,
     route:PropTypes.object.isRequired,
+    updateVerifiedAccountBalances:PropTypes.func.isRequired,
 };
+
+function mapStateToProps(){    
+    return{
+    };
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        updateVerifiedAccountBalances:address =>
+            dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
+    };
+}
  
-export default WithdrawStatusScreen;
+export default connect(mapStateToProps,mapDispatchToProps)(WithdrawStatusScreen);

@@ -80,7 +80,7 @@ export default (styles = StyleSheet.create({
     iconStyle:{
         width:moderateScale(30),
         height:moderateScale(30)
-    }
+    },
 }));
   
   

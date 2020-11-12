@@ -21,4 +21,5 @@ export default {
     activeTintRed: '#ed3946',
     darkGrey:'#86898b',
     lightGrey:'#e2e2e2',
+    amber:'#FFBF00',
 };

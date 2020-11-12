@@ -26,7 +26,11 @@ import {
 import HelperFunctions from '../../@Services/helper-functions';
 
 const initialState = {
+
     verifiedBalances:[],
+    depositingBalances:[],
+    committedBalances:[],
+
     exchangeRates:[],
     balanceObj:{}
 };
@@ -45,9 +49,18 @@ const  dashboardReducer = (state = initialState,action) =>{
         return { ...state};   
     case FETCH_ZK_SYNC_ACCOUNT_ASSETS_SUCCESS:
     {   
-        const {response:{verified:{balances={}}}} = action;
-        const balanceArr = HelperFunctions.objectToArray(balances) || [];
-        return{...state,verifiedBalances:balanceArr};
+        console.log('Fetched balances ',action.response);
+        const {response:{depositing : {balances : depositingBal = {}},committed:{balances : committedBal = {}},verified:{balances : verifiedBal ={}}}} = action;
+        const depositingArr = HelperFunctions.objectToArray(depositingBal) || [];
+        const committedArr = HelperFunctions.objectToArray(committedBal) || [];
+        const verifiedArr = HelperFunctions.objectToArray(verifiedBal) || [];
+
+        return{
+            ...state,
+            verifiedBalances:verifiedArr,
+            depositingBalances:depositingArr,
+            committedBalances:committedArr
+        };
     }   
     case FETCH_ZK_SYNC_ACCOUNT_ASSETS_FAILURE:
         return { ...state};

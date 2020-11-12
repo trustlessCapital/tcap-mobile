@@ -36,6 +36,8 @@ import Colors from '../../../../../@Constants/Colors';
 import { sendEmail } from '../../../../../@Services/email-service';
 import walletUtils from '../../../../../@Services/wallet-utils';
 import apiServices from '../../../../../@Services/api-services';
+import { connect } from 'react-redux';
+import * as DashboardActions from '../../../../../@Redux/actions/dashboardActions';
 
 const {supportMail} = Support;
  
@@ -45,7 +47,8 @@ const TransferStatusScreen = ({...props}) =>{
 
     const {
         route:{params},
-        navigation
+        navigation,
+        updateVerifiedAccountBalances
     } = props;
 
     const {transactionData:{address='',selectedAsset,amountToTransfer}} = params;
@@ -66,8 +69,9 @@ const TransferStatusScreen = ({...props}) =>{
 
         walletService.transferFundsToZkSync(address,symbol,amountToTransfer)
             .then(data =>{
+                updateVerifiedAccountBalances(accAddress);
                 const [receipt, txHash] = data;
-
+                console.log('Transfer Data',data);
                 const body = {
                     'walletAddress': accAddress,
                     'txnType': 'transfer',
@@ -232,6 +236,19 @@ const TransferStatusScreen = ({...props}) =>{
 TransferStatusScreen.propTypes = {
     navigation:PropTypes.object.isRequired,
     route:PropTypes.object.isRequired,
+    updateVerifiedAccountBalances:PropTypes.func.isRequired,
 };
+
+function mapStateToProps(){    
+    return{
+    };
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        updateVerifiedAccountBalances:address =>
+            dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
+    };
+}
  
-export default TransferStatusScreen;
+export default connect(mapStateToProps,mapDispatchToProps)(TransferStatusScreen);

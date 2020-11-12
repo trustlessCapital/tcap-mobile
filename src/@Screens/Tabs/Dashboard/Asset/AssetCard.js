@@ -24,6 +24,10 @@ import { View,Text,Image } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './styles';
 import walletUtils from '../../../../@Services/wallet-utils';
+import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { moderateScale } from 'react-native-size-matters';
+import Colors from '../../../../@Constants/Colors';
 
 const assetSet = [
     {symbol:'ETH',imageAsset : require('../../../../../assets/images/assetLogos/eth.svg')},
@@ -57,9 +61,10 @@ const assetSet = [
     // {symbol:'RENBTC',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
 ];
 
+const AssetCard = ({asset,exchangeRates,...props}) =>{ 
 
- 
-const AssetCard = ({asset,exchangeRates}) =>{ 
+    const {depositingBalances,committedBalances} = props;
+
     const {symbol,value} = asset;
     const loadAssetValue = (defaultVal) =>{
         const cost = walletUtils.getAssetDisplayTextInUSD(
@@ -80,6 +85,14 @@ const AssetCard = ({asset,exchangeRates}) =>{
        
     };
 
+    const renderTickMark = () =>{
+        const deposited = depositingBalances.findIndex(x => x.symbol === asset.symbol);
+        const committed = committedBalances.findIndex(x => (x.symbol === asset.symbol && x.value === asset.value ));
+        if(committed !== -1 && deposited === -1 )
+            return <Icon color={Colors.green} name={'check-double'} size={moderateScale(16)} style={{marginLeft:moderateScale(3)}} />;
+        return <Icon color={Colors.amber} name={'check'} size={moderateScale(16)} style={{marginLeft:moderateScale(3)}} />;
+    };
+
     return(
         <View style={styles.assetCard}>
             <View style={styles.imageWrapper}>
@@ -87,7 +100,10 @@ const AssetCard = ({asset,exchangeRates}) =>{
                     {renderImage()}
                 </View>
                 <View style={styles.leftWrapper}>
-                    <Text style={styles.title}>$ {loadAssetValue(0)}</Text>
+                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                        <Text style={styles.title}>$ {loadAssetValue(0)}</Text>
+                        {renderTickMark()}
+                    </View>
                     <Text style={styles.subTitle}>
                         {walletUtils.getAssetDisplayText( symbol,value)}
                         {' '+symbol.toUpperCase()} 
@@ -106,7 +122,16 @@ const AssetCard = ({asset,exchangeRates}) =>{
  
 AssetCard.propTypes = {
     asset:PropTypes.object.isRequired,
+    committedBalances:PropTypes.array.isRequired,
+    depositingBalances:PropTypes.array.isRequired,
     exchangeRates:PropTypes.array.isRequired,
 };
+
+function mapStateToProps(state){
+    return{
+        depositingBalances : state.dashboard.depositingBalances,
+        committedBalances : state.dashboard.committedBalances
+    };
+}
  
-export default AssetCard;
+export default connect(mapStateToProps)(AssetCard);

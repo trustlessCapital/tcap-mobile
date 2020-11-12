@@ -48,7 +48,7 @@ const TransferHomeScreen = ({...props}) =>{
     const [selectedAsset, setSelectedAsset] = useState(verifiedBalances[0]);
     const [amountToTransfer, setAmountToTransfer] = useState(0.00);
     // testAddress  (for testing)
-    const testAddress = '0xDD624396D018fffB7369341f73e9e8B6F65de7bf';
+    const testAddress = '0xD8f647855876549d2623f52126CE40D053a2ef6A';
     const [address, setAddress] = useState(testAddress);
     const [remarks , setRemarks] = useState('');
     const [modal, setModal] = useState(false);
