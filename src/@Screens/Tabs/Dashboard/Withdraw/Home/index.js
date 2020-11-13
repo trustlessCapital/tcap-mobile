@@ -89,7 +89,7 @@ const WithdrawHomeScreen = ({...props}) =>{
     };
 
     useEffect(()=>{
-        console.log('accAddress',accAddress);
+        // console.log('accAddress',accAddress);
         if(verifiedBalances.length) setShowTransactionUi(true);
         updateVerifiedAccountBalances(accAddress);
     },[]);
@@ -106,13 +106,11 @@ const WithdrawHomeScreen = ({...props}) =>{
     },[verifiedBalances.length]);
 
     const refreshAssets = (currentAsset,fast=false) =>{
-        console.log('fastWithDraw',fast);
         setIndicatingMsg('Please Wait...');
         setLoader(true);
         updateVerifiedAccountBalances(accAddress);
         apiServices.getTransferFundProcessingFee(currentAsset.symbol,accAddress,fast ? 'fastwithdraw' : 'withdraw')
             .then(data=>{
-                console.log('withdraw fee',data);
                 setLoader(false);
                 setFee(data.totalFee);
             })

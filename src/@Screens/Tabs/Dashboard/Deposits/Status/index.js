@@ -97,13 +97,11 @@ class DepositStatusScreen extends Component {
                       'ethTxnId': txCommit.transactionHash,
                   };
                   apiServices.setTransactionDetailsWithServer(body)
-                      .then(data=>{
-                          console.log('Deposit',data);
+                      .then(()=>{
                       })
                       .catch();
                   this.setState({ transactionDetails:txCommit,isLoading: false });
-              }).catch((err) => {
-                  console.log('Error',err);
+              }).catch(() => {
                   this.setState({isLoading: false,errorOccured:true});
               });
       }

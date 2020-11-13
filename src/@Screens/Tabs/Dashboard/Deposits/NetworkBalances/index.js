@@ -50,8 +50,7 @@ export default class DepositEthBalanceScreen extends Component {
       this.state.isLoading = true;
       Promise.all(promises).then(() => {
           this.setState({isLoading: false});
-      }).catch((e) => {
-          console.log('ERROR >>> ', e);
+      }).catch(() => {
           // Show toast in case of any error
           this.setState({isLoading: false});
       });

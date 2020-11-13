@@ -102,9 +102,7 @@ class DashboardWallet extends Component {
           _.forOwn(balanceObj, (val, key) => {
               let value = walletUtils.getAssetDisplayText(key.toLowerCase(), val);
               let price = walletUtils.getAssetDisplayTextInUSD(key.toLowerCase(), value, exchangeRates);
-              console.log('Price',typeof price,price);
               total +=parseFloat(price);
-              console.log('Total',total);
           });
           this.setState({totalBalance:total,isLoading:false});
       }
@@ -115,8 +113,7 @@ class DashboardWallet extends Component {
       this.setState({isLoading:true});
       Promise.all(promises).then(() => {
           this.setState({isLoading: false});
-      }).catch((e) => {
-          console.log('Error ', e);
+      }).catch(() => {
           this.setState({isLoading: false});
       });
   }
@@ -132,7 +129,6 @@ class DashboardWallet extends Component {
   fetchAccountBalance = async () => {
       const walletService = WalletService.getInstance();
       await walletService.getZkSyncBalance().then(balanceObj => {
-          console.log('balanceObj',balanceObj);
           this.props.updateBalanceObject(balanceObj);
           if (!balanceObj) {
               this.setState({totalBalance:0});

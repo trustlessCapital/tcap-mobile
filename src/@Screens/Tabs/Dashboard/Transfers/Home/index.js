@@ -63,7 +63,7 @@ const TransferHomeScreen = ({...props}) =>{
     const [showTransactionUi , setShowTransactionUi] = useState(false);
 
     useEffect(()=>{
-        console.log('accAddress',accAddress);
+        // console.log('accAddress',accAddress);
         if(verifiedBalances.length) setShowTransactionUi(true);
         updateVerifiedAccountBalances(accAddress);
     },[]);

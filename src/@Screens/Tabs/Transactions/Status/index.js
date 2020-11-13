@@ -50,11 +50,9 @@ const TransactionStatusScreen = ({...props}) =>{
         txnId,
         zksyncTxnId='',
         ethTxnId=''
-    },historyData} = params;
+    }} = params;
 
     const [modal,setModal] = useState(false);
-
-    console.log('historyData',historyData);
 
     const renderType = () =>{
         if(txnType === 'deposit')

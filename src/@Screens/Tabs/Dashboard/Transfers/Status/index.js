@@ -71,7 +71,6 @@ const TransferStatusScreen = ({...props}) =>{
             .then(data =>{
                 updateVerifiedAccountBalances(accAddress);
                 const [receipt, txHash] = data;
-                console.log('Transfer Data',data);
                 const body = {
                     'walletAddress': accAddress,
                     'txnType': 'transfer',

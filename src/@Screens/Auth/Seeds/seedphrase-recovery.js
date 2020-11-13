@@ -63,7 +63,6 @@ export default class SeedPhraseRecoveryScreen extends Component {
           this.pin,
           this.accountDetails.email,
       ).then(pk => {
-          console.log('Dashboard Navigation');
           const walletService = WalletService.getInstance();
           walletService.setPk(pk);
           this.setState({

@@ -54,7 +54,6 @@ const TransactionHistory = () =>{
             .then((data)=>{
                 setList(data);
                 setIsLoading(false);
-                console.log('HistoryList', data);
             })
             .catch(err=>{
                 setIsLoading(false);
