@@ -1,6 +1,7 @@
 import {
     StyleSheet,
 } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 import Colors from '../../../../@Constants/Colors';
   
 export default (styles = StyleSheet.create({
@@ -41,7 +42,7 @@ export default (styles = StyleSheet.create({
     balanceText: {
         color: Colors.white,
         fontFamily: 'Montserrat-Bold',
-        fontSize: 26,
+        fontSize: moderateScale(30),
     },
     balanceTextDecimal: {
         color: Colors.white,
@@ -77,7 +78,30 @@ export default (styles = StyleSheet.create({
     },
     mainContent: {
         flex: 1
-    }
+    },
+    buttonWrapper:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        marginTop:moderateScale(30),
+        width:'100%'
+    },
+    eachButton:{
+        backgroundColor:Colors.white,
+        width:moderateScale(100),
+        justifyContent:'center',
+        alignItems:'center',
+        height:moderateScale(80),
+        borderRadius:moderateScale(20)
+    },
+    itemText:{
+        color:Colors.activeTintRed,
+        fontFamily: 'Montserrat-Regular',
+        marginTop:moderateScale(8)
+    },
+    icons:{
+        color:Colors.activeTintRed
+    },
 }));
   
   

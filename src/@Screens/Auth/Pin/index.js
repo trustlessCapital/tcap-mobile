@@ -12,7 +12,7 @@ import {
     AppState,
     BackHandler
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import LoadingIndicator from '../../../@Components/loading-indicator';
 import StatusBarColor from '../../../@Components/status-bar-color';
@@ -115,7 +115,7 @@ export default class PINScreen extends Component {
                           style={styles.backButton}>
                           <Icon
                               color={Colors.title}
-                              name={'ios-arrow-back'}
+                              name={'angle-left'}
                               size={24}
                               style={{alignSelf: 'center'}}
                           />
@@ -214,7 +214,7 @@ export default class PINScreen extends Component {
                               style={styles.key}>
                               <Icon
                                   color="#fff"
-                                  name={'ios-backspace'}
+                                  name={'backspace'}
                                   size={22}
                                   style={{alignSelf: 'center'}}
                               />
@@ -412,10 +412,7 @@ export default class PINScreen extends Component {
                           this.state.pin
                       ).then(() => {
                           this.setState({ isLoading: false });
-                          if (
-                              !accountDetails.isPhoneVerified ||
-                !accountDetails.isEmailVerified
-                          ) {
+                          if (!accountDetails.isPhoneVerified ||!accountDetails.isEmailVerified) {
                               this.props.navigation.replace('VerificationScreen', {
                                   accountDetails: accountDetails,
                                   mode: !accountDetails.isPhoneVerified
@@ -447,7 +444,6 @@ export default class PINScreen extends Component {
                       });
                   })
                   .catch((error) => {
-                      console.log('Err',err);
                       if (error.status == 409) {
                           this.setState({
                               isLoading: false,
@@ -468,7 +464,6 @@ export default class PINScreen extends Component {
                   .finally(() => this.setState({ isLoading: false }));
           })
           .catch((error) => {
-              console.log('Err',error);
               let errMsg = 'Error occured in signing you in! Please try later!';
               if (error.status == -1) {
                   errMsg = 'Error occured in signing you in!';

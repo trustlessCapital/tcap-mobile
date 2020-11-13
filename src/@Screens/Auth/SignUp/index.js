@@ -8,18 +8,31 @@ import {
     KeyboardAvoidingView, TextInput
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import LoadingIndicator from '../../../@Components/loading-indicator';
 import ErrorDialog from '../../../@Components/error-dialog';
 import Colors from '../../../@Constants/Colors';
 import {PIN_SCREEN_MODE} from '../../../@Constants';
-import { Hoshi } from 'react-native-textinput-effects';
 import CountryPicker from 'react-native-country-picker-modal';
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 import styles from './styles';
 import StatusBarColor from '../../../@Components/status-bar-color';
 
 export default class SignUp extends Component {
+ 
+
+    constructor(props) {
+        super(props);
+        if (this.props.route &&
+      this.props.route.params) {
+            if (this.props.route.params.signupError) this.state.signupError = this.props.route.params.signupError;
+            if (this.props.route.params.email) this.state.emailInput = this.props.route.params.email;
+            if (this.props.route.params.phone) this.state.phoneInput = this.props.route.params.phone;
+            if (this.props.route.params.recoverAccount) this.state.recoverAccount = true;
+        }
+        this.canGoBack = this.props.navigation.canGoBack();
+    }
+
   state = {
       emailInput: '',
       phoneInput: '',
@@ -32,18 +45,6 @@ export default class SignUp extends Component {
       signupError: false,
       recoverAccount: false
   };
-
-  constructor(props) {
-      super(props);
-      if (this.props.route &&
-      this.props.route.params) {
-          if (this.props.route.params.signupError) this.state.signupError = this.props.route.params.signupError;
-          if (this.props.route.params.email) this.state.emailInput = this.props.route.params.email;
-          if (this.props.route.params.phone) this.state.phoneInput = this.props.route.params.phone;
-          if (this.props.route.params.recoverAccount) this.state.recoverAccount = true;
-      }
-      this.canGoBack = this.props.navigation.canGoBack();
-  }
 
   switchAccountMode = () => {
       if (this.state.recoverAccount) {
@@ -63,6 +64,66 @@ export default class SignUp extends Component {
 
   openCountryPicker = () => {
       this.setState({ showCountryPicker: true });
+  }
+
+ 
+  goToPinLogin = () => {
+      this.props.navigation.navigate('PINScreen');
+  };
+
+  signUp = () => {
+      this.props.navigation.push('PINScreen', {
+          mode: PIN_SCREEN_MODE.SIGNUP_PIN,
+          email: this.state.emailInput,
+          phone: this.state.countryCallingCode + this.state.phoneInput,
+          recoverAccount: this.state.recoverAccount
+      });
+  }
+
+  getSignUpButtonStyle = () => {
+      return !this.state.isEmailValid || !this.state.isPhoneValid
+          ? styles.circleButtonDisabled
+          : styles.circleButton;
+  }
+
+  onEmailChange = (emailInput) => {
+      emailInput = emailInput.toLowerCase();
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput)) {
+          this.setState({ emailInput: emailInput, isEmailValid: true });
+      } else {
+          this.setState({ emailInput: emailInput, isEmailValid: false });
+      }
+  }
+
+  getEmailBorderColor = () => {
+      if (this.state.isEmailValid) {
+          return Colors.tintColor;
+      } else {
+          return Colors.error;
+      }
+  }
+
+  onPhoneChange = (phoneInput) => {
+      let parsedNumber;
+      try {
+          parsedNumber = phoneUtil.parse(this.state.countryCallingCode + phoneInput);
+      } catch (e) {}
+    
+      if (parsedNumber && phoneUtil.isValidNumber(parsedNumber)) {
+          this.setState({ phoneInput: phoneInput, isPhoneValid: true });
+      } else if (parsedNumber) {
+          this.setState({ phoneInput: phoneInput, isPhoneValid: false });
+      } else {
+          this.setState({ phoneInput: phoneInput });
+      }
+  }
+
+  getPhoneBorderColor = () => {
+      if (this.state.isPhoneValid) {
+          return Colors.tintColor;
+      } else {
+          return Colors.error;
+      }
   }
 
   render() {
@@ -121,7 +182,7 @@ export default class SignUp extends Component {
                                           </Text>
                                           <Icon
                                               color={Colors.subTitle}
-                                              name={'ios-arrow-down'}
+                                              name={'arrow-down'}
                                               size={18}
                                               style={{paddingStart: 5}}
                                           />
@@ -186,7 +247,7 @@ export default class SignUp extends Component {
                                           style={this.getSignUpButtonStyle()}>
                                           <Icon
                                               color="#fff"
-                                              name={'md-arrow-forward'}
+                                              name={'arrow-right'}
                                               size={22}
                                           />
                                       </TouchableOpacity>
@@ -210,7 +271,7 @@ export default class SignUp extends Component {
                                           <Text
                                               onPress={this.goToPinLogin.bind(this)}
                                               style={[styles.recoverAccount, {marginTop: 5}]}>
-                        Login
+                      Login
                                           </Text>
                                       </TouchableOpacity>
                                   )}
@@ -235,62 +296,4 @@ export default class SignUp extends Component {
       );
   }
 
-  goToPinLogin = () => {
-      this.props.navigation.navigate('PINScreen');
-  };
-
-  signUp = () => {
-      this.props.navigation.push('PINScreen', {
-          mode: PIN_SCREEN_MODE.SIGNUP_PIN,
-          email: this.state.emailInput,
-          phone: this.state.countryCallingCode + this.state.phoneInput,
-          recoverAccount: this.state.recoverAccount
-      });
-  }
-
-  getSignUpButtonStyle = () => {
-      return !this.state.isEmailValid || !this.state.isPhoneValid
-          ? styles.circleButtonDisabled
-          : styles.circleButton;
-  }
-
-  onEmailChange = (emailInput) => {
-      emailInput = emailInput.toLowerCase();
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput)) {
-          this.setState({ emailInput: emailInput, isEmailValid: true });
-      } else {
-          this.setState({ emailInput: emailInput, isEmailValid: false });
-      }
-  }
-
-  getEmailBorderColor = () => {
-      if (this.state.isEmailValid) {
-          return Colors.tintColor;
-      } else {
-          return Colors.error;
-      }
-  }
-
-  onPhoneChange = (phoneInput) => {
-      let parsedNumber;
-      try {
-          parsedNumber = phoneUtil.parse(this.state.countryCallingCode + phoneInput);
-      } catch (e) {}
-    
-      if (parsedNumber && phoneUtil.isValidNumber(parsedNumber)) {
-          this.setState({ phoneInput: phoneInput, isPhoneValid: true });
-      } else if (parsedNumber) {
-          this.setState({ phoneInput: phoneInput, isPhoneValid: false });
-      } else {
-          this.setState({ phoneInput: phoneInput });
-      }
-  }
-
-  getPhoneBorderColor = () => {
-      if (this.state.isPhoneValid) {
-          return Colors.tintColor;
-      } else {
-          return Colors.error;
-      }
-  }
 }

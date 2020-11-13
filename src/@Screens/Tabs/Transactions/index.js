@@ -5,13 +5,13 @@
 import React, {Component} from 'react';
 import {
     SafeAreaView,
-    Text,
     AppState
 } from 'react-native';
 import styles from './styles';
 import SecurityServices from '../../../@Services/security';
 import Colors from '../../../@Constants/Colors';
 import StatusBarColor from '../../../@Components/status-bar-color';
+import TransactionHistory from './TransactionHistory';
 
 export default class TransactionScreen extends Component {
   
@@ -54,7 +54,7 @@ componentWillUnmount() {
                   backgroundColor={Colors.primary_bg}
                   barStyle="light-content"
               />
-              <Text style={{color:'#fff',alignSelf:'center'}}>Transaction Screen</Text>
+              <TransactionHistory />
           </SafeAreaView>
       );
   }

@@ -20,12 +20,8 @@
 
 //MAIN ENVIRONMENT
 const env = process.env.NODE_ENV;
-const localIp = 'http://192.168.43.59:7001';
-const devServerIp = '';
-const prodServerIp = '';
-
-// set true to use Local Ip address
-const useLocalIP = true;
+const devServerIp = 'https://dev.api.trustless.capital';
+const prodServerIp = 'https://api.trustless.capital';
 
 //SET ENVIRONMENT
 const setEnv = env === 'development';
@@ -34,8 +30,14 @@ export default {
 
     AsyncStorageKey:'Tcap',
 
-    BASE_PATH:  useLocalIP ?  localIp  : setEnv ? devServerIp : prodServerIp,
+    NETWORK : 'rinkeby',
+
+    SUBNET : 'WS',
+
+    BASE_PATH:  setEnv ? devServerIp : prodServerIp,
 
     API_PREFIX : '/api',
+
+    SECURE_KEY : setEnv ? 'esKWwHMMuo2hspzLzWKvbj7dV7ycPWy4ZXo5uNYj' : 'esKWwHMMuo2hspzLzWKvbj7dV7ycPWy4ZXo5uNYj',
 
 };

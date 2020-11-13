@@ -2,9 +2,10 @@ import '@ethersproject/shims';
 import {ethers} from 'ethers';
 import WalletUtils from './wallet-utils';
 import * as zksync from '../lib/zksync/build-src/index';
+import Config from '../@Config/default';
 
-const NETWORK = 'rinkeby';
-//const NETWORK = 'mainnet';
+const { NETWORK , SUBNET } = Config;
+
 export default class WalletService {
 
     constructor() {}
@@ -27,7 +28,7 @@ export default class WalletService {
   }
 
   getProvider = async () => {
-      this.syncProvider = await zksync.getDefaultProvider(NETWORK);
+      this.syncProvider = await zksync.getDefaultProvider(NETWORK,SUBNET);
   }
 
   getEthersProvider = async () => {
@@ -48,17 +49,20 @@ export default class WalletService {
       return this.syncWallet.getAccountState();
   }
 
-  unlockZksyncWallet = async () => {
+  unlockZksyncWallet = async (token) => {
       await this.getSyncWallet();
+      //this.syncWallet.isSigningKeySet() - true (unlocked)
       if (!(await this.syncWallet.isSigningKeySet())) {
           if ((await this.syncWallet.getAccountId()) == undefined) {
               return;
           }
-
-          const changePubkey = await this.syncWallet.setSigningKey();
-
-          return await changePubkey.awaitReceipt();
+          const signingKeyTx = await this.syncWallet.setSigningKey({ feeToken: token.toUpperCase(), });
+          const receipt = await signingKeyTx.awaitReceipt();
+          return receipt.success; // true - unlocked
       }
+      return true;
+      
+
   }
 
   depositFundsToZkSync = async (token, amount) => {
@@ -82,6 +86,46 @@ export default class WalletService {
       return transactionDetails;
   }
 
+  transferFundsToZkSync = async (destination,token,amount) =>{
+      amount = amount.toString();
+      await this.getSyncWallet();
+      const decimalForToken = WalletUtils.getDecimalValueForAsset(token);
+      let weiUnit = Math.pow(10,decimalForToken);
+      let Wei = (amount * weiUnit).toString();
+      const txAmount = ethers.BigNumber.from(Wei);
+      const body = {
+          to: destination, token: token.toUpperCase(), amount: txAmount
+      };
+      const transfer = await this.syncWallet.syncTransfer(body);
+      const transactionDetails = Promise.all([
+          transfer.awaitReceipt(),
+          transfer.txHash,
+      ]);
+      return transactionDetails;
+  }
+
+  withdrawFundsToEtherium = async (destination,token,amount,fastWithdraw=false,fee) =>{
+      amount = amount.toString();
+      await this.getSyncWallet();
+      const decimalForToken = WalletUtils.getDecimalValueForAsset(token);
+      let weiUnit = Math.pow(10,decimalForToken);
+      let Wei = (amount * weiUnit).toString();
+      const txAmount = ethers.BigNumber.from(Wei);
+      let body = {
+          ethAddress: destination, 
+          token: token.toUpperCase(), 
+          amount: txAmount,
+          fastProcessing:fastWithdraw
+      };
+      if(fastWithdraw) body.fee =  ethers.BigNumber.from((fee * weiUnit).toString());
+      const withdraw = await this.syncWallet.withdrawFromSyncToEthereum(body);
+      const transactionDetails = Promise.all([
+          withdraw.awaitReceipt(),
+          withdraw.txHash,
+      ]);
+      return transactionDetails;
+  }
+
   getZkSyncBalance = async () => {
       const accountState = await this.getAccountState();
       const verifiedBalances = accountState.verified.balances;
@@ -97,4 +141,9 @@ export default class WalletService {
   getTxStatusUrl(txId) {
       return `https://${NETWORK}.etherscan.io/tx/${txId}`;
   }
+
+  getFundTransferStatusUrl(txId) {
+      return `https://${NETWORK}.zkscan.io/explorer/transactions/${txId}`;
+  }
+
 }

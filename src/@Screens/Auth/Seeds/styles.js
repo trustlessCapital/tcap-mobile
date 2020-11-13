@@ -41,7 +41,6 @@ export default (styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     phrasesWrapper: {
-        alignItems: 'center',
         width: Dimensions.get('window').width,
     },
     phraseRow: {
@@ -54,7 +53,8 @@ export default (styles = StyleSheet.create({
         backgroundColor: Colors.tintColor,
         width: Dimensions.get('window').width / 2 - 40,
         height: 45,
-        marginStart: 20,
+        margin:moderateScale(6),
+        marginBottom:moderateScale(10),
         justifyContent: 'center',
     },
     phraseItemWithBorder: {
@@ -138,5 +138,6 @@ export default (styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 14,
         color: Colors.title,
+        height:moderateScale(40)
     },
 }));
