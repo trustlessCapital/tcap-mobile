@@ -87,8 +87,9 @@ export default class SignUp extends Component {
   }
 
   onEmailChange = (emailInput) => {
+      console.log('Callings');
       emailInput = emailInput.toLowerCase();
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput)) {
+      if (/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(emailInput)) {
           this.setState({ emailInput: emailInput, isEmailValid: true });
       } else {
           this.setState({ emailInput: emailInput, isEmailValid: false });
@@ -165,9 +166,13 @@ export default class SignUp extends Component {
                           <View style={styles.form}>
                               <View style={styles.textInputRoot}>
                                   <TextInput
+                                      autoCapitalize={'none'}
+                                      blurOnSubmit={false}
                                       onChangeText={this.onEmailChange}
+                                      onSubmitEditing={() => { this.numberInput.focus(); }}
                                       placeholder={'E-mail'}
                                       placeholderTextColor={Colors.tintColorGreyedDark}
+                                      returnKeyType={'next'}
                                       style={styles.textInput}
                                       value={this.state.emailInput}
                                   />
@@ -227,6 +232,7 @@ export default class SignUp extends Component {
                                           onChangeText={this.onPhoneChange}
                                           placeholder={'Phone Number'}
                                           placeholderTextColor={Colors.tintColorGreyedDark}
+                                          ref={(input) => { this.numberInput = input; }}
                                           style={styles.textInput}
                                           value={this.state.phoneInput}
                                       />
