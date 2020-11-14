@@ -27,11 +27,16 @@ import WalletService from '../../../../@Services/wallet-service';
 import apiServices from '../../../../@Services/api-services';
 import styles from './styles';
 import LoadingIndicator from '../../../../@Components/loading-indicator';
+import { useIsFocused } from '@react-navigation/native';
+
 import HistoryCard from './HistoryCard';
  
 const TransactionHistory = () =>{
+    const isFocused = useIsFocused();
     const walletService = WalletService.getInstance();
     const accAddress =  walletUtils.createAddressFromPrivateKey(walletService.pk);
+
+    console.log('accAddress',accAddress);
 
     const [isLoading, setIsLoading] = useState(false);
     const [list , setList] = useState([]);
@@ -39,8 +44,9 @@ const TransactionHistory = () =>{
     const [refreshing,setRefreshing] = useState(false);
 
     useEffect(()=>{
-        loadHistory();
-    },[]);
+        if(isFocused)
+            loadHistory();
+    },[isFocused]);
 
     const onRefresh = () =>{
         setRefreshing(true);

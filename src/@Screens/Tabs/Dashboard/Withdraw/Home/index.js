@@ -120,7 +120,9 @@ const WithdrawHomeScreen = ({...props}) =>{
     };
 
     const checkAccountIsUnlocked = async() =>{
+        console.log('Checking Account is Unlocked ? ');
         const isUnlocked = await walletService.unlockZksyncWallet(selectedAsset.symbol);
+        console.log('isUnlocked',isUnlocked);
         if(isUnlocked)
         {
             setLoader(false);

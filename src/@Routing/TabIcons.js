@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import {Platform} from 'react-native';
 import { Image, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 

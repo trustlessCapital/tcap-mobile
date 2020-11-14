@@ -5,6 +5,7 @@ import {
     View,
     TouchableOpacity,
     TextInput,
+    ScrollView
 } from 'react-native';
 import styles from './styles';
 import WalletUtils from '../../../@Services/wallet-utils';
@@ -19,12 +20,11 @@ import APIService from '../../../@Services/api-services';
 import SecurityServices from '../../../@Services/security';
 import StatusBarColor from '../../../@Components/status-bar-color';
 import Colors from '../../../@Constants/Colors';
+import { moderateScale } from 'react-native-size-matters';
 
 const WAIT_SEEDPHRASE = 'Please wait.. while we create your seed phrase!';
 const WAIT_CREATEWALLET = 'Please wait.. while we create your wallet!';
 export default class SeedPhraseScreen extends Component {
-  
-  
 
     constructor(props) {
         super(props);
@@ -217,29 +217,6 @@ export default class SeedPhraseScreen extends Component {
               }
           </View>
       );
-      //   return (
-      //       <SortableGrid
-      //           itemHeight={moderateScale(60)}
-      //           itemWidth={moderateScale(120)}
-      //           onDragRelease={itemOrder =>
-      //               (this.seedPhraseOrder = itemOrder.itemOrder)
-      //           }
-      //           style={styles.phrasesWrapper}>
-      //           {this.state.seedPhrase.map((phrase, index) => (
-      //               <View
-      //                   inactive={!this.state.isVerificationMode}
-      //                   key={index}
-      //                   style={this.state.isVerificationMode? styles.phraseItemWithBorder: styles.phraseItem}>
-      //                   {!this.state.isVerificationMode ? (
-      //                       <View style={styles.phraseItemWrapper}>
-      //                           <Text style={styles.phraseIndex}>{index + 1}</Text>
-      //                       </View>
-      //                   ) : null}
-      //                   <Text style={styles.phraseText}>{phrase}</Text>
-      //               </View>
-      //           ))}
-      //       </SortableGrid>
-      //   );
   }
 
   render() {
@@ -250,38 +227,40 @@ export default class SeedPhraseScreen extends Component {
                       backgroundColor={Colors.primary_bg}
                       barStyle="light-content"
                   />
-                  <View style={styles.container}>
-                      <Text style={styles.mainTitle}>
-                          {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
+                  <ScrollView style={{paddingBottom:moderateScale(300)}}>
+                      <View style={styles.container}>
+                          <Text style={styles.mainTitle}>
+                              {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
               Phrase
-                      </Text>
-                      <View style={styles.disclaimerHeader}>
-                          <Text style={styles.title}>Disclaimer</Text>
-                          <Text style={styles.subTitle}>
-                              {this.state.isVerificationMode
-                                  ? 'Enter the words in the missing positions of the seed phrase'
-                                  : 'Please note down your 12 word mnemonic seed phrase in the displayed order and save it in a secure manner.'}
                           </Text>
-                      </View>
-                      {this._getSortableGrid()}
-                      <View style={styles.footer}>
-                          <TouchableOpacity
-                              onPress={this._onSaveButtonClick.bind(this)}
-                              style={styles.primaryButtonStyle}>
-                              <Text style={styles.primaryButtonText}>
-                                  {this.state.saveButtonText}
+                          <View style={styles.disclaimerHeader}>
+                              <Text style={styles.title}>Disclaimer</Text>
+                              <Text style={styles.subTitle}>
+                                  {this.state.isVerificationMode
+                                      ? 'Enter the words in the missing positions of the seed phrase'
+                                      : 'Please note down your 12 word mnemonic seed phrase in the displayed order and save it in a secure manner.'}
                               </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                              onPress={() => {
-                                  this.setState({confirmResetDialog: true});
-                              }}
-                              style={styles.secondaryButtonStyle}>
-                              <Text style={styles.secondaryButtonText}>
-                                  {this.state.resetButtonText}
-                              </Text>
-                          </TouchableOpacity>
+                          </View>
+                          {this._getSortableGrid()}
                       </View>
+                  </ScrollView>
+                  <View style={styles.footer}>
+                      <TouchableOpacity
+                          onPress={this._onSaveButtonClick.bind(this)}
+                          style={styles.primaryButtonStyle}>
+                          <Text style={styles.primaryButtonText}>
+                              {this.state.saveButtonText}
+                          </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                          onPress={() => {
+                              this.setState({confirmResetDialog: true});
+                          }}
+                          style={styles.secondaryButtonStyle}>
+                          <Text style={styles.secondaryButtonText}>
+                              {this.state.resetButtonText}
+                          </Text>
+                      </TouchableOpacity>
                   </View>
                   <LoadingIndicator
                       message={this.state.loadingMessage}

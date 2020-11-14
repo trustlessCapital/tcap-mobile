@@ -82,7 +82,6 @@ class DashboardScreen extends Component {
       });
   }
 
-
   render() {
       const {refreshing} = this.state;
       return (

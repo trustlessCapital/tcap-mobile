@@ -38,10 +38,6 @@ import WithdrawStatusScreen from '../@Screens/Tabs/Dashboard/Withdraw/Status';
 //TRANSACTION -HISTORY
 import TransactionStatusScreen from '../@Screens/Tabs/Transactions/Status';
 
-
-
-
-
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const navigationOptions = { headerShown: false };
@@ -82,7 +78,6 @@ const TabStack = ({...props}) => {
                 showIcon: true,
                 style: { 
                     height: Platform.OS === 'ios' ? moderateScale(90)  : moderateScale(40), borderTopWidth: 0, 
-                    
                 },
             }}
         >
@@ -121,10 +116,6 @@ const MixNavigator = ({...props}) => {
 
             {/* TRANSACTION HISTORY STACK */}
             <Stack.Screen component={TransactionStatusScreen}  name="TransactionStatusScreen" />
-            
-            
-
-
         </Stack.Navigator>
     );
 };

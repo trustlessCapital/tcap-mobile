@@ -10,7 +10,8 @@ import {
     Image,
     TouchableOpacity,
     AppState,
-    BackHandler
+    // BackHandler,
+    
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -30,7 +31,6 @@ import SecurityServices from '../../../@Services/security';
 import styles from './styles';
 
 export default class PINScreen extends Component {
-  
 
     constructor(props) {
         super(props);
@@ -46,7 +46,7 @@ export default class PINScreen extends Component {
                 this.phone = this.props.route.params.phone;
             if (this.props.route.params.isPinFallback)
                 this.isPinFallback = this.props.route.params.isPinFallback;
-      
+        
             this.recoverAccount = this.props.route.params.recoverAccount;
         }
     }
@@ -76,18 +76,18 @@ export default class PINScreen extends Component {
               this.allowLogin = true;
           });
       }
-      BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
+      //   BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
   componentWillUnmount() {
       AppState.removeEventListener('change', this._handleAppStateChange);
-      BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton);
+      //   BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton);
   }
 
-  _handleBackButton = () =>{
-      if(this.state.disableBackButton) return true;
-      else return false;
-  };
+  //   _handleBackButton = () =>{
+  //       if(this.state.disableBackButton) this.props.navigation.pop();
+  //       else return false;
+  //   };
 
   _handleAppStateChange = (nextAppState) => {
       if (!this.isPinFallback) {
@@ -437,7 +437,12 @@ export default class PINScreen extends Component {
                                           );
                                       }
                                       WalletService.getInstance().setPk(pk);
-                                      this.props.navigation.navigate('App',{ accountDetails: accountDetails });
+                                      //   this.props.navigation.reset('App',{ accountDetails: accountDetails });
+                                      this.props.navigation.reset({
+                                          index: 0,
+                                          routes: [{ name: 'App' ,params:{ accountDetails: accountDetails }}],
+                                          //   params:{ accountDetails: accountDetails }
+                                      });
                                   });
                               }
                           }

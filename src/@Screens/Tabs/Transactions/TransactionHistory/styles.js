@@ -24,7 +24,6 @@ export default (styles = StyleSheet.create({
         width:'90%',
         height:moderateScale(60),
         backgroundColor:Colors.tintColorDark,
-        marginBottom:moderateScale(20),
         alignItems:'center',
         paddingHorizontal:moderateScale(20),
         borderRadius:moderateScale(6),
@@ -39,6 +38,17 @@ export default (styles = StyleSheet.create({
         color:Colors.darkGrey , width:moderateScale(120),
         marginLeft:moderateScale(10),
         fontSize:moderateScale(14)
+    },
+    dateText:{
+        fontFamily: 'Montserrat-Regular',
+        fontSize:moderateScale(10),
+        color:Colors.white
+    },
+    timeView:{
+        alignSelf:'flex-end',marginRight:moderateScale(20),backgroundColor:Colors.inactiveTintGrey,
+        paddingHorizontal:moderateScale(15),borderRadius:moderateScale(10),
+        marginTop:moderateScale(-10),
+        padding:moderateScale(2)
     }
 }));
   

@@ -18,7 +18,7 @@ import WalletService from '../../../@Services/wallet-service';
 
 const SplashScreen = ({...props}) =>{
 
-    const {navigation:{navigate}} = props;
+    const {navigation:{replace}} = props;
 
     useEffect(()=>{
         loadResourcesAndDataAsync();
@@ -43,9 +43,9 @@ const SplashScreen = ({...props}) =>{
             console.warn(e);
         } finally {
             if (account) {
-                navigate('PINScreen');
+                replace('PINScreen');
             } else {
-                navigate('SignUp');
+                replace('SignUp');
             }
         }
     }
