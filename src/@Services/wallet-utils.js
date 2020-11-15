@@ -108,14 +108,17 @@ const getWeiToEth = (weiAmount) =>{
     return weiAmount/ethUnit;
 };
 
-const getAssetDisplayTextInUSD = (symbol, value, exchangeRates) => {
+const getAssetDisplayTextInSelectedCurrency = (symbol, value, exchangeRates) => {
+    const reduxState = reduxStore.getState();
+    const { selectedCurrency } = reduxState.currency;
     if (!value) {
         return 0;
     }
     value = parseFloat(value);
     let exchangeRate = _.find(exchangeRates, { symbol });
     if (!exchangeRate) return 0;
-    return (value * parseFloat(exchangeRate.value) * 1e-8).toFixed(4);
+    const displayPrice =  (value * selectedCurrency.value * parseFloat(exchangeRate.value) * 1e-8).toFixed(4);
+    return displayPrice;
 };
 
 export default (WalletUtils = {
@@ -128,7 +131,7 @@ export default (WalletUtils = {
     clearPrivateKey,
     getDecimalValueForAsset,
     getAssetDisplayText,
-    getAssetDisplayTextInUSD,
+    getAssetDisplayTextInSelectedCurrency,
     getWeiToEth,
 });
 

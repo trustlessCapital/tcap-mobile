@@ -180,6 +180,17 @@ function getTransactionHistory(address) {
     }).then(processResponse);
 }
 
+function getCurrencyRate(Currency = 'USD') {
+    const url =  `${BASE_PATH + API_PREFIX}/currency-exchange/${Currency}`;
+    console.log('URL',url);
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'x-api-key' : SECURE_KEY,
+        },
+    }).then(processResponse);
+}
+
 export default (APIService = {
     signUp,
     recoverAccount,
@@ -193,5 +204,6 @@ export default (APIService = {
     getAccountBalances,
     getTransferFundProcessingFee,
     setTransactionDetailsWithServer,
-    getTransactionHistory
+    getTransactionHistory,
+    getCurrencyRate
 });

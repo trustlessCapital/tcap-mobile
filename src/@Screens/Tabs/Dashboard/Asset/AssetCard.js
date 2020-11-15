@@ -67,7 +67,7 @@ const AssetCard = ({asset,exchangeRates,...props}) =>{
 
     const {symbol,value} = asset;
     const loadAssetValue = (defaultVal) =>{
-        const cost = walletUtils.getAssetDisplayTextInUSD(
+        const cost = walletUtils.getAssetDisplayTextInSelectedCurrency(
             symbol.toLowerCase(),
             defaultVal ? 0.1 : walletUtils.getAssetDisplayText(symbol,value),
             exchangeRates,
@@ -111,7 +111,7 @@ const AssetCard = ({asset,exchangeRates,...props}) =>{
                 </View>
             </View>
             <View style={styles.detailWrapper}>
-                <Text style={styles.title}>$ {loadAssetValue(0.1)}</Text>
+                <Text style={{...styles.title,fontSize:moderateScale(10)}}>$ {loadAssetValue(0.1)}</Text>
                 <View style={styles.percentBox}>
                     <Text style={styles.percent}>2.5 %</Text>
                 </View>

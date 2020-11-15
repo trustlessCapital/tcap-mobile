@@ -52,7 +52,7 @@ export default (styles = StyleSheet.create({
     title: {
         color: Colors.white,
         fontFamily: 'Montserrat-Bold',
-        fontSize: moderateScale(18),
+        fontSize: moderateScale(16),
     },
     leftWrapper:{
         paddingLeft:moderateScale(15),
@@ -60,7 +60,7 @@ export default (styles = StyleSheet.create({
     subTitle: {
         color: Colors.darkGrey,
         fontFamily: 'Montserrat-Bold',
-        fontSize: moderateScale(14),
+        fontSize: moderateScale(12),
         marginTop:moderateScale(10)
     },
     percentBox:{
@@ -69,13 +69,13 @@ export default (styles = StyleSheet.create({
         paddingHorizontal:moderateScale(10),
         borderRadius:moderateScale(5),
         marginTop:moderateScale(5),
-        width:moderateScale(60),
         alignSelf:'flex-end'
     },
     percent:{
         color: Colors.subTitle,
         fontFamily: 'Montserrat-Bold',
-        fontSize: moderateScale(14),
+        fontSize: moderateScale(10),
+        alignSelf:'center'
     },
     iconStyle:{
         width:moderateScale(30),

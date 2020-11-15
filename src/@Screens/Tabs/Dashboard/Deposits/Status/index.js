@@ -223,7 +223,7 @@ class DepositStatusScreen extends Component {
                                   </Text>
                                   <Text style={[styles.buttonText2, styles.greenText]}>
                                   ~$ {
-                                          WalletUtils.getAssetDisplayTextInUSD(
+                                          WalletUtils.getAssetDisplayTextInSelectedCurrency(
                                               this.token,
                                               this.state.amount,
                                               this.exchangeRates,

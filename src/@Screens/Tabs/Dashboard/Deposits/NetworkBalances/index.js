@@ -152,7 +152,7 @@ export default class DepositEthBalanceScreen extends Component {
                                                   <Text
                                                       style={[styles.buttonText2, styles.greenText]}>
                             $
-                                                      {walletUtils.getAssetDisplayTextInUSD(
+                                                      {walletUtils.getAssetDisplayTextInSelectedCurrency(
                                                           balanceObj.symbol,
                                                           walletUtils.getAssetDisplayText(
                                                               balanceObj.symbol,

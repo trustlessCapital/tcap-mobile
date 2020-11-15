@@ -37,8 +37,8 @@ const WithdrawConfirmationScreen = ({...props}) =>{
     } = props;
 
     const {transactionData:{address='',fee=0,selectedAsset,amountToWithdraw},transactionData} = params;
-    const amt = walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),amountToWithdraw, exchangeRates);
-    const charges = walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),fee, exchangeRates);
+    const amt = walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),amountToWithdraw, exchangeRates);
+    const charges = walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),fee, exchangeRates);
     const total = parseFloat(amt)+parseFloat(charges);
 
     const navigateToStatus =() =>{

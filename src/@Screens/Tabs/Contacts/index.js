@@ -7,15 +7,18 @@ import {
     SafeAreaView,
     Text,
     AppState,
-    TouchableOpacity
 } from 'react-native';
+import PropTypes from 'prop-types';
 import styles from './styles';
 import SecurityServices from '../../../@Services/security';
 import Colors from '../../../@Constants/Colors';
 import StatusBarColor from '../../../@Components/status-bar-color';
-import { moderateScale } from 'react-native-size-matters';
 
 export default class ContactsScreen extends Component {
+
+    static propTypes = {
+        route:PropTypes.object.isRequired,
+    };
   
     constructor(props) {
         super(props);
@@ -24,6 +27,12 @@ export default class ContactsScreen extends Component {
                 this.accountDetails = this.props.route.params.accountDetails;
         }
     }
+
+    state = {
+        appState: AppState.currentState,
+        index: 0,
+    };
+
     componentDidMount() {
         AppState.addEventListener('change', this._handleAppStateChange);
     }
@@ -32,10 +41,7 @@ export default class ContactsScreen extends Component {
         AppState.removeEventListener('change', this._handleAppStateChange);
     }
 
-    state = {
-        appState: AppState.currentState,
-        index: 0,
-    };
+    
     authState = {};
 
 
@@ -56,13 +62,6 @@ export default class ContactsScreen extends Component {
                   barStyle="light-content"
               />
               <Text style={{color:'#fff',alignSelf:'center'}}>Contacts Screen</Text>
-              <TouchableOpacity
-                  onPress={()=>this.props.navigation.reset({
-                      index: 0,
-                      routes: [{ name: 'Auth'}],
-                  })} style={{backgroundColor:'red',paddingBottom:moderateScale(10)}}>
-                  <Text>Button</Text>
-              </TouchableOpacity>
           </SafeAreaView>
       );
   }

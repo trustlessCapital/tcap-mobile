@@ -82,8 +82,8 @@ const TabStack = ({...props}) => {
             }}
         >
             <Tab.Screen component={DashboardScreen} initialParams={params} name="Dashboard" />
-            <Tab.Screen component={TransactionScreen} name="Transactions" />
-            <Tab.Screen component={ContactsScreens} name="Contacts" />
+            <Tab.Screen component={TransactionScreen} initialParams={params} name="Transactions" />
+            <Tab.Screen component={ContactsScreens} initialParams={params} name="Contacts" />
             <Tab.Screen component={AccountsScreen} initialParams={params} name="Accounts" />
         </Tab.Navigator>
     );

@@ -189,7 +189,7 @@ const WithdrawHomeScreen = ({...props}) =>{
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bottomInputBar}>
-                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),amountToWithdraw, exchangeRates)}</Text>
+                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ $ {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),amountToWithdraw, exchangeRates)}</Text>
                                 <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
                             </View>
                         </View>
@@ -292,7 +292,7 @@ const WithdrawHomeScreen = ({...props}) =>{
                             </Text>
                             <Text style={styles.feeText}>
                     Fee : {fee}{' '+selectedAsset.symbol.toUpperCase()+' '}
-                    ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
+                    ~ $ {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
                             </Text>
                         </View>
                     )

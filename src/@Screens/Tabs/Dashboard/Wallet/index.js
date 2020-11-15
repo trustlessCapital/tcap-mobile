@@ -101,7 +101,7 @@ class DashboardWallet extends Component {
           let total = 0;
           _.forOwn(balanceObj, (val, key) => {
               let value = walletUtils.getAssetDisplayText(key.toLowerCase(), val);
-              let price = walletUtils.getAssetDisplayTextInUSD(key.toLowerCase(), value, exchangeRates);
+              let price = walletUtils.getAssetDisplayTextInSelectedCurrency(key.toLowerCase(), value, exchangeRates);
               total +=parseFloat(price);
           });
           this.setState({totalBalance:total,isLoading:false});

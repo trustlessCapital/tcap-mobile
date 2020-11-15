@@ -440,8 +440,7 @@ export default class PINScreen extends Component {
                                       //   this.props.navigation.reset('App',{ accountDetails: accountDetails });
                                       this.props.navigation.reset({
                                           index: 0,
-                                          routes: [{ name: 'App' ,params:{ accountDetails: accountDetails }}],
-                                          //   params:{ accountDetails: accountDetails }
+                                          routes: [{ name: 'App' ,params:{ accountDetails: accountDetails }}]
                                       });
                                   });
                               }

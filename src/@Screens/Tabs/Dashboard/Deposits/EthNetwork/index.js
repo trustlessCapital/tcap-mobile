@@ -131,7 +131,7 @@ export default class DepositEthScreen extends Component {
                                       styles.greenText,
                                       {marginTop: 10, width: '100%'},
                                   ]}>
-                  ~ ${WalletUtils.getAssetDisplayTextInUSD(this.token,this.state.amount, this.exchangeRates)}
+                  ~ ${WalletUtils.getAssetDisplayTextInSelectedCurrency(this.token,this.state.amount, this.exchangeRates)}
                               </Text>
                           </View>
                       </View>
