@@ -18,7 +18,7 @@
  */
 
 import React,{useState} from 'react';
-import {View,Text,TouchableOpacity} from 'react-native';
+import {View,Text,TouchableOpacity,Share} from 'react-native';
 import styles from '../styles';
 import WalletService from '../../../../@Services/wallet-service';
 import walletUtils from '../../../../@Services/wallet-utils';
@@ -42,6 +42,19 @@ const Details = () =>{
         Toast.show('Address Copied to Clipboard',Toast.LONG);
     };
 
+    const shareAddress = () =>{
+        Share.share({
+            message: accAddress,
+        }, {
+            // Android only:
+            dialogTitle: 'Trustless Capital - Account Address',
+            // iOS only:
+            excludedActivityTypes: [
+                'com.apple.UIKit.activity.PostToTwitter'
+            ]
+        });
+    };
+
     const renderQrCodeBox = () =>{
         return(
             <View style={styles.bottomModal}>
@@ -56,7 +69,7 @@ const Details = () =>{
                     <Text style={{...styles.accAddressText,color:Colors.darkGrey,alignSelf:'center',marginTop:moderateScale(10)}}>Account Addess</Text>
                     <Text style={{...styles.titleBar_title,maxWidth:moderateScale(200),color:Colors.darkGrey,alignSelf:'center',textAlign:'center'}}>{accAddress}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.shareButton}>
+                <TouchableOpacity onPressOut={()=>shareAddress()} style={styles.shareButton}>
                     <Text style={{color:Colors.white}}>Share</Text>
                 </TouchableOpacity>
             </View>

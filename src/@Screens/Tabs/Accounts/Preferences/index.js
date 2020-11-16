@@ -17,8 +17,8 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import React, { useState } from 'react';
-import {View,Text, TextInput,ScrollView,TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {View,Text, TextInput,ScrollView,TouchableOpacity,SafeAreaView} from 'react-native';
 import PropTypes from 'prop-types';
 import apiServices from '../../../../@Services/api-services';
 import * as CurrencyActions from '../../../../@Redux/actions/currencyActions';
@@ -39,14 +39,24 @@ const Preferences = ({...props}) =>{
 
     const {
         updateExchangeRates,selectedCurrency,currencyList,
-        navigation,accountDetails
+        navigation,accountDetails,updateCurrencyList
     } = props;
 
-    const value = selectedCurrency.exchange;
+    const value = `${selectedCurrency.exchange}  ( ${selectedCurrency.symbol} )`;
     const [isActive, setIsActive] = useState(false);
     const [loader, setLoader] = useState(false);
+    const [searchedData , setSearchedData] = useState([]);
 
     const {recommended = [], all =[]} = currencyList;
+
+    useEffect(()=>{
+        apiServices.getCurrencyList()
+            .then(data=>{
+                updateCurrencyList(data.currencyList);
+            })
+            .catch(()=>{
+            });
+    },[]);
 
     const getCurrency = (currency) =>{
         setIsActive(false);
@@ -67,24 +77,52 @@ const Preferences = ({...props}) =>{
 
     const renderEachCurrency = (item) =>{
         return(
-            <TouchableOpacity onPress={()=>getCurrency(item.shortName)} style={{paddingVertical:moderateScale(15),paddingLeft:moderateScale(20)}}>
-                <Text style={styles.optionText}>{item.fullName}</Text>
+            <TouchableOpacity onPress={()=>getCurrency(item.shortName)} style={styles.currencyRowWrapper}>
+                <Text style={styles.optionText}>{item.fullName} - {item.shortName}</Text>
+                <Text style={styles.optionSymbol}> ( {item.symbol} )</Text>
             </TouchableOpacity>
         );
     };
 
+    const searchText = (text) =>{
+        console.log('text',text);
+        const data = all.find(x=> x.shortName === text.toUpperCase());
+        if(data) setSearchedData([data]);
+        console.log('data',data);
+    };
+
+    const renderSearchedData = () =>{
+        if(searchedData.length)
+            return(
+                <>
+                    <Text style={styles.titleBar_title}>Searched Currency</Text>
+                    {searchedData.map((item)=>(
+                        renderEachCurrency(item)
+                    ))}
+                </>
+            );
+        return null;
+    };
+
     const renderCurrencyList = () =>{
         return(
-            <View style={styles.modalWrapper}>
+            <SafeAreaView style={styles.modalWrapper}>
                 <View style={styles.searchWrapper}>
-                    <Icon color={Colors.lightGrey} name={'search'} style={{marginRight:moderateScale(10)}} />
-                    <TextInput 
-                        placeholder={'Search Your Currency'}
-                        placeholderTextColor={Colors.lightGrey}
-                        style={styles.searchBox}
-                    />
+                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                        <Icon color={Colors.lightGrey} name={'search'} style={{marginRight:moderateScale(10)}} />
+                        <TextInput 
+                            onChangeText={(string)=>searchText(string)}
+                            placeholder={'Search, Ex - USD'}
+                            placeholderTextColor={Colors.lightGrey}
+                            style={styles.searchBox}
+                        />
+                    </View>
+                    <TouchableOpacity onPress={()=>setIsActive(false)}>
+                        <Icon color={Colors.activeTintRed} name={'times'} size={moderateScale(20)} />
+                    </TouchableOpacity>
                 </View>
                 <ScrollView contentContainerStyle={{padding:moderateScale(20)}} showsVerticalScrollIndicator={false}>
+                    {renderSearchedData()}
                     <Text style={styles.titleBar_title}>Recommended</Text>
                     {recommended.map((item)=>(
                         renderEachCurrency(item)
@@ -94,7 +132,7 @@ const Preferences = ({...props}) =>{
                         renderEachCurrency(item)
                     ))}
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         );
     };
 
@@ -130,6 +168,7 @@ Preferences.propTypes = {
     currencyList:PropTypes.object.isRequired,
     navigation:PropTypes.object.isRequired,
     selectedCurrency:PropTypes.object.isRequired,
+    updateCurrencyList:PropTypes.func.isRequired,
     updateExchangeRates:PropTypes.func.isRequired,
 };
 
@@ -144,6 +183,8 @@ function mapDispatchToProps(dispatch){
     return{
         updateExchangeRates:currency =>
             dispatch(CurrencyActions.updateExchangeRates(currency)),
+        updateCurrencyList:list =>
+            dispatch(CurrencyActions.updateCurrencyList(list)),
     };
 }
  

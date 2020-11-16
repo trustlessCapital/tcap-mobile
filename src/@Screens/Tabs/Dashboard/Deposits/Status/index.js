@@ -35,7 +35,9 @@ class DepositStatusScreen extends Component {
   static propTypes = {
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
+      selectedCurrency:PropTypes.object.isRequired,
       updateVerifiedAccountBalances:PropTypes.func.isRequired,
+      
   };
 
   constructor(props) {
@@ -222,7 +224,7 @@ class DepositStatusScreen extends Component {
                                       {this.state.amount}
                                   </Text>
                                   <Text style={[styles.buttonText2, styles.greenText]}>
-                                  ~$ {
+                                  ~{this.props.selectedCurrency.symbol} {
                                           WalletUtils.getAssetDisplayTextInSelectedCurrency(
                                               this.token,
                                               this.state.amount,
@@ -307,8 +309,9 @@ class DepositStatusScreen extends Component {
   }
 }
 
-function mapStateToProps(){    
+function mapStateToProps(state){    
     return{
+        selectedCurrency : state.currency.selectedCurrency,
     };
 }
 

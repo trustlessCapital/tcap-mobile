@@ -83,7 +83,7 @@ authState = {};
                   backgroundColor={Colors.primary_bg}
                   barStyle="light-content"
               />
-              <ScrollView>
+              <ScrollView showsVerticalScrollIndicator={false}>
                   <Details />
                   <AboutYou accountDetails={this.accountDetails} />
                   <Preferences accountDetails={this.accountDetails} navigation={this.props.navigation}  />

@@ -38,7 +38,8 @@ import ErrorDialog from '../../../../../@Components/error-dialog';
  
 const TransferHomeScreen = ({...props}) =>{
     const {
-        updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation
+        updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation,
+        selectedCurrency
     } = props;
 
     const walletService = WalletService.getInstance();
@@ -185,7 +186,7 @@ const TransferHomeScreen = ({...props}) =>{
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bottomInputBar}>
-                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ $ {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),amountToTransfer, exchangeRates)}</Text>
+                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ {selectedCurrency.symbol} {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),amountToTransfer, exchangeRates)}</Text>
                                 <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
                             </View>
                         </View>
@@ -241,7 +242,7 @@ const TransferHomeScreen = ({...props}) =>{
                             </TouchableOpacity>
                             <Text style={styles.feeText}>
                         Fee : {fee}{' '+selectedAsset.symbol.toUpperCase()+' '}
-                        ~ $ {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
+                        ~ {selectedCurrency.symbol} {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
                             </Text>
                         </>
                     )
@@ -279,6 +280,7 @@ const TransferHomeScreen = ({...props}) =>{
 TransferHomeScreen.propTypes = {
     exchangeRates:PropTypes.array.isRequired,
     navigation:PropTypes.object.isRequired,
+    selectedCurrency:PropTypes.object.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,
     verifiedBalances:PropTypes.array.isRequired,
     
@@ -288,6 +290,7 @@ function mapStateToProps(state){
     return{
         verifiedBalances : state.dashboard.verifiedBalances,
         exchangeRates : state.dashboard.exchangeRates,
+        selectedCurrency : state.currency.selectedCurrency,
     };
 }
 

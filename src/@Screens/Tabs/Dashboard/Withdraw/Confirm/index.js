@@ -33,7 +33,8 @@ const WithdrawConfirmationScreen = ({...props}) =>{
     const {
         route:{params},
         exchangeRates,
-        navigation
+        navigation,
+        selectedCurrency
     } = props;
 
     const {transactionData:{address='',fee=0,selectedAsset,amountToWithdraw},transactionData} = params;
@@ -54,15 +55,15 @@ const WithdrawConfirmationScreen = ({...props}) =>{
                 </View>
                 <View style={styles.dataRow}>
                     <Text style={styles.titleDetails}>AMOUNT ENTERED</Text>
-                    <Text style={styles.titleText}>$ {amt}</Text>
+                    <Text style={styles.titleText}>{selectedCurrency.symbol} {amt}</Text>
                 </View>
                 <View style={styles.dataRow}>
                     <Text style={styles.titleDetails}>CHARGES</Text>
-                    <Text style={styles.titleText}>~ $ {charges}</Text>
+                    <Text style={styles.titleText}>~ {selectedCurrency.symbol} {charges}</Text>
                 </View>
                 <View style={styles.dataRow}>
                     <Text style={styles.titleDetails}>TOTAL</Text>
-                    <Text style={styles.titleText}>~ $ {total.toFixed(4)}</Text>
+                    <Text style={styles.titleText}>~ {selectedCurrency.symbol} {total.toFixed(4)}</Text>
                 </View>
             </View>
         );
@@ -87,11 +88,13 @@ WithdrawConfirmationScreen.propTypes = {
     exchangeRates:PropTypes.array.isRequired,
     navigation:PropTypes.object.isRequired,
     route:PropTypes.object.isRequired,
+    selectedCurrency:PropTypes.object.isRequired,
 };
  
 function mapStateToProps(state){
     return{
-        exchangeRates : state.dashboard.exchangeRates
+        exchangeRates : state.dashboard.exchangeRates,
+        selectedCurrency : state.currency.selectedCurrency,
     };
 }
  

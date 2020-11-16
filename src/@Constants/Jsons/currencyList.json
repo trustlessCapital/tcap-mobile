@@ -1,23 +1,22 @@
 {
     "currencyList" : {
         "recommended" : [
-            {"fullName" : "United States Dollar" , "symbol" : "", "shortName" : "USD"},
-            {"fullName" : "Euro" , "symbol" : "", "shortName" : "EUR"},
-            {"fullName" : "Indian Nation Rupee" , "symbol" : "", "shortName" : "INR"}
+            {"fullName": "US Dollar", "symbol": "$", "shortName": "USD"},
+            {"fullName" : "Euro" , "symbol" : "€", "shortName" : "EUR"},
+            {"fullName": "Indian Rupee", "symbol": "₹", "shortName": "INR"}
         ],
         "all" :[
-            {"fullName" : "United Arab Emirates dirham" , "symbol" : "", "shortName" : "AED"},
-            {"fullName" : "Afghan afghani" , "symbol" : "", "shortName" : "AFN"},
-            {"fullName" : "Albanian lek" , "symbol" : "", "shortName" : "ALL"},
-            {"fullName" : "Armenian dram" , "symbol" : "", "shortName" : "AMD"},
-            {"fullName" : "Netherlands Antillean guilder" , "symbol" : "", "shortName" : "ANG"},
-            {"fullName" : "Angolan kwanza" , "symbol" : "", "shortName" : "AOA"},
-            {"fullName" : "Argentine peso" , "symbol" : "", "shortName" : "ARS"},
-            {"fullName" : "Australian dollar" , "symbol" : "", "shortName" : "AUD"},
-            {"fullName" : "Aruban florin" , "symbol" : "", "shortName" : "AWG"},
-            {"fullName" : "Azerbaijani manat" , "symbol" : "", "shortName" : "AZN"},
-            {"fullName" : "Bosnia and Herzegovina convertible mark" , "symbol" : "", "shortName" : "BAM"},
-            {"fullName" : "Barbados dollar" , "symbol" : "", "shortName" : "BBD"}
+            {"fullName": "UAE Dirham", "shortName": "AED", "symbol": "د.إ"},
+            {"fullName": "Afghani", "shortName": "AFN", "symbol": "Af"},
+            {"fullName": "Lek", "shortName": "ALL", "symbol": "L"},
+            {"fullName": "Armenian Dram", "shortName": "AMD", "symbol": "Դ"},
+            {"fullName": "Netherlands Antillean Guilder", "shortName": "ANG", "symbol": "ƒ"},
+            {"fullName": "Kwanza", "shortName": "AOA", "symbol": "Kz"},
+            {"fullName": "Argentine Peso", "shortName": "ARS", "symbol": "$"},
+            {"fullName": "Australian Dollar", "shortName": "AUD", "symbol": "$"},
+            {"fullName": "Aruban Guilder/Florin", "shortName": "AWG", "symbol": "ƒ"},
+            {"fullName": "Azerbaijanian Manat", "shortName": "AZN", "symbol": "ман"},
+            {"fullName": "Konvertibilna Marka", "shortName": "BAM", "symbol": "КМ"}
         ]
     }
 }

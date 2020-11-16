@@ -19,22 +19,25 @@
  */
 
 import { 
-    UPDATE_SELECTED_CURRECNCY
+    UPDATE_SELECTED_CURRECNCY,UPDATE_CURRENCY_LIST
 } from '../constants/currency-constants';
 
 import * as CURRENCY from '../../@Constants/Jsons/currencyList.json';
 
 const initialState = {
-    selectedCurrency:{base: 'USD', exchange: 'USD', value: 1},
+    selectedCurrency:{base: 'USD', exchange: 'USD', value: 1,symbol: '$'},
     currencyList : CURRENCY.currencyList
 };
 
 const  currencyReducer = (state = initialState,action) =>{
-    const {type,currency} = action;
+    const {type,currency,list} = action;
     switch(type)
     {
     case  UPDATE_SELECTED_CURRECNCY:
         return { ...state,selectedCurrency:currency};
+    
+    case UPDATE_CURRENCY_LIST:
+        return {...state,currencyList:list};
         
     default :   
         return state;

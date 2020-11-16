@@ -28,6 +28,7 @@ class DashboardWallet extends Component {
       balanceObj:PropTypes.object.isRequired,
       exchangeRates:PropTypes.array.isRequired,
       navigation:PropTypes.object.isRequired,
+      selectedCurrency:PropTypes.object.isRequired,
       updateBalanceObject:PropTypes.func.isRequired,
       updateExchangeRates:PropTypes.func.isRequired,
   };
@@ -147,13 +148,14 @@ class DashboardWallet extends Component {
   }
 
   get balanceCard() {
+      const {symbol} = this.props.selectedCurrency;
       return (
           <>
               <LinearGradient colors={['#f2935a', '#9845c1', '#844bf6']} end={{x: 1, y: 0}} start={{x: .1, y: 0}} style={styles.balanceCard}>
                   <Text style={styles.balanceTitle}>Total Balance</Text>
                   <View style={styles.balanceWrapper}>
                       <Text style={styles.balanceText}>
-              $ {this.state.totalBalance.toFixed(4)}
+                          {symbol} {this.state.totalBalance.toFixed(4)}
                       </Text>
                   </View>
                   <LoadingIndicator
@@ -196,7 +198,8 @@ class DashboardWallet extends Component {
 function mapStateToProps(state){
     return{
         balanceObj:state.dashboard.balanceObj,
-        exchangeRates : state.dashboard.exchangeRates
+        exchangeRates : state.dashboard.exchangeRates,
+        selectedCurrency : state.currency.selectedCurrency,
     };
 }
 

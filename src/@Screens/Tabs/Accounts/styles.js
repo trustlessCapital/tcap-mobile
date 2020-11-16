@@ -1,4 +1,5 @@
 import {
+    Platform,
     StyleSheet,
 } from 'react-native';
 import Colors from '../../../@Constants/Colors';
@@ -37,6 +38,11 @@ export default (styles = StyleSheet.create({
         color:Colors.tintColorGreyed,
         fontSize:moderateScale(12)
     },
+    optionSymbol:{
+        color:Colors.tintColorGreyed,
+        fontSize:moderateScale(16),
+        marginLeft:moderateScale(10)
+    },
     optionValueText:{
         color:Colors.subTitle,
         fontSize:moderateScale(11)
@@ -51,10 +57,12 @@ export default (styles = StyleSheet.create({
         flexDirection:'row',width:'100%',alignItems:'center',
         borderBottomColor:Colors.inactiveTintGrey,
         borderBottomWidth:1,
+        paddingBottom:Platform.OS === 'ios' ? moderateScale(14) : 0,
+        paddingHorizontal:Platform.OS === 'ios' ? moderateScale(15) : 0,
     },
     searchBox:{
         color:Colors.white,
-        width:'100%'
+        width: Platform.OS === 'ios' ? '90%' : '85%'
     },
     buttonWrappers:{
         marginTop:moderateScale(15),flexDirection:'row',justifyContent:'space-between',
@@ -115,6 +123,10 @@ export default (styles = StyleSheet.create({
         paddingHorizontal:moderateScale(30),
         padding:moderateScale(8),
         borderRadius:moderateScale(15)
+    },
+    currencyRowWrapper:{
+        paddingVertical:moderateScale(15),paddingLeft:moderateScale(20),
+        flexDirection:'row',alignItems:'center'
     }
 }));
   

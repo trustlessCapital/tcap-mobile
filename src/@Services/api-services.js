@@ -191,6 +191,17 @@ function getCurrencyRate(Currency = 'USD') {
     }).then(processResponse);
 }
 
+function getCurrencyList() {
+    const url =  `${BASE_PATH + API_PREFIX}/currency-exchange/currency-list`;
+    console.log('URL',url);
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'x-api-key' : SECURE_KEY,
+        },
+    }).then(processResponse);
+}
+
 export default (APIService = {
     signUp,
     recoverAccount,
@@ -205,5 +216,6 @@ export default (APIService = {
     getTransferFundProcessingFee,
     setTransactionDetailsWithServer,
     getTransactionHistory,
-    getCurrencyRate
+    getCurrencyRate,
+    getCurrencyList
 });

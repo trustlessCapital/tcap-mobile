@@ -18,12 +18,19 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import { UPDATE_SELECTED_CURRECNCY } from '../constants/currency-constants';
+import { UPDATE_SELECTED_CURRECNCY,UPDATE_CURRENCY_LIST } from '../constants/currency-constants';
 
 
 export const updateExchangeRates =(currency) =>{
     return{
         type: UPDATE_SELECTED_CURRECNCY,
         currency,
+    };
+};
+
+export const updateCurrencyList =(list) =>{
+    return{
+        type: UPDATE_CURRENCY_LIST,
+        list,
     };
 };
