@@ -30,6 +30,7 @@
     "google-libphonenumber": "^3.2.9",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
+    "qrcode": "^1.4.4",
     "qs": "^6.9.4",
     "react": "16.11.0",
     "react-native": "0.62.3",

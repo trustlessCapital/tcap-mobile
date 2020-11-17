@@ -17,7 +17,7 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import {View,Text,TouchableOpacity,Share} from 'react-native';
 import styles from '../styles';
 import WalletService from '../../../../@Services/wallet-service';
@@ -28,6 +28,7 @@ import Clipboard from '@react-native-community/clipboard';
 import Toast from 'react-native-simple-toast';
 import Modal from 'react-native-modal';
 import Colors from '../../../../@Constants/Colors';
+import QRCode from 'qrcode';
 
 const Details = () =>{
 
@@ -36,6 +37,16 @@ const Details = () =>{
     const accAddress = walletUtils.createAddressFromPrivateKey(pk);
 
     const [isActive, setIsActive] = useState(false);
+
+    useEffect(()=>{generateQR();},[]);
+
+    const generateQR = async(text) => {
+        try {
+            console.log(await QRCode.toDataURL(accAddress));
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     const copyToClipboard = () =>{
         Clipboard.setString(accAddress);

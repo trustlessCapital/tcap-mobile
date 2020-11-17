@@ -202,6 +202,24 @@ function getCurrencyList() {
     }).then(processResponse);
 }
 
+function updateUserPhoneEmail(email,phone,newEmail,newPhone) {
+    const url =  `${BASE_PATH + API_PREFIX}/user/update`;
+    const body = {
+        'email' : email,
+        'phoneNumber' : phone,
+        'newEmail' : newEmail,
+        'newPhoneNumber': newPhone
+    };
+    console.log('URL',url,body);
+    return fetch(url, {
+        method: 'POST',
+        body,
+        headers: {
+            'x-api-key' : SECURE_KEY,
+        },
+    }).then(processResponse);
+}
+
 export default (APIService = {
     signUp,
     recoverAccount,
@@ -217,5 +235,6 @@ export default (APIService = {
     setTransactionDetailsWithServer,
     getTransactionHistory,
     getCurrencyRate,
-    getCurrencyList
+    getCurrencyList,
+    updateUserPhoneEmail
 });

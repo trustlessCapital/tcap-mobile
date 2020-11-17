@@ -85,10 +85,8 @@ const Preferences = ({...props}) =>{
     };
 
     const searchText = (text) =>{
-        console.log('text',text);
         const data = all.find(x=> x.shortName === text.toUpperCase());
         if(data) setSearchedData([data]);
-        console.log('data',data);
     };
 
     const renderSearchedData = () =>{

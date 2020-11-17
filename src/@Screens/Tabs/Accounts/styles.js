@@ -53,6 +53,16 @@ export default (styles = StyleSheet.create({
         height:'100%',
         padding:moderateScale(10)
     },
+    verificationModals:{
+        backgroundColor:Colors.primaryBg,
+        width:'100%',
+        height:moderateScale(300),
+        position:'absolute',
+        bottom:0,
+        borderTopLeftRadius:moderateScale(10),
+        borderTopRightRadius:moderateScale(10),
+        padding:moderateScale(20)
+    },
     searchWrapper:{
         flexDirection:'row',width:'100%',alignItems:'center',
         borderBottomColor:Colors.inactiveTintGrey,
@@ -127,7 +137,42 @@ export default (styles = StyleSheet.create({
     currencyRowWrapper:{
         paddingVertical:moderateScale(15),paddingLeft:moderateScale(20),
         flexDirection:'row',alignItems:'center'
-    }
+    },
+    inputText:{
+        fontSize:moderateScale(16),
+        width:'80%',
+        borderRadius:moderateScale(10),
+        paddingLeft:moderateScale(10),
+        color:Colors.white
+    },
+    NumberWrapper:{
+        flexDirection:'row',alignItems:'center',backgroundColor:Colors.primaryBgLight,
+        marginTop:moderateScale(10),
+        borderRadius:moderateScale(6),
+        paddingLeft:moderateScale(8)
+    },
+    verifyButton:{
+        backgroundColor:Colors.activeTintRed,
+        paddingHorizontal:moderateScale(25),
+        padding:moderateScale(8),
+        borderRadius:moderateScale(10),
+        alignSelf:'center',
+        marginTop:moderateScale(40)
+    },
+    verifyText:{
+        color:Colors.white,
+        fontFamily:'Montserrat-Bold',
+        
+    },
+    otpInput: {
+        height: 40,
+        fontSize: moderateScale(18),
+        alignSelf: 'center',
+        letterSpacing: 10,
+        fontFamily: 'Montserrat-Bold',
+        color: Colors.title,
+        width:moderateScale(120),
+    },
 }));
   
   
