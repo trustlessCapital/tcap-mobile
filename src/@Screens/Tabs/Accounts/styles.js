@@ -111,7 +111,7 @@ export default (styles = StyleSheet.create({
         alignSelf:'center',
         width:moderateScale(250),
         height:moderateScale(250),
-        backgroundColor:Colors.black,
+        backgroundColor:Colors.white,
         shadowOpacity: .2,
         shadowRadius: moderateScale(5),
         shadowOffset: {
@@ -122,7 +122,8 @@ export default (styles = StyleSheet.create({
         marginTop:moderateScale(30),
         justifyContent:'center',
         alignItems:'center',
-        borderRadius:moderateScale(30)
+        borderRadius:moderateScale(30),
+        overflow:'hidden'
     },
     shareButton:{
         backgroundColor:Colors.activeTintRed,

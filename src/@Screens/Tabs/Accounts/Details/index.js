@@ -18,7 +18,8 @@
  */
 
 import React,{useEffect, useState} from 'react';
-import {View,Text,TouchableOpacity,Share,WebView} from 'react-native';
+import {View,Text,TouchableOpacity,Share} from 'react-native';
+import { WebView } from 'react-native-webview';
 import styles from '../styles';
 import WalletService from '../../../../@Services/wallet-service';
 import walletUtils from '../../../../@Services/wallet-utils';
@@ -42,9 +43,9 @@ const Details = () =>{
     useEffect(()=>{generateQR();},[]);
 
     const generateQR = async() => {
-        let svg = await QRCode.toString(accAddress,{type:'svg'});
+        let svg = await QRCode.toString(accAddress,{type:'terminal'});
         setQrSvg(svg);
-        console.log(svg);
+        console.log('terminal',svg);
 
         // QRCode.toDataURL(accAddress)
         //     .then(url => {
@@ -85,7 +86,7 @@ const Details = () =>{
                     {(!qrSvg) && <Text>Preparing...</Text>}
                     {
                         (qrSvg) && 
-                            <WebView  source={{uri:qrSvg}} />
+                            <WebView  source={{ html: qrSvg }} style={{width:moderateScale(250),height:250,}} />
                     }
                 </View>
                 <TouchableOpacity onPress={()=>copyToClipboard()}>
