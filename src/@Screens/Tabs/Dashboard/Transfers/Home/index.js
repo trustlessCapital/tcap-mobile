@@ -19,7 +19,7 @@
  */
  
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView,View,Text,TextInput,TouchableOpacity,ScrollView } from 'react-native';
+import { SafeAreaView,View,Text,TextInput,TouchableOpacity,ScrollView,Image } from 'react-native';
 import PropTypes from 'prop-types';
 import GlobalStyles from '../../../../../@GlobalStyles';
 import AppHeader from '../../../../../@Components/AppHeader';
@@ -232,7 +232,15 @@ const TransferHomeScreen = ({...props}) =>{
     return(
         <SafeAreaView style={GlobalStyles.appContainer}>
             <View style={styles.wrapper}>
-                <AppHeader headerTitle={'Transfer Funds'}  />
+                <AppHeader headerTitle={'Transfer Funds'} >
+                    <TouchableOpacity>
+                        <Image 
+                            resizeMode={'contain'} 
+                            source={require('../../../../../../assets/images/icons/scanner.svg')} 
+                            style={styles.qrScanner} 
+                        />
+                    </TouchableOpacity>
+                </AppHeader>
                 {renderAssets()}
                 {
                     showTransactionUi && (
