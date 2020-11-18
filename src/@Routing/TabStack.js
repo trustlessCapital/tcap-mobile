@@ -35,8 +35,11 @@ import WithdrawHomeScreen from '../@Screens/Tabs/Dashboard/Withdraw/Home';
 import WithdrawConfirmationScreen from '../@Screens/Tabs/Dashboard/Withdraw/Confirm';
 import WithdrawStatusScreen from '../@Screens/Tabs/Dashboard/Withdraw/Status';
 
-//TRANSACTION -HISTORY
+//TRANSACTION-HISTORY
 import TransactionStatusScreen from '../@Screens/Tabs/Transactions/Status';
+
+// QRCODE SCANNER
+import ScannerScreen from '../@Screens/Tabs/@Common/Scanner';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -116,6 +119,10 @@ const MixNavigator = ({...props}) => {
 
             {/* TRANSACTION HISTORY STACK */}
             <Stack.Screen component={TransactionStatusScreen}  name="TransactionStatusScreen" />
+
+            {/* QRCODE SCANNER  */}
+            <Stack.Screen component={ScannerScreen}  name="ScannerScreen" />
+            
         </Stack.Navigator>
     );
 };

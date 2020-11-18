@@ -35,11 +35,14 @@ import Modal from 'react-native-modal';
 import apiServices from '../../../../../@Services/api-services';
 import LoadingIndicator from '../../../../../@Components/loading-indicator';
 import ErrorDialog from '../../../../../@Components/error-dialog';
+import { useIsFocused } from '@react-navigation/native';
  
 const TransferHomeScreen = ({...props}) =>{
+    const isFocused = useIsFocused();
+
     const {
         updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation,
-        selectedCurrency
+        selectedCurrency,route
     } = props;
 
     const walletService = WalletService.getInstance();
@@ -49,8 +52,8 @@ const TransferHomeScreen = ({...props}) =>{
     const [selectedAsset, setSelectedAsset] = useState(verifiedBalances[0]);
     const [amountToTransfer, setAmountToTransfer] = useState(0.00);
     // testAddress  (for testing)
-    const testAddress = '0xD8f647855876549d2623f52126CE40D053a2ef6A';
-    const [address, setAddress] = useState(testAddress);
+    // const testAddress = '0xD8f647855876549d2623f52126CE40D053a2ef6A';
+    const [address, setAddress] = useState('');
     const [remarks , setRemarks] = useState('');
     const [modal, setModal] = useState(false);
     const [fee , setFee] = useState(0);
@@ -68,6 +71,18 @@ const TransferHomeScreen = ({...props}) =>{
         if(verifiedBalances.length) setShowTransactionUi(true);
         updateVerifiedAccountBalances(accAddress);
     },[]);
+
+    useEffect(()=>{
+        if(isFocused)
+        {
+            console.log('route.params',route.params);
+            const {scannedAddress} =   route.params;
+            console.log('scannedAddress',scannedAddress);
+            if(scannedAddress) setAddress(scannedAddress);
+        }
+    },[isFocused]);
+
+
 
     useEffect(()=>{
         if(verifiedBalances.length) {
@@ -204,8 +219,10 @@ const TransferHomeScreen = ({...props}) =>{
                                 style={{color:Colors.white,width:'100%'}}
                                 value={address}
                             />
-                        </View>    
-                        <Text style={GlobalStyles.titleTypo}> Any Remarks</Text>
+                        </View>  
+
+                        {/* TODO  -  FUTURE   */}
+                        {/* <Text style={GlobalStyles.titleTypo}> Any Remarks</Text>
                         <View style={GlobalStyles.inputBox}>
                             <TextInput
                                 autoCorrect={false}
@@ -216,7 +233,7 @@ const TransferHomeScreen = ({...props}) =>{
                                 placeholderTextColor={Colors.tintColorGreyedDark}
                                 style={{color:Colors.white,width:'100%'}}
                             />
-                        </View>     
+                        </View>      */}
                     </View>
                    
                 </ScrollView>
@@ -233,7 +250,7 @@ const TransferHomeScreen = ({...props}) =>{
         <SafeAreaView style={GlobalStyles.appContainer}>
             <View style={styles.wrapper}>
                 <AppHeader headerTitle={'Transfer Funds'} >
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>navigation.navigate('ScannerScreen')}>
                         <Image 
                             resizeMode={'contain'} 
                             source={require('../../../../../../assets/images/icons/scanner.svg')} 
@@ -288,6 +305,7 @@ const TransferHomeScreen = ({...props}) =>{
 TransferHomeScreen.propTypes = {
     exchangeRates:PropTypes.array.isRequired,
     navigation:PropTypes.object.isRequired,
+    route:PropTypes.object.isRequired,
     selectedCurrency:PropTypes.object.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,
     verifiedBalances:PropTypes.array.isRequired,
