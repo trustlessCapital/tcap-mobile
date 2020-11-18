@@ -274,7 +274,7 @@ const AboutYou = ({accountDetails}) =>{
                 isVisible={showEmail}
                 onBackButtonPress={()=>{setShowEmail(false);setEmailOtp(false);}}
                 onBackdropPress={()=>{setShowEmail(false);setEmailOtp(false);}}
-                style={{padding:0,margin:0}}
+                style={{padding:0,margin:0,justifyContent:'center',alignItems:'center'}}
                 useNativeDriver={true}
             >
                 {renderEmailVerification()}
@@ -287,7 +287,7 @@ const AboutYou = ({accountDetails}) =>{
                 isVisible={showPhoneNumber}
                 onBackButtonPress={()=>{setShowPhoneNumber(false);setNumberOtp(false);}}
                 onBackdropPress={()=>{setShowPhoneNumber(false);setNumberOtp(false);}}
-                style={{padding:0,margin:0}}
+                style={{padding:0,margin:0,justifyContent:'center',alignItems:'center'}}
                 useNativeDriver={true}
             >
                 {renderNumberVerification()}

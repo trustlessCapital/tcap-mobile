@@ -18,7 +18,7 @@
  */
 
 import React,{useEffect, useState} from 'react';
-import {View,Text,TouchableOpacity,Share} from 'react-native';
+import {View,Text,TouchableOpacity,Share,WebView} from 'react-native';
 import styles from '../styles';
 import WalletService from '../../../../@Services/wallet-service';
 import walletUtils from '../../../../@Services/wallet-utils';
@@ -37,15 +37,22 @@ const Details = () =>{
     const accAddress = walletUtils.createAddressFromPrivateKey(pk);
 
     const [isActive, setIsActive] = useState(false);
+    const [qrSvg , setQrSvg] = useState(undefined);
 
     useEffect(()=>{generateQR();},[]);
 
-    const generateQR = async(text) => {
-        try {
-            console.log(await QRCode.toDataURL(accAddress));
-        } catch (err) {
-            console.error(err);
-        }
+    const generateQR = async() => {
+        let svg = await QRCode.toString(accAddress,{type:'svg'});
+        setQrSvg(svg);
+        console.log(svg);
+
+        // QRCode.toDataURL(accAddress)
+        //     .then(url => {
+        //         console.log(url);
+        //     })
+        //     .catch(err => {
+        //         console.error(err);
+        //     });
     };
 
     const copyToClipboard = () =>{
@@ -67,6 +74,7 @@ const Details = () =>{
     };
 
     const renderQrCodeBox = () =>{
+        console.log('qrSvg',qrSvg);
         return(
             <View style={styles.bottomModal}>
                 <TouchableOpacity onPress={()=>setIsActive(false)} style={{alignSelf:'flex-end',paddingHorizontal:moderateScale(8),padding:moderateScale(2)}}>
@@ -74,7 +82,11 @@ const Details = () =>{
                 </TouchableOpacity>
                 <Text style={{alignSelf:'center',fontSize:moderateScale(16),marginVertical:moderateScale(5),fontWeight:'bold'}}>Send To You Wallet</Text>
                 <View style={styles.barcodeBox}>
-                    <Text>QRCODE</Text>
+                    {(!qrSvg) && <Text>Preparing...</Text>}
+                    {
+                        (qrSvg) && 
+                            <WebView  source={{uri:qrSvg}} />
+                    }
                 </View>
                 <TouchableOpacity onPress={()=>copyToClipboard()}>
                     <Text style={{...styles.accAddressText,color:Colors.darkGrey,alignSelf:'center',marginTop:moderateScale(10)}}>Account Addess</Text>

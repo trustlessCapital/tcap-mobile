@@ -153,7 +153,7 @@ class DepositEthBalanceScreen extends Component {
                                                   </Text>
                                                   <Text
                                                       style={[styles.buttonText2, styles.greenText]}>
-                            {this.props.selectedCurrency.symbol}
+                                                      {this.props.selectedCurrency.symbol}
                                                       {walletUtils.getAssetDisplayTextInSelectedCurrency(
                                                           balanceObj.symbol,
                                                           walletUtils.getAssetDisplayText(

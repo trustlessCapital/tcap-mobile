@@ -55,12 +55,10 @@ export default (styles = StyleSheet.create({
     },
     verificationModals:{
         backgroundColor:Colors.primaryBg,
-        width:'100%',
+        width:'90%',
         height:moderateScale(300),
-        position:'absolute',
         bottom:0,
-        borderTopLeftRadius:moderateScale(10),
-        borderTopRightRadius:moderateScale(10),
+        borderRadius:moderateScale(10),
         padding:moderateScale(20)
     },
     searchWrapper:{
@@ -113,7 +111,7 @@ export default (styles = StyleSheet.create({
         alignSelf:'center',
         width:moderateScale(250),
         height:moderateScale(250),
-        backgroundColor:Colors.white,
+        backgroundColor:Colors.black,
         shadowOpacity: .2,
         shadowRadius: moderateScale(5),
         shadowOffset: {
@@ -139,17 +137,18 @@ export default (styles = StyleSheet.create({
         flexDirection:'row',alignItems:'center'
     },
     inputText:{
-        fontSize:moderateScale(16),
+        fontSize:moderateScale(12),
         width:'80%',
         borderRadius:moderateScale(10),
         paddingLeft:moderateScale(10),
-        color:Colors.white
+        color:Colors.white,
     },
     NumberWrapper:{
         flexDirection:'row',alignItems:'center',backgroundColor:Colors.primaryBgLight,
         marginTop:moderateScale(10),
         borderRadius:moderateScale(6),
-        paddingLeft:moderateScale(8)
+        paddingLeft:moderateScale(8),
+        paddingVertical:Platform.OS==='ios'? moderateScale(16) : 0
     },
     verifyButton:{
         backgroundColor:Colors.activeTintRed,
