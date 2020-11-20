@@ -437,7 +437,6 @@ export default class PINScreen extends Component {
                                           );
                                       }
                                       WalletService.getInstance().setPk(pk);
-                                      //   this.props.navigation.reset('App',{ accountDetails: accountDetails });
                                       this.props.navigation.reset({
                                           index: 0,
                                           routes: [{ name: 'App' ,params:{ accountDetails: accountDetails }}]

@@ -8,6 +8,8 @@ export default (styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         backgroundColor: Colors.primaryBg,
+        justifyContent:'center',
+        alignItems:'center'
     },
 }));
   

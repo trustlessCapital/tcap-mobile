@@ -13,6 +13,7 @@ import styles from './styles';
 import SecurityServices from '../../../@Services/security';
 import Colors from '../../../@Constants/Colors';
 import StatusBarColor from '../../../@Components/status-bar-color';
+import { moderateScale } from 'react-native-size-matters';
 
 export default class ContactsScreen extends Component {
 
@@ -61,7 +62,7 @@ export default class ContactsScreen extends Component {
                   backgroundColor={Colors.primary_bg} 
                   barStyle="light-content"
               />
-              <Text style={{color:'#fff',alignSelf:'center'}}>Contacts Screen</Text>
+              <Text style={{color:'#fff',alignSelf:'center',fontSize:moderateScale(16)}}>Coming Soon.</Text>
           </SafeAreaView>
       );
   }

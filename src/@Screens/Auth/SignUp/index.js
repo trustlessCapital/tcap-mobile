@@ -5,7 +5,9 @@ import {
     View,
     Image,
     TouchableOpacity,
-    KeyboardAvoidingView, TextInput
+    KeyboardAvoidingView, 
+    TextInput,
+    Linking
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -17,6 +19,8 @@ import CountryPicker from 'react-native-country-picker-modal';
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 import styles from './styles';
 import StatusBarColor from '../../../@Components/status-bar-color';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import SUPPORT from '../../../@Constants/Supports';
 
 export default class SignUp extends Component {
  
@@ -126,6 +130,46 @@ export default class SignUp extends Component {
           return Colors.error;
       }
   }
+
+  openLink = async ()=>{
+      try {
+          const url = SUPPORT.termAndConditions;
+          if (await InAppBrowser.isAvailable()) {
+              await InAppBrowser.open(url, {
+                  // iOS Properties
+                  dismissButtonStyle: 'done',
+                  preferredBarTintColor: Colors.white,
+                  preferredControlTintColor: Colors.tintColor,
+                  readerMode: false,
+                  animated: true,
+                  modalPresentationStyle: 'pageSheet',
+                  modalTransitionStyle: 'coverVertical',
+                  modalEnabled: true,
+                  enableBarCollapsing: true,
+                  // Android Properties
+                  showTitle: true,
+                  toolbarColor: Colors.primaryBg,
+                  secondaryToolbarColor: 'white',
+                  enableUrlBarHiding: true,
+                  enableDefaultShare: true,
+                  forceCloseOnRedirection: false,
+                  // Animations
+                  animations: {
+                      startEnter: 'slide_in_right',
+                      startExit: 'slide_out_left',
+                      endEnter: 'slide_in_left',
+                      endExit: 'slide_out_right',
+                  },
+                  headers: {
+                      'my-custom-header': 'Track Status',
+                  },
+              });
+          }
+          else Linking.openURL(url);
+      } catch (error) {
+          console.log(error.message);
+      }
+  };
 
   render() {
       return (
@@ -237,6 +281,10 @@ export default class SignUp extends Component {
                                           value={this.state.phoneInput}
                                       />
                                   </View>
+                                  <Text style={styles.termsAndCondView}>By Signing up you are accepting all the
+                                  </Text>
+                                  <Text onPress={()=>this.openLink()} style={styles.termText}>  Terms and Conditions</Text>
+
                               </View>
                               <View style={styles.formFooter}>
                                   <View style={styles.flexStart}>

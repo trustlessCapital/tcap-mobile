@@ -58,6 +58,17 @@ export default (styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 30,
     },
+    termsAndCondView:{
+        alignSelf:'center',
+        marginTop:moderateScale(10),
+        color:Colors.white,
+        fontSize:moderateScale(10)
+    },
+    termText:{
+        color:Colors.activeTintRed,
+        alignSelf:'center',
+        fontSize:moderateScale(12),
+    },
     subTitle: {
         alignSelf: 'flex-start',
         color: Colors.subTitle,

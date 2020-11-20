@@ -69,7 +69,7 @@ const AssetCard = ({asset,exchangeRates,...props}) =>{
     const loadAssetValue = (defaultVal) =>{
         const cost = walletUtils.getAssetDisplayTextInSelectedCurrency(
             symbol.toLowerCase(),
-            defaultVal ? 0.1 : walletUtils.getAssetDisplayText(symbol,value),
+            defaultVal ? 1 : walletUtils.getAssetDisplayText(symbol,value),
             exchangeRates,
         );
         if(cost)
@@ -105,16 +105,19 @@ const AssetCard = ({asset,exchangeRates,...props}) =>{
                         {renderTickMark()}
                     </View>
                     <Text style={styles.subTitle}>
-                        {walletUtils.getAssetDisplayText( symbol,value)}
+                        {walletUtils.getAssetDisplayText(symbol,value)}
                         {' '+symbol.toUpperCase()} 
                     </Text>
                 </View>
             </View>
             <View style={styles.detailWrapper}>
-                <Text style={{...styles.title,fontSize:moderateScale(10)}}>{selectedCurrency.symbol} {loadAssetValue(0.1)}</Text>
-                <View style={styles.percentBox}>
+                <Text style={{...styles.title,fontSize:moderateScale(10)}}>{selectedCurrency.symbol} {loadAssetValue(1)}</Text>
+                <Text style={{...styles.subTitle,alignSelf:'flex-end',fontSize:moderateScale(10)}}>
+                    {'1 '+symbol.toUpperCase()} 
+                </Text>
+                {/* <View style={styles.percentBox}>
                     <Text style={styles.percent}>2.5 %</Text>
-                </View>
+                </View> */}
             </View>
         </View>
     );

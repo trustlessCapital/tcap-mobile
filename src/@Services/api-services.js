@@ -90,7 +90,8 @@ function resendOTP(email, phone) {
     }).then(processResponse);
 }
 
-function mnemonicGenerated(email, phone) {
+function mnemonicGenerated(email, phone,walletAddress) {
+    console.log('mnemonicGenerated',email,phone,walletAddress);
     return fetch(BASE_PATH + API_PREFIX + '/user/mnemonicgenerated', {
         method: 'POST',
         headers: {
@@ -101,6 +102,7 @@ function mnemonicGenerated(email, phone) {
         body: JSON.stringify({
             phoneNumber: phone,
             email,
+            walletAddress
         }),
     }).then(processResponse);
 }
@@ -204,18 +206,18 @@ function getCurrencyList() {
 
 function updateUserPhoneEmail(email,phone,newEmail,newPhone) {
     const url =  `${BASE_PATH + API_PREFIX}/user/update`;
-    const body = {
-        'email' : email,
-        'phoneNumber' : phone,
-        'newEmail' : newEmail,
-        'newPhoneNumber': newPhone
-    };
-    console.log('URL',url,body);
+    const body = JSON.stringify({
+        email: email,
+        phoneNumber : phone,
+        newEmail : newEmail,
+        newPhoneNumber : newPhone
+    });
     return fetch(url, {
         method: 'POST',
         body,
         headers: {
             'x-api-key' : SECURE_KEY,
+            'Content-Type': 'application/json'
         },
     }).then(processResponse);
 }

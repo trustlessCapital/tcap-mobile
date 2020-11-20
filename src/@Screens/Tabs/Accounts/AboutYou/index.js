@@ -31,6 +31,7 @@ import { moderateScale } from 'react-native-size-matters';
 import apiServices from '../../../../@Services/api-services';
 import LoadingIndicator from '../../../../@Components/loading-indicator';
 import ErrorDialog from '../../../../@Components/error-dialog';
+import Toast from 'react-native-simple-toast';
  
 const AboutYou = ({accountDetails}) =>{
     const {email,phoneNumber} = accountDetails;
@@ -42,7 +43,7 @@ const AboutYou = ({accountDetails}) =>{
     const [countryCallingCode , setCountryCallingCode] = useState('+91');
     const [countryCode , setCountryCode] = useState('IN');
     const [showCountryPicker, setShowCountryPicker] = useState(false);
-    const [emailOtp, setEmailOtp] = useState(false);
+    const [emailVerified, setEmailVerified] = useState(false);
     const [numberOtp, setNumberOtp] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -51,8 +52,8 @@ const AboutYou = ({accountDetails}) =>{
     const [showError ,setShowError] = useState(false);
 
     const availabeOptions = [
-        {icon:'envelope',name:'Email',showArrow:true,itemValue:email},
-        {icon:'phone-alt',name:'Phone Number',showArrow:true,itemValue:phoneNumber},
+        {icon:'envelope',name:'Email',showArrow:false,itemValue:email ,disabled : true ,},
+        {icon:'phone-alt',name:'Phone Number',showArrow:false,itemValue:phoneNumber , disabled : true},
     ];
 
     const checkOptions = (index) =>{
@@ -72,10 +73,9 @@ const AboutYou = ({accountDetails}) =>{
         }
     };
 
-    const sendOtp = (type) =>{
-        if(type==='email') setEmailOtp(true);
-        else setNumberOtp(true);
-        apiServices.resendOTP(type === 'email' ? newEmail : email, type === 'email' ? phoneNumber :`${countryCallingCode}${newNumber}`)
+    const sendOtp = () =>{
+        setNumberOtp(true);
+        apiServices.resendOTP(email,`${countryCallingCode}${newNumber}`)
             .then((data)=>{
                 console.log('Data',data);
             })
@@ -84,28 +84,13 @@ const AboutYou = ({accountDetails}) =>{
             });
     };
 
-    const verifyOTP = (otp,type) => {
+    const verifyOTP = (otp) => {
         setIsLoading(true);
         setShowPhoneNumber(false);
         setShowEmail(false);
-        apiServices.verifyOTP(type === 'email' ? newEmail : email,  type === 'email' ? phoneNumber : `${countryCallingCode}${newNumber}`, otp)
+        apiServices.verifyOTP( email, `${countryCallingCode}${newNumber}`, otp)
             .then(() => {
                 setNumberOtp(false);
-                setEmailOtp(false);
-                apiServices.updateUserPhoneEmail( email,phoneNumber, type === 'email' ? newEmail :email, type === 'email' ? phoneNumber : `${countryCallingCode}${newNumber}`)
-                    .then(()=>{
-                        setIsLoading(false);
-                        setShowError(true);
-                        setErroTitle('Update Successful');
-                        setErrorMessage('Updated Successfully!');
-                    })
-                    .catch((err)=>{
-                        console.log('Err',err);
-                        setIsLoading(false);
-                        setShowError(true);
-                        setErroTitle('Update Failed');
-                        setErrorMessage('Your Number/Email Update Failed!');
-                    });
             })
             .catch(() => {
                 setIsLoading(false);
@@ -113,6 +98,29 @@ const AboutYou = ({accountDetails}) =>{
                 setErroTitle('Verification Failed');
                 setErrorMessage('You have entered Invalid or Expired OTP!');
             });
+    };
+
+    const updateEmail = () =>{
+        if(newEmail !== '')
+        {
+            apiServices.updateUserPhoneEmail( email,phoneNumber, newEmail, phoneNumber )
+                .then(()=>{
+                    setIsLoading(false);
+                    setShowError(true);
+                    setErroTitle('Verify Email');
+                    setErrorMessage('Please check your email for verification link');
+                })
+                .catch((err)=>{
+                    console.log('Err',err);
+                    setIsLoading(false);
+                    setShowError(true);
+                    setErroTitle('Update Failed');
+                    setErrorMessage('Your Number/Email Update Failed!');
+                });
+        }
+        else{
+            Toast.show('Email cannot be empty', Toast.LONG);
+        }
     };
 
     const renderNumberVerification = ()=>{
@@ -204,9 +212,9 @@ const AboutYou = ({accountDetails}) =>{
     const renderEmailVerification = ()=>{
         return(
             <View style={styles.verificationModals}>
-                <ModalHeader headerText={'Change Email ?'} onPress={()=>{setShowEmail(false);setEmailOtp(false);}} />
+                <ModalHeader headerText={'Change Email ?'} onPress={()=>{setShowEmail(false);setEmailVerified(false);}} />
                 {
-                    (!emailOtp) && 
+                    (!emailVerified) && 
                     <View style={{marginTop:moderateScale(20)}}>
                         <View style={styles.NumberWrapper}>
                             <TextInput
@@ -221,24 +229,16 @@ const AboutYou = ({accountDetails}) =>{
                                 value={newEmail}
                             />
                         </View>
-                        <TouchableOpacity onPress={()=>sendOtp('email')} style={styles.verifyButton}>
-                            <Text style={styles.verifyText}>Get OTP</Text>
+                        <TouchableOpacity onPress={()=>updateEmail('email')} style={styles.verifyButton}>
+                            <Text style={styles.verifyText}>Get Verification Email</Text>
                         </TouchableOpacity>
                     </View>
                 }
 
                 {
-                    (emailOtp) &&
+                    (emailVerified) &&
                    <View style={{marginTop:moderateScale(100)}}>
-                       <TextInput
-                           keyboardType={'phone-pad'}
-                           maxLength={4}
-                           onChangeText={(otp)=>otpInput(otp,'email')}
-                           placeholder={'- - - -'}
-                           placeholderTextColor={Colors.subTitle}
-                           style={styles.otpInput}
-                       />
-                       <Text style={{alignSelf:'center',color:Colors.white}}>Enter The OTP sent you on new email </Text>
+                       <Text style={{alignSelf:'center',color:Colors.white}}>Please check your email for verification. </Text>
                    </View>
                 }
                 
@@ -272,8 +272,8 @@ const AboutYou = ({accountDetails}) =>{
                 backdropColor={'#000'}
                 dismissable={true}
                 isVisible={showEmail}
-                onBackButtonPress={()=>{setShowEmail(false);setEmailOtp(false);}}
-                onBackdropPress={()=>{setShowEmail(false);setEmailOtp(false);}}
+                onBackButtonPress={()=>{setShowEmail(false);setEmailVerified(false);}}
+                onBackdropPress={()=>{setShowEmail(false);setEmailVerified(false);}}
                 style={{padding:0,margin:0,justifyContent:'center',alignItems:'center'}}
                 useNativeDriver={true}
             >

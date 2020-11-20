@@ -45,15 +45,6 @@ const Details = () =>{
     const generateQR = async() => {
         let svg = await QRCode.toString(accAddress,{type:'terminal'});
         setQrSvg(svg);
-        console.log('terminal',svg);
-
-        // QRCode.toDataURL(accAddress)
-        //     .then(url => {
-        //         console.log(url);
-        //     })
-        //     .catch(err => {
-        //         console.error(err);
-        //     });
     };
 
     const copyToClipboard = () =>{
@@ -75,13 +66,12 @@ const Details = () =>{
     };
 
     const renderQrCodeBox = () =>{
-        console.log('qrSvg',qrSvg);
         return(
             <View style={styles.bottomModal}>
                 <TouchableOpacity onPress={()=>setIsActive(false)} style={{alignSelf:'flex-end',paddingHorizontal:moderateScale(8),padding:moderateScale(2)}}>
                     <Text style={{color:Colors.darkGrey}}>Done</Text>
                 </TouchableOpacity>
-                <Text style={{alignSelf:'center',fontSize:moderateScale(16),marginVertical:moderateScale(5),fontWeight:'bold'}}>Send To You Wallet</Text>
+                <Text style={{alignSelf:'center',fontSize:moderateScale(16),marginVertical:moderateScale(5),fontWeight:'bold'}}>Send To Your Wallet</Text>
                 <View style={styles.barcodeBox}>
                     {(!qrSvg) && <Text>Preparing...</Text>}
                     {

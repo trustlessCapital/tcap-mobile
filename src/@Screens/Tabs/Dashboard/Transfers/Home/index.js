@@ -67,7 +67,6 @@ const TransferHomeScreen = ({...props}) =>{
     const [showTransactionUi , setShowTransactionUi] = useState(false);
 
     useEffect(()=>{
-        // console.log('accAddress',accAddress);
         if(verifiedBalances.length) setShowTransactionUi(true);
         updateVerifiedAccountBalances(accAddress);
     },[]);
@@ -75,14 +74,10 @@ const TransferHomeScreen = ({...props}) =>{
     useEffect(()=>{
         if(isFocused)
         {
-            console.log('route.params',route.params);
             const {scannedAddress} =   route.params;
-            console.log('scannedAddress',scannedAddress);
             if(scannedAddress) setAddress(scannedAddress);
         }
     },[isFocused]);
-
-
 
     useEffect(()=>{
         if(verifiedBalances.length) {

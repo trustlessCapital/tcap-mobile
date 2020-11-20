@@ -19,7 +19,6 @@
 
 import React from 'react';
 import {View,Text,Linking} from 'react-native';
-import PropTypes from 'prop-types';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import styles from '../styles';
 import Options from '../Options';
@@ -33,11 +32,7 @@ const availabeOptions = [
     {icon:'',name:'Terms And Conditions',showArrow:true},
 ];
  
-const Legal = ({...props}) =>{
-
-    const checkOptions = (index) =>{
-        console.log('checkOptions',index);
-    };
+const Legal = () =>{
 
     const openLink = async (index)=>{
         try {
