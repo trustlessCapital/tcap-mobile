@@ -371,6 +371,7 @@ export default class PINScreen extends Component {
               });
           })
           .catch(error => {
+              console.log('Signup error',error);
               this.setState({isLoading: false});
               if (error.status == 409) {
                   this.props.navigation.popToTop();

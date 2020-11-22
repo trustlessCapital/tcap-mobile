@@ -115,6 +115,7 @@ export default class SeedPhraseScreen extends Component {
           const walletService = WalletService.getInstance();
           walletService.setPk(pk);
           const walletAddess = WalletUtils.createAddressFromPrivateKey(pk);
+          console.log('WalletAddress while signing up',walletAddess);
           APIService.mnemonicGenerated(
               this.accountDetails.email,
               this.accountDetails.phoneNumber,
