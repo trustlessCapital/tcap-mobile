@@ -18,11 +18,13 @@ import SplashScreen from '../@Screens/Auth/Splash';
 const Stack = createStackNavigator();
 const navigationOptions = {headerShown: false};
 
-const AuthNavigator = () => {
+const AuthNavigator = ({...props}) => {
+    const {navigation:{state:{params}}} = props;
     return (
-        <Stack.Navigator headerMode="none" initialRouteName={'Splash'}>
+        <Stack.Navigator headerMode="none"  initialRouteName={'Splash'}>
             <Stack.Screen
                 component={SplashScreen}
+                initialParams={params}
                 name="Splash"
                 options={navigationOptions}
             />

@@ -10,9 +10,10 @@ import {
     Image,
     TouchableOpacity,
     AppState,
-    BackHandler
+    // BackHandler,
+    
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import LoadingIndicator from '../../../@Components/loading-indicator';
 import StatusBarColor from '../../../@Components/status-bar-color';
@@ -30,7 +31,6 @@ import SecurityServices from '../../../@Services/security';
 import styles from './styles';
 
 export default class PINScreen extends Component {
-  
 
     constructor(props) {
         super(props);
@@ -46,7 +46,7 @@ export default class PINScreen extends Component {
                 this.phone = this.props.route.params.phone;
             if (this.props.route.params.isPinFallback)
                 this.isPinFallback = this.props.route.params.isPinFallback;
-      
+        
             this.recoverAccount = this.props.route.params.recoverAccount;
         }
     }
@@ -76,18 +76,18 @@ export default class PINScreen extends Component {
               this.allowLogin = true;
           });
       }
-      BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
+      //   BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
   componentWillUnmount() {
       AppState.removeEventListener('change', this._handleAppStateChange);
-      BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton);
+      //   BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton);
   }
 
-  _handleBackButton = () =>{
-      if(this.state.disableBackButton) return true;
-      else return false;
-  };
+  //   _handleBackButton = () =>{
+  //       if(this.state.disableBackButton) this.props.navigation.pop();
+  //       else return false;
+  //   };
 
   _handleAppStateChange = (nextAppState) => {
       if (!this.isPinFallback) {
@@ -115,7 +115,7 @@ export default class PINScreen extends Component {
                           style={styles.backButton}>
                           <Icon
                               color={Colors.title}
-                              name={'ios-arrow-back'}
+                              name={'angle-left'}
                               size={24}
                               style={{alignSelf: 'center'}}
                           />
@@ -214,7 +214,7 @@ export default class PINScreen extends Component {
                               style={styles.key}>
                               <Icon
                                   color="#fff"
-                                  name={'ios-backspace'}
+                                  name={'backspace'}
                                   size={22}
                                   style={{alignSelf: 'center'}}
                               />
@@ -371,6 +371,7 @@ export default class PINScreen extends Component {
               });
           })
           .catch(error => {
+              console.log('Signup error',error);
               this.setState({isLoading: false});
               if (error.status == 409) {
                   this.props.navigation.popToTop();
@@ -412,10 +413,7 @@ export default class PINScreen extends Component {
                           this.state.pin
                       ).then(() => {
                           this.setState({ isLoading: false });
-                          if (
-                              !accountDetails.isPhoneVerified ||
-                !accountDetails.isEmailVerified
-                          ) {
+                          if (!accountDetails.isPhoneVerified ||!accountDetails.isEmailVerified) {
                               this.props.navigation.replace('VerificationScreen', {
                                   accountDetails: accountDetails,
                                   mode: !accountDetails.isPhoneVerified
@@ -440,14 +438,16 @@ export default class PINScreen extends Component {
                                           );
                                       }
                                       WalletService.getInstance().setPk(pk);
-                                      this.props.navigation.navigate('App',{ accountDetails: accountDetails });
+                                      this.props.navigation.reset({
+                                          index: 0,
+                                          routes: [{ name: 'App' ,params:{ accountDetails: accountDetails }}]
+                                      });
                                   });
                               }
                           }
                       });
                   })
                   .catch((error) => {
-                      console.log('Err',err);
                       if (error.status == 409) {
                           this.setState({
                               isLoading: false,
@@ -468,7 +468,6 @@ export default class PINScreen extends Component {
                   .finally(() => this.setState({ isLoading: false }));
           })
           .catch((error) => {
-              console.log('Err',error);
               let errMsg = 'Error occured in signing you in! Please try later!';
               if (error.status == -1) {
                   errMsg = 'Error occured in signing you in!';

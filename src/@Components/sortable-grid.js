@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import _ from 'lodash';
+import { moderateScale } from 'react-native-size-matters';
 
 // Default values
 const ITEMS_PER_ROW = 2;
@@ -638,6 +639,7 @@ const styles = StyleSheet.create({
     sortableGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
+        minHeight:moderateScale(400)
     },
     deletedBlock: {
         opacity: 0,

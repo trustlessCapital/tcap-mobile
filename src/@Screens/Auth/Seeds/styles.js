@@ -11,8 +11,6 @@ export default (styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginStart: 20,
-        marginEnd: 20,
         backgroundColor: Colors.primaryBg,
     },
     mainTitle: {
@@ -41,7 +39,6 @@ export default (styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     phrasesWrapper: {
-        alignItems: 'center',
         width: Dimensions.get('window').width,
     },
     phraseRow: {
@@ -54,7 +51,8 @@ export default (styles = StyleSheet.create({
         backgroundColor: Colors.tintColor,
         width: Dimensions.get('window').width / 2 - 40,
         height: 45,
-        marginStart: 20,
+        margin:moderateScale(6),
+        marginBottom:moderateScale(10),
         justifyContent: 'center',
     },
     phraseItemWithBorder: {
@@ -98,7 +96,7 @@ export default (styles = StyleSheet.create({
     footer: {
         alignItems: 'center',
         marginTop: 20,
-        position:'absolute',
+        alignSelf:'center',
         bottom:moderateScale(5)
     },
     primaryButtonStyle: {
@@ -138,5 +136,6 @@ export default (styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 14,
         color: Colors.title,
+        height:moderateScale(40)
     },
 }));

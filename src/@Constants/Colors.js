@@ -14,10 +14,12 @@ export default {
     green: '#3bba48',
     tintColorDisabled: '#569aff',
     white: '#FFFFFF',
+    black:'#000',
     tintColorGreyed: '#f4f8ff',
     tintColorGreyedDark: '#d8e8ff',
     inactiveTintGrey: '#4a4e70',
     activeTintRed: '#ed3946',
     darkGrey:'#86898b',
     lightGrey:'#e2e2e2',
+    amber:'#FFBF00',
 };

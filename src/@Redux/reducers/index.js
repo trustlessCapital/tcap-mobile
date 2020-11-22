@@ -19,10 +19,15 @@
  */
 
 import { combineReducers } from 'redux';
+import currencyReducer from './currencyReducer';
+
+import dashboardReducer from './dashboardReducer';
 import zkSyncTokenReducer from './zkSyncTokenReducer';
 
 const rootReducer = combineReducers({
-    zkSyncTokens:zkSyncTokenReducer
+    zkSyncTokens:zkSyncTokenReducer,
+    dashboard:dashboardReducer,
+    currency:currencyReducer,
 });
 
 export default rootReducer;

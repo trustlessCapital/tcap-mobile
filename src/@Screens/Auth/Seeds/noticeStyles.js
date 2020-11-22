@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 import Colors from '../../../@Constants/Colors';
 
 
@@ -14,42 +15,43 @@ export default (styles = StyleSheet.create({
         marginEnd: 20,
         backgroundColor: Colors.primaryBg,
     },
-    logo: {
-        height: 40,
+    companyLogo: {
+        height: moderateScale(60),
         resizeMode: 'contain',
-        marginTop: 40,
-        marginBottom: 40,
+        width:moderateScale(140)
+    },
+    scrollWrapper:{
+        justifyContent:'center',
+        alignItems:'center',
+        paddingBottom:moderateScale(50)
     },
     carouselItem: {
-        flexDirection: 'column',
-        height: Dimensions.get('window').height - 250,
-        alignItems: 'center',
-        justifyContent: 'center',
+        marginTop:moderateScale(15)
     },
     title: {
         color: Colors.title,
         fontFamily: 'Montserrat-Bold',
         fontWeight: 'bold',
-        textAlign: 'center',
-        fontSize: 26,
+        fontSize: moderateScale(26),
         marginBottom: 20,
-        marginHorizontal: 40,
+        textDecorationLine:'underline',
+        marginHorizontal: moderateScale(20),
     },
     paragraph: {
         color: Colors.subTitle,
         fontFamily: 'Montserrat-Regular',
-        fontSize: 14,
-        textAlign: 'center',
+        fontSize: moderateScale(12),
+        // textAlign: 'center',
         marginBottom: 20,
-        marginHorizontal: 40,
+        marginHorizontal: moderateScale(20),
     },
     paragraphImportant: {
         color: Colors.tintColorSecondary,
         fontFamily: 'Montserrat-Bold',
-        fontSize: 14,
-        textAlign: 'center',
+        fontSize: moderateScale(14),
+        // textAlign: 'center',
         marginBottom: 20,
-        marginHorizontal: 40,
+        marginHorizontal: moderateScale(20)
     },
     paginationWrapper: {
         alignItems: 'center',
@@ -73,7 +75,10 @@ export default (styles = StyleSheet.create({
     },
     footer: {
         alignItems: 'center',
-        marginTop: 40,
+        marginTop:moderateScale(5)
+    },
+    accountText:{
+        color:Colors.white
     },
     buttonStyle: {
         borderRadius: 5,
@@ -90,4 +95,10 @@ export default (styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
     },
+    checkBoxWrapper:{
+        flexDirection:'row',alignItems:'center',marginTop:moderateScale(10)
+    },
+    checkBox:{
+        marginRight:moderateScale(5)
+    }
 }));

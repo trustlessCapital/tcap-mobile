@@ -13,6 +13,13 @@ import Dialog, {
 } from 'react-native-popup-dialog';
 
 const ErrorDialog = ({ title, visible, message, onDismiss }) => {
+
+    const renderMessage = () =>{
+        if(message)
+            return <Text style={styles.message}>{message}</Text>;
+        return null;
+    };
+
     return (
         <Dialog
             dialogTitle={
@@ -43,7 +50,7 @@ const ErrorDialog = ({ title, visible, message, onDismiss }) => {
             visible={visible}>
             <DialogContent style={styles.dialogContentWrapper}>
                 <View style={styles.dialogContent}>
-                    {message && <Text style={styles.message}>{message}</Text>}
+                    {renderMessage()}
                 </View>
             </DialogContent>
         </Dialog>
