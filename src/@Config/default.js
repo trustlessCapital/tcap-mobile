@@ -24,7 +24,7 @@ const devServerIp = 'https://dev.api.trustless.capital';
 const prodServerIp = 'https://api.trustless.capital';
 
 //SET ENVIRONMENT
-const setEnv = env === 'development';
+const setEnv = env !== 'development';
 
 export default {
 
