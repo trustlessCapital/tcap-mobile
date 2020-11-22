@@ -9,6 +9,7 @@ export default (styles = StyleSheet.create({
     titleBar: {
         flexDirection: 'row',
         justifyContent: 'space-around',
+        alignItems:'center',
         marginTop: moderateScale(30),
         marginBottom: moderateScale(40),
     },

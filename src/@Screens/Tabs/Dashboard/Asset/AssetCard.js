@@ -63,13 +63,13 @@ const assetSet = [
 
 const AssetCard = ({asset,exchangeRates,...props}) =>{ 
 
-    const {depositingBalances,committedBalances} = props;
+    const {depositingBalances,committedBalances,selectedCurrency} = props;
 
     const {symbol,value} = asset;
     const loadAssetValue = (defaultVal) =>{
-        const cost = walletUtils.getAssetDisplayTextInUSD(
+        const cost = walletUtils.getAssetDisplayTextInSelectedCurrency(
             symbol.toLowerCase(),
-            defaultVal ? 0.1 : walletUtils.getAssetDisplayText(symbol,value),
+            defaultVal ? 1 : walletUtils.getAssetDisplayText(symbol,value),
             exchangeRates,
         );
         if(cost)
@@ -101,20 +101,23 @@ const AssetCard = ({asset,exchangeRates,...props}) =>{
                 </View>
                 <View style={styles.leftWrapper}>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
-                        <Text style={styles.title}>$ {loadAssetValue(0)}</Text>
+                        <Text style={styles.title}>{selectedCurrency.symbol} {loadAssetValue(0)}</Text>
                         {renderTickMark()}
                     </View>
                     <Text style={styles.subTitle}>
-                        {walletUtils.getAssetDisplayText( symbol,value)}
+                        {walletUtils.getAssetDisplayText(symbol,value)}
                         {' '+symbol.toUpperCase()} 
                     </Text>
                 </View>
             </View>
             <View style={styles.detailWrapper}>
-                <Text style={styles.title}>$ {loadAssetValue(0.1)}</Text>
-                <View style={styles.percentBox}>
+                <Text style={{...styles.title,fontSize:moderateScale(10)}}>{selectedCurrency.symbol} {loadAssetValue(1)}</Text>
+                <Text style={{...styles.subTitle,alignSelf:'flex-end',fontSize:moderateScale(10)}}>
+                    {'1 '+symbol.toUpperCase()} 
+                </Text>
+                {/* <View style={styles.percentBox}>
                     <Text style={styles.percent}>2.5 %</Text>
-                </View>
+                </View> */}
             </View>
         </View>
     );
@@ -125,12 +128,14 @@ AssetCard.propTypes = {
     committedBalances:PropTypes.array.isRequired,
     depositingBalances:PropTypes.array.isRequired,
     exchangeRates:PropTypes.array.isRequired,
+    selectedCurrency:PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state){
     return{
         depositingBalances : state.dashboard.depositingBalances,
-        committedBalances : state.dashboard.committedBalances
+        committedBalances : state.dashboard.committedBalances,
+        selectedCurrency : state.currency.selectedCurrency,
     };
 }
  

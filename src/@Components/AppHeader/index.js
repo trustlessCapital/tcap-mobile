@@ -26,7 +26,7 @@ import { withNavigation } from '@react-navigation/compat';
 import styles from './styles';
 import Colors from '../../@Constants/Colors';
  
-const AppHeader = ({headerTitle='Loading',...props}) =>{
+const AppHeader = ({headerTitle='Loading',children,...props}) =>{
 
     const {navigation} = props;
 
@@ -47,12 +47,15 @@ const AppHeader = ({headerTitle='Loading',...props}) =>{
             <View style={styles.titleBarContent}>
                 <Text style={styles.titleBarTitle}>{headerTitle}</Text>
             </View>
-            <View style={styles.titleBarContentRight} />
+            <View style={styles.titleBarContentRight} >
+                {children}
+            </View>
         </View>
     );
 };
  
 AppHeader.propTypes = {
+    children:PropTypes.node,
     headerTitle:PropTypes.string.isRequired,
     navigation:PropTypes.object.isRequired,
 };

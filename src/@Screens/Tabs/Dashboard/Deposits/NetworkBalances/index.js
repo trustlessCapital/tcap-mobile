@@ -16,11 +16,13 @@ import walletUtils from '../../../../../@Services/wallet-utils';
 import PropTypes from 'prop-types';
 import ErrorDialog from '../../../../../@Components/error-dialog';
 import AppHeader from '../../../../../@Components/AppHeader';
+import { connect } from 'react-redux';
 
-export default class DepositEthBalanceScreen extends Component {
+class DepositEthBalanceScreen extends Component {
     static propTypes = {
         navigation:PropTypes.object.isRequired,
         route:PropTypes.object.isRequired,
+        selectedCurrency:PropTypes.object.isRequired,
     };
 
     constructor(props) {
@@ -151,8 +153,8 @@ export default class DepositEthBalanceScreen extends Component {
                                                   </Text>
                                                   <Text
                                                       style={[styles.buttonText2, styles.greenText]}>
-                            $
-                                                      {walletUtils.getAssetDisplayTextInUSD(
+                                                      {this.props.selectedCurrency.symbol}
+                                                      {walletUtils.getAssetDisplayTextInSelectedCurrency(
                                                           balanceObj.symbol,
                                                           walletUtils.getAssetDisplayText(
                                                               balanceObj.symbol,
@@ -236,3 +238,11 @@ export default class DepositEthBalanceScreen extends Component {
       );
   }
 }
+
+function mapStateToProps(state){
+    return{
+        selectedCurrency : state.currency.selectedCurrency,
+    };
+}
+
+export default connect(mapStateToProps)(DepositEthBalanceScreen);

@@ -19,7 +19,7 @@
  */
  
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView,View,Text,TextInput,TouchableOpacity,ScrollView } from 'react-native';
+import { SafeAreaView,View,Text,TextInput,TouchableOpacity,ScrollView,Image } from 'react-native';
 import PropTypes from 'prop-types';
 import GlobalStyles from '../../../../../@GlobalStyles';
 import AppHeader from '../../../../../@Components/AppHeader';
@@ -35,10 +35,14 @@ import Modal from 'react-native-modal';
 import apiServices from '../../../../../@Services/api-services';
 import LoadingIndicator from '../../../../../@Components/loading-indicator';
 import ErrorDialog from '../../../../../@Components/error-dialog';
+import { useIsFocused } from '@react-navigation/native';
  
 const TransferHomeScreen = ({...props}) =>{
+    const isFocused = useIsFocused();
+
     const {
-        updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation
+        updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation,
+        selectedCurrency,route
     } = props;
 
     const walletService = WalletService.getInstance();
@@ -48,8 +52,8 @@ const TransferHomeScreen = ({...props}) =>{
     const [selectedAsset, setSelectedAsset] = useState(verifiedBalances[0]);
     const [amountToTransfer, setAmountToTransfer] = useState(0.00);
     // testAddress  (for testing)
-    const testAddress = '0xD8f647855876549d2623f52126CE40D053a2ef6A';
-    const [address, setAddress] = useState(testAddress);
+    // const testAddress = '0xD8f647855876549d2623f52126CE40D053a2ef6A';
+    const [address, setAddress] = useState('');
     const [remarks , setRemarks] = useState('');
     const [modal, setModal] = useState(false);
     const [fee , setFee] = useState(0);
@@ -63,10 +67,17 @@ const TransferHomeScreen = ({...props}) =>{
     const [showTransactionUi , setShowTransactionUi] = useState(false);
 
     useEffect(()=>{
-        // console.log('accAddress',accAddress);
         if(verifiedBalances.length) setShowTransactionUi(true);
         updateVerifiedAccountBalances(accAddress);
     },[]);
+
+    useEffect(()=>{
+        if(isFocused)
+        {
+            const {scannedAddress} =   route.params;
+            if(scannedAddress) setAddress(scannedAddress);
+        }
+    },[isFocused]);
 
     useEffect(()=>{
         if(verifiedBalances.length) {
@@ -185,7 +196,7 @@ const TransferHomeScreen = ({...props}) =>{
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bottomInputBar}>
-                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),amountToTransfer, exchangeRates)}</Text>
+                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ {selectedCurrency.symbol} {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),amountToTransfer, exchangeRates)}</Text>
                                 <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
                             </View>
                         </View>
@@ -203,8 +214,10 @@ const TransferHomeScreen = ({...props}) =>{
                                 style={{color:Colors.white,width:'100%'}}
                                 value={address}
                             />
-                        </View>    
-                        <Text style={GlobalStyles.titleTypo}> Any Remarks</Text>
+                        </View>  
+
+                        {/* TODO  -  FUTURE   */}
+                        {/* <Text style={GlobalStyles.titleTypo}> Any Remarks</Text>
                         <View style={GlobalStyles.inputBox}>
                             <TextInput
                                 autoCorrect={false}
@@ -215,7 +228,7 @@ const TransferHomeScreen = ({...props}) =>{
                                 placeholderTextColor={Colors.tintColorGreyedDark}
                                 style={{color:Colors.white,width:'100%'}}
                             />
-                        </View>     
+                        </View>      */}
                     </View>
                    
                 </ScrollView>
@@ -231,7 +244,15 @@ const TransferHomeScreen = ({...props}) =>{
     return(
         <SafeAreaView style={GlobalStyles.appContainer}>
             <View style={styles.wrapper}>
-                <AppHeader headerTitle={'Transfer Funds'}  />
+                <AppHeader headerTitle={'Transfer Funds'} >
+                    <TouchableOpacity onPress={()=>navigation.navigate('ScannerScreen')}>
+                        <Image 
+                            resizeMode={'contain'} 
+                            source={require('../../../../../../assets/images/icons/scanner.svg')} 
+                            style={styles.qrScanner} 
+                        />
+                    </TouchableOpacity>
+                </AppHeader>
                 {renderAssets()}
                 {
                     showTransactionUi && (
@@ -241,7 +262,7 @@ const TransferHomeScreen = ({...props}) =>{
                             </TouchableOpacity>
                             <Text style={styles.feeText}>
                         Fee : {fee}{' '+selectedAsset.symbol.toUpperCase()+' '}
-                        ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
+                        ~ {selectedCurrency.symbol} {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
                             </Text>
                         </>
                     )
@@ -279,6 +300,8 @@ const TransferHomeScreen = ({...props}) =>{
 TransferHomeScreen.propTypes = {
     exchangeRates:PropTypes.array.isRequired,
     navigation:PropTypes.object.isRequired,
+    route:PropTypes.object.isRequired,
+    selectedCurrency:PropTypes.object.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,
     verifiedBalances:PropTypes.array.isRequired,
     
@@ -288,6 +311,7 @@ function mapStateToProps(state){
     return{
         verifiedBalances : state.dashboard.verifiedBalances,
         exchangeRates : state.dashboard.exchangeRates,
+        selectedCurrency : state.currency.selectedCurrency,
     };
 }
 

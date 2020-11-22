@@ -41,7 +41,8 @@ import ErrorDialog from '../../../../../@Components/error-dialog';
 const WithdrawHomeScreen = ({...props}) =>{
 
     const {
-        updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation
+        updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation,
+        selectedCurrency
     } = props;
 
     const walletService = WalletService.getInstance();
@@ -120,7 +121,9 @@ const WithdrawHomeScreen = ({...props}) =>{
     };
 
     const checkAccountIsUnlocked = async() =>{
+        console.log('Checking Account is Unlocked ? ');
         const isUnlocked = await walletService.unlockZksyncWallet(selectedAsset.symbol);
+        console.log('isUnlocked',isUnlocked);
         if(isUnlocked)
         {
             setLoader(false);
@@ -187,7 +190,7 @@ const WithdrawHomeScreen = ({...props}) =>{
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bottomInputBar}>
-                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),amountToWithdraw, exchangeRates)}</Text>
+                                <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ {selectedCurrency.symbol} {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),amountToWithdraw, exchangeRates)}</Text>
                                 <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
                             </View>
                         </View>
@@ -290,7 +293,7 @@ const WithdrawHomeScreen = ({...props}) =>{
                             </Text>
                             <Text style={styles.feeText}>
                     Fee : {fee}{' '+selectedAsset.symbol.toUpperCase()+' '}
-                    ~ $ {walletUtils.getAssetDisplayTextInUSD(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
+                    ~ {selectedCurrency.symbol} {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),fee, exchangeRates)}
                             </Text>
                         </View>
                     )
@@ -328,6 +331,7 @@ const WithdrawHomeScreen = ({...props}) =>{
 WithdrawHomeScreen.propTypes = {
     exchangeRates:PropTypes.array.isRequired,
     navigation:PropTypes.object.isRequired,
+    selectedCurrency:PropTypes.object.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,
     verifiedBalances:PropTypes.array.isRequired,
 };
@@ -336,6 +340,7 @@ function mapStateToProps(state){
     return{
         verifiedBalances : state.dashboard.verifiedBalances,
         exchangeRates : state.dashboard.exchangeRates,
+        selectedCurrency : state.currency.selectedCurrency,
     };
 }
 

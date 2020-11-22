@@ -5,6 +5,7 @@ import {
     View,
     TouchableOpacity,
     TextInput,
+    ScrollView
 } from 'react-native';
 import styles from './styles';
 import WalletUtils from '../../../@Services/wallet-utils';
@@ -19,12 +20,11 @@ import APIService from '../../../@Services/api-services';
 import SecurityServices from '../../../@Services/security';
 import StatusBarColor from '../../../@Components/status-bar-color';
 import Colors from '../../../@Constants/Colors';
+import { moderateScale } from 'react-native-size-matters';
 
 const WAIT_SEEDPHRASE = 'Please wait.. while we create your seed phrase!';
 const WAIT_CREATEWALLET = 'Please wait.. while we create your wallet!';
 export default class SeedPhraseScreen extends Component {
-  
-  
 
     constructor(props) {
         super(props);
@@ -62,13 +62,6 @@ export default class SeedPhraseScreen extends Component {
       allowScreenCaptureAsync(); 
   }
 
-  //   _shuffleSeedPhrase(array) {
-  //       for (let i = array.length - 1; i > 0; i--) {
-  //           const j = Math.floor(Math.random() * (i + 1));
-  //           [array[i], array[j]] = [array[j], array[i]];
-  //       }
-  //   }
-
   _generateMnemonic() {
       this.setState({loadingMessage: WAIT_SEEDPHRASE});
       WalletUtils.createMnemonic().then((mnemonic) => {
@@ -94,6 +87,9 @@ export default class SeedPhraseScreen extends Component {
       const originalSeed10 = this.originalSeedPhrase[9];
       const originalSeed12 = this.originalSeedPhrase[11];
 
+      //TODO - "Add Wallet Addess to the APIService.mnemonicGenerated "
+      // Key - walletAddress
+
       if(originalSeed1 === randomSeed1.toLowerCase() && originalSeed4 === randomSeed4.toLowerCase() && originalSeed7 === randomSeed7.toLowerCase() && originalSeed10 === randomSeed10.toLowerCase() && originalSeed12 === randomSeed12.toLowerCase())
       {
           this.setState({ isLoading: true, loadingMessage: WAIT_CREATEWALLET });
@@ -102,15 +98,7 @@ export default class SeedPhraseScreen extends Component {
               this.pin,
               this.accountDetails.email,
           ).then(() => {
-              APIService.mnemonicGenerated(
-                  this.accountDetails.email,
-                  this.accountDetails.phoneNumber,
-              ).then(accountDetails => {
-                  SecurityServices.storeAccountDetails(accountDetails, this.pin).then(() => {
-                      this.accountDetails = accountDetails;
-                      this._navigateToDashboard();
-                  });
-              });
+              this._navigateToDashboard();
           });
       }
       else
@@ -126,10 +114,19 @@ export default class SeedPhraseScreen extends Component {
       ).then(pk => {
           const walletService = WalletService.getInstance();
           walletService.setPk(pk);
-          this.setState({
-              isLoading: false,
+          const walletAddess = WalletUtils.createAddressFromPrivateKey(pk);
+          console.log('WalletAddress while signing up',walletAddess);
+          APIService.mnemonicGenerated(
+              this.accountDetails.email,
+              this.accountDetails.phoneNumber,
+              walletAddess,
+          ).then(accountDetails => {
+              SecurityServices.storeAccountDetails(accountDetails, this.pin).then(() => {
+                  this.accountDetails = accountDetails;
+                  this.setState({isLoading: false});
+                  this.props.navigation.navigate('App',{ accountDetails: this.accountDetails });
+              });
           });
-          this.props.navigation.navigate('App',{ accountDetails: this.accountDetails });
       }); 
   }
 
@@ -138,7 +135,6 @@ export default class SeedPhraseScreen extends Component {
           this._checkReshuffledSeedPhrase();
       } else {
           this.originalSeedPhrase = _.clone(this.state.seedPhrase);
-          //   this._shuffleSeedPhrase(this.state.seedPhrase);
           this.setState({isVerificationMode: true, saveButtonText: 'Done'});
       }
   }
@@ -217,29 +213,6 @@ export default class SeedPhraseScreen extends Component {
               }
           </View>
       );
-      //   return (
-      //       <SortableGrid
-      //           itemHeight={moderateScale(60)}
-      //           itemWidth={moderateScale(120)}
-      //           onDragRelease={itemOrder =>
-      //               (this.seedPhraseOrder = itemOrder.itemOrder)
-      //           }
-      //           style={styles.phrasesWrapper}>
-      //           {this.state.seedPhrase.map((phrase, index) => (
-      //               <View
-      //                   inactive={!this.state.isVerificationMode}
-      //                   key={index}
-      //                   style={this.state.isVerificationMode? styles.phraseItemWithBorder: styles.phraseItem}>
-      //                   {!this.state.isVerificationMode ? (
-      //                       <View style={styles.phraseItemWrapper}>
-      //                           <Text style={styles.phraseIndex}>{index + 1}</Text>
-      //                       </View>
-      //                   ) : null}
-      //                   <Text style={styles.phraseText}>{phrase}</Text>
-      //               </View>
-      //           ))}
-      //       </SortableGrid>
-      //   );
   }
 
   render() {
@@ -250,38 +223,40 @@ export default class SeedPhraseScreen extends Component {
                       backgroundColor={Colors.primary_bg}
                       barStyle="light-content"
                   />
-                  <View style={styles.container}>
-                      <Text style={styles.mainTitle}>
-                          {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
+                  <ScrollView style={{paddingBottom:moderateScale(300)}}>
+                      <View style={styles.container}>
+                          <Text style={styles.mainTitle}>
+                              {this.state.isVerificationMode ? 'Verify ' : ''}Mnemonic Seed
               Phrase
-                      </Text>
-                      <View style={styles.disclaimerHeader}>
-                          <Text style={styles.title}>Disclaimer</Text>
-                          <Text style={styles.subTitle}>
-                              {this.state.isVerificationMode
-                                  ? 'Enter the words in the missing positions of the seed phrase'
-                                  : 'Please note down your 12 word mnemonic seed phrase in the displayed order and save it in a secure manner.'}
                           </Text>
-                      </View>
-                      {this._getSortableGrid()}
-                      <View style={styles.footer}>
-                          <TouchableOpacity
-                              onPress={this._onSaveButtonClick.bind(this)}
-                              style={styles.primaryButtonStyle}>
-                              <Text style={styles.primaryButtonText}>
-                                  {this.state.saveButtonText}
+                          <View style={styles.disclaimerHeader}>
+                              <Text style={styles.title}>Disclaimer</Text>
+                              <Text style={styles.subTitle}>
+                                  {this.state.isVerificationMode
+                                      ? 'Enter the words in the missing positions of the seed phrase'
+                                      : 'Please note down your 12 word mnemonic seed phrase in the displayed order and save it in a secure manner.'}
                               </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                              onPress={() => {
-                                  this.setState({confirmResetDialog: true});
-                              }}
-                              style={styles.secondaryButtonStyle}>
-                              <Text style={styles.secondaryButtonText}>
-                                  {this.state.resetButtonText}
-                              </Text>
-                          </TouchableOpacity>
+                          </View>
+                          {this._getSortableGrid()}
                       </View>
+                  </ScrollView>
+                  <View style={styles.footer}>
+                      <TouchableOpacity
+                          onPress={this._onSaveButtonClick.bind(this)}
+                          style={styles.primaryButtonStyle}>
+                          <Text style={styles.primaryButtonText}>
+                              {this.state.saveButtonText}
+                          </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                          onPress={() => {
+                              this.setState({confirmResetDialog: true});
+                          }}
+                          style={styles.secondaryButtonStyle}>
+                          <Text style={styles.secondaryButtonText}>
+                              {this.state.resetButtonText}
+                          </Text>
+                      </TouchableOpacity>
                   </View>
                   <LoadingIndicator
                       message={this.state.loadingMessage}

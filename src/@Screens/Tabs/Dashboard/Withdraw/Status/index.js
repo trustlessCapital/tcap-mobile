@@ -97,7 +97,8 @@ const WithdrawStatusScreen = ({...props}) =>{
                 }
                 
             })
-            .catch(() =>{
+            .catch((err) =>{
+                console.log('Transfer err',err);
                 setErrorOccured(true);
                 setIsLoading(false);
             });

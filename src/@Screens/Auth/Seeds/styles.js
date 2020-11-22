@@ -11,8 +11,6 @@ export default (styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginStart: 20,
-        marginEnd: 20,
         backgroundColor: Colors.primaryBg,
     },
     mainTitle: {
@@ -98,7 +96,7 @@ export default (styles = StyleSheet.create({
     footer: {
         alignItems: 'center',
         marginTop: 20,
-        position:'absolute',
+        alignSelf:'center',
         bottom:moderateScale(5)
     },
     primaryButtonStyle: {

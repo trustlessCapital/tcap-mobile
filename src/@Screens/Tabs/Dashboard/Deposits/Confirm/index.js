@@ -12,12 +12,14 @@ import PropTypes from 'prop-types';
 import StorageUtils from '../../../../../@Services/storage-utils';
 import WalletUtils from '../../../../../@Services/wallet-utils';
 import AppHeader from '../../../../../@Components/AppHeader';
+import { connect } from 'react-redux';
 
-export default class DepositConfirmScreen extends Component {
+class DepositConfirmScreen extends Component {
 
   static propTypes = {
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
+      selectedCurrency:PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -109,8 +111,8 @@ export default class DepositConfirmScreen extends Component {
                                       {this.state.amount}
                                   </Text>
                                   <Text style={[styles.buttonText2, styles.greenText]}>
-                    ~$
-                                      {WalletUtils.getAssetDisplayTextInUSD(
+                    ~{this.props.selectedCurrency.symbol}
+                                      {WalletUtils.getAssetDisplayTextInSelectedCurrency(
                                           this.token,
                                           this.state.amount,
                                           this.exchangeRates,
@@ -137,7 +139,7 @@ export default class DepositConfirmScreen extends Component {
                                   ]}>
                                   <Text style={[styles.buttonText3]}>0</Text>
                                   <Text style={[styles.buttonText2, styles.greenText]}>
-                    $0
+                                      {this.props.selectedCurrency.symbol}0
                                   </Text>
                               </View>
                           </View>
@@ -163,8 +165,8 @@ export default class DepositConfirmScreen extends Component {
                                       {this.state.amount}
                                   </Text>
                                   <Text style={[styles.buttonText2, styles.greenText]}>
-                    ~$
-                                      {WalletUtils.getAssetDisplayTextInUSD(
+                    ~{this.props.selectedCurrency.symbol}
+                                      {WalletUtils.getAssetDisplayTextInSelectedCurrency(
                                           this.token,
                                           this.state.amount,
                                           this.exchangeRates,
@@ -227,3 +229,11 @@ export default class DepositConfirmScreen extends Component {
       );
   }
 }
+
+function mapStateToProps(state){
+    return{
+        selectedCurrency : state.currency.selectedCurrency,
+    };
+}
+
+export default connect(mapStateToProps)(DepositConfirmScreen);

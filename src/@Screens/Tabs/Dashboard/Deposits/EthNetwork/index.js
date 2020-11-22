@@ -20,12 +20,14 @@ import StorageUtils from '../../../../../@Services/storage-utils';
 import WalletUtils from '../../../../../@Services/wallet-utils';
 import PropTypes from 'prop-types';
 import AppHeader from '../../../../../@Components/AppHeader';
+import { connect } from 'react-redux';
 
-export default class DepositEthScreen extends Component {
+class DepositEthScreen extends Component {
 
   static propTypes = {
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
+      selectedCurrency:PropTypes.object.isRequired
   };
   
   constructor(props) {
@@ -131,7 +133,7 @@ export default class DepositEthScreen extends Component {
                                       styles.greenText,
                                       {marginTop: 10, width: '100%'},
                                   ]}>
-                  ~ ${WalletUtils.getAssetDisplayTextInUSD(this.token,this.state.amount, this.exchangeRates)}
+                  ~ {this.props.selectedCurrency.symbol}{WalletUtils.getAssetDisplayTextInSelectedCurrency(this.token,this.state.amount, this.exchangeRates)}
                               </Text>
                           </View>
                       </View>
@@ -198,3 +200,11 @@ export default class DepositEthScreen extends Component {
       );
   }
 }
+
+function mapStateToProps(state){
+    return{
+        selectedCurrency : state.currency.selectedCurrency,
+    };
+}
+
+export default connect(mapStateToProps)(DepositEthScreen);

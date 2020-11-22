@@ -149,6 +149,9 @@ export default (styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop:moderateScale(10)
     },
+    qrScanner:{
+        width:moderateScale(40),height:moderateScale(40),marginRight:moderateScale(10)
+    }
 }));
   
   

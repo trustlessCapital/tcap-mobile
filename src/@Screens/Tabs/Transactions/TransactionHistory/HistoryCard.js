@@ -27,11 +27,12 @@ import walletUtils from '../../../../@Services/wallet-utils';
 import Colors from '../../../../@Constants/Colors';
 import { withNavigation } from '@react-navigation/compat';
 import APPICONS from '../../../../@Constants/AppIcons';
+import { moderateScale } from 'react-native-size-matters';
+import moment from 'moment';
 
 const HistoryCard = ({historyData,...props}) =>{
     const {navigation} = props;
-
-    const {asset,amount,txnType,walletAddress='',recipientAddress=''} = historyData;
+    const {asset,amount,txnType,walletAddress='',recipientAddress='',createdAt} = historyData;
 
     const renderType = () =>{
         if(txnType === 'deposit')
@@ -68,16 +69,25 @@ const HistoryCard = ({historyData,...props}) =>{
         navigation.navigate('TransactionStatusScreen',{historyData});
     };
 
+    const getDateView = () =>{
+        return moment(new Date(createdAt)).format('LLLL');
+    };
+
     return(
-        <TouchableOpacity onPress={()=>checkNavigaion()} style={styles.cardWrapper}>
-            <View style={{flexDirection:'row',alignItems:'center'}}>
-                <Icon color={getColor()} name={getIcon()} size={25}  />
-                {renderType()}
+        <View style={{marginBottom:moderateScale(20)}}>
+            <TouchableOpacity onPress={()=>checkNavigaion()} style={styles.cardWrapper}>
+                <View style={{flexDirection:'row',alignItems:'center'}}>
+                    <Icon color={getColor()} name={getIcon()} size={25}  />
+                    {renderType()}
+                </View>
+                <View>
+                    <Text style={{...styles.assetText,color:getColor()}}>{walletUtils.getAssetDisplayText( asset,amount)}{' '+asset}</Text>
+                </View>
+            </TouchableOpacity>
+            <View style={styles.timeView} >
+                <Text style={styles.dateText}>{getDateView()}</Text>
             </View>
-            <View>
-                <Text style={{...styles.assetText,color:getColor()}}>{walletUtils.getAssetDisplayText( asset,amount)}{' '+asset}</Text>
-            </View>
-        </TouchableOpacity>
+        </View>
     );
 };
 

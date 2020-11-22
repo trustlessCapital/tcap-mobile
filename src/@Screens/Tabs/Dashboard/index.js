@@ -34,6 +34,7 @@ class DashboardScreen extends Component {
 
   constructor(props) {
       super(props);
+      console.log('Dashboard props',props);
       if (this.props.route && this.props.route.params) {
           if (this.props.route.params.accountDetails)
               this.accountDetails = this.props.route.params.accountDetails;
@@ -81,7 +82,6 @@ class DashboardScreen extends Component {
           this.props.updateBalanceObject(balanceObj);
       });
   }
-
 
   render() {
       const {refreshing} = this.state;

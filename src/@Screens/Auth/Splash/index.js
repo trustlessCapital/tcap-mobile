@@ -18,11 +18,21 @@ import WalletService from '../../../@Services/wallet-service';
 
 const SplashScreen = ({...props}) =>{
 
-    const {navigation:{navigate}} = props;
+    const {navigation:{replace,reset},route:{params : AppParams}} = props;
 
     useEffect(()=>{
-        loadResourcesAndDataAsync();
+        if(AppParams.accountDetails)
+            setTimeout(()=>{reloadApp();},300);
+        else
+            loadResourcesAndDataAsync();
     },[]);
+
+    const reloadApp = () =>{
+        reset({
+            index: 0,
+            routes: [{ name: 'App' ,params:AppParams}]
+        });
+    };
 
     async function loadResourcesAndDataAsync() {
         let account = null;
@@ -43,9 +53,9 @@ const SplashScreen = ({...props}) =>{
             console.warn(e);
         } finally {
             if (account) {
-                navigate('PINScreen');
+                replace('PINScreen');
             } else {
-                navigate('SignUp');
+                replace('SignUp');
             }
         }
     }
@@ -65,6 +75,7 @@ const SplashScreen = ({...props}) =>{
 
 SplashScreen.propTypes = {
     navigation:PropTypes.object.isRequired,
+    route:PropTypes.object.isRequired,
 };
 
 export default SplashScreen;

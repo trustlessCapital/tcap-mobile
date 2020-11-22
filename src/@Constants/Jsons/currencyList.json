@@ -1,0 +1,22 @@
+{
+    "currencyList" : {
+        "recommended" : [
+            {"fullName": "US Dollar", "symbol": "$", "shortName": "USD"},
+            {"fullName" : "Euro" , "symbol" : "€", "shortName" : "EUR"},
+            {"fullName": "Indian Rupee", "symbol": "₹", "shortName": "INR"}
+        ],
+        "all" :[
+            {"fullName": "UAE Dirham", "shortName": "AED", "symbol": "د.إ"},
+            {"fullName": "Afghani", "shortName": "AFN", "symbol": "Af"},
+            {"fullName": "Lek", "shortName": "ALL", "symbol": "L"},
+            {"fullName": "Armenian Dram", "shortName": "AMD", "symbol": "Դ"},
+            {"fullName": "Netherlands Antillean Guilder", "shortName": "ANG", "symbol": "ƒ"},
+            {"fullName": "Kwanza", "shortName": "AOA", "symbol": "Kz"},
+            {"fullName": "Argentine Peso", "shortName": "ARS", "symbol": "$"},
+            {"fullName": "Australian Dollar", "shortName": "AUD", "symbol": "$"},
+            {"fullName": "Aruban Guilder/Florin", "shortName": "AWG", "symbol": "ƒ"},
+            {"fullName": "Azerbaijanian Manat", "shortName": "AZN", "symbol": "ман"},
+            {"fullName": "Konvertibilna Marka", "shortName": "BAM", "symbol": "КМ"}
+        ]
+    }
+}

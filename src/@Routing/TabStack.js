@@ -35,12 +35,11 @@ import WithdrawHomeScreen from '../@Screens/Tabs/Dashboard/Withdraw/Home';
 import WithdrawConfirmationScreen from '../@Screens/Tabs/Dashboard/Withdraw/Confirm';
 import WithdrawStatusScreen from '../@Screens/Tabs/Dashboard/Withdraw/Status';
 
-//TRANSACTION -HISTORY
+//TRANSACTION-HISTORY
 import TransactionStatusScreen from '../@Screens/Tabs/Transactions/Status';
 
-
-
-
+// QRCODE SCANNER
+import ScannerScreen from '../@Screens/Tabs/@Common/Scanner';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -82,13 +81,12 @@ const TabStack = ({...props}) => {
                 showIcon: true,
                 style: { 
                     height: Platform.OS === 'ios' ? moderateScale(90)  : moderateScale(40), borderTopWidth: 0, 
-                    
                 },
             }}
         >
             <Tab.Screen component={DashboardScreen} initialParams={params} name="Dashboard" />
-            <Tab.Screen component={TransactionScreen} name="Transactions" />
-            <Tab.Screen component={ContactsScreens} name="Contacts" />
+            <Tab.Screen component={TransactionScreen} initialParams={params} name="Transactions" />
+            <Tab.Screen component={ContactsScreens} initialParams={params} name="Contacts" />
             <Tab.Screen component={AccountsScreen} initialParams={params} name="Accounts" />
         </Tab.Navigator>
     );
@@ -121,10 +119,10 @@ const MixNavigator = ({...props}) => {
 
             {/* TRANSACTION HISTORY STACK */}
             <Stack.Screen component={TransactionStatusScreen}  name="TransactionStatusScreen" />
-            
-            
 
-
+            {/* QRCODE SCANNER  */}
+            <Stack.Screen component={ScannerScreen}  name="ScannerScreen" />
+            
         </Stack.Navigator>
     );
 };
