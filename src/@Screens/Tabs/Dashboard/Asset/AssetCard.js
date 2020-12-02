@@ -90,7 +90,12 @@ const AssetCard = ({asset,exchangeRates,...props}) =>{
         const committed = committedBalances.findIndex(x => (x.symbol === asset.symbol && x.value === asset.value ));
         if(committed !== -1 && deposited === -1 )
             return <Icon color={Colors.green} name={'check-double'} size={moderateScale(16)} style={{marginLeft:moderateScale(3)}} />;
-        return <Icon color={Colors.amber} name={'check'} size={moderateScale(16)} style={{marginLeft:moderateScale(3)}} />;
+        return (
+            <View style={{flexDirection:'row',alignItems:'center'}}>
+                <Icon color={Colors.amber} name={'check'} size={moderateScale(16)} style={{marginLeft:moderateScale(3)}} />
+                <Text style={{color:Colors.amber,fontSize:moderateScale(9)}}>(Pending)</Text>
+            </View>
+        );
     };
 
     return(

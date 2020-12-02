@@ -193,6 +193,34 @@ function getCurrencyRate(Currency = 'USD') {
     }).then(processResponse);
 }
 
+function getIsAccountUnlockedFromServer(accAddress) {
+    const url =  `${BASE_PATH + API_PREFIX}/user/accountstatus/${accAddress}`;
+    console.log('URL',url);
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'x-api-key' : SECURE_KEY,
+        },
+    }).then(processResponse);
+}
+
+function updateIsAccountUnlockedWithServer(email,phone) {
+    const url =  `${BASE_PATH + API_PREFIX}/user/updateaccountstatus`;
+    const body = JSON.stringify({
+        email: email,
+        phoneNumber : phone
+    });
+    console.log('URL',url);
+    return fetch(url, {
+        method: 'POST',
+        body,
+        headers: {
+            'x-api-key' : SECURE_KEY,
+            'Content-Type': 'application/json'
+        },
+    }).then(processResponse);
+}
+
 function getCurrencyList() {
     const url =  `${BASE_PATH + API_PREFIX}/currency-exchange/currency-list`;
     console.log('URL',url);
@@ -238,5 +266,7 @@ export default (APIService = {
     getTransactionHistory,
     getCurrencyRate,
     getCurrencyList,
-    updateUserPhoneEmail
+    updateUserPhoneEmail,
+    getIsAccountUnlockedFromServer,
+    updateIsAccountUnlockedWithServer
 });

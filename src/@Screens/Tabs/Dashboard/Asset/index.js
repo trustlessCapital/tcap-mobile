@@ -28,12 +28,14 @@ import WalletService from '../../../../@Services/wallet-service';
 import walletUtils from '../../../../@Services/wallet-utils';
 import { connect } from 'react-redux';
 import * as DashboardActions from '../../../../@Redux/actions/dashboardActions';
+import * as AccountActions from '../../../../@Redux/actions/accountActions';
+import apiServices from '../../../../@Services/api-services';
 
 const DashboardAsset = ({...props}) =>{
 
     const {
         updateVerifiedAccountBalances,verifiedBalances,
-        exchangeRates
+        exchangeRates,setIsAccountUnlocked
     } = props;
 
     const walletService = WalletService.getInstance();
@@ -46,6 +48,20 @@ const DashboardAsset = ({...props}) =>{
         const pk = walletService.pk;
         const address = walletUtils.createAddressFromPrivateKey(pk);
         updateVerifiedAccountBalances(address);
+        syncAccountUnlockFromServer(address);
+    };
+
+    const syncAccountUnlockFromServer = (address) =>{
+        apiServices.getIsAccountUnlockedFromServer(address)
+            .then(res=>{
+                console.log('Account unlock',res);
+                const {isAccountUnlocked} = res;
+                setIsAccountUnlocked(isAccountUnlocked);
+            })
+            .catch((err)=>{
+                console.log('Account unlock err',err);
+                setIsAccountUnlocked(false);
+            });
     };
 
     if(verifiedBalances.length)
@@ -62,11 +78,19 @@ const DashboardAsset = ({...props}) =>{
                 </ScrollView>
             </View>
         );
-    return null;
+    return (
+        <View style={styles.NoAssetWrapper}>
+            <Text style={styles.NoAssetText}>You dont have any assets ! </Text>
+            <Text style={{...styles.subTitle,alignSelf:'center',textAlign:'center'}}>
+                    Please add assets by clicking on Add Funds button.
+            </Text>
+        </View>
+    );
 };
 
 DashboardAsset.propTypes = {
     exchangeRates:PropTypes.array.isRequired,
+    setIsAccountUnlocked:PropTypes.func.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,
     verifiedBalances:PropTypes.array.isRequired,
 };
@@ -82,6 +106,8 @@ function mapDispatchToProps(dispatch){
     return{
         updateVerifiedAccountBalances:address =>
             dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
+        setIsAccountUnlocked : isUnlocked =>
+            dispatch(AccountActions.setIsAccountUnlocked(isUnlocked))
     };
 }
 

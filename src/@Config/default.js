@@ -24,7 +24,7 @@ const devServerIp = 'https://dev.api.trustless.capital';
 const prodServerIp = 'https://api.trustless.capital';
 
 //SET ENVIRONMENT
-const setEnv = env !== 'development';
+const setEnv = env === 'development';
 
 export default {
 
@@ -39,5 +39,7 @@ export default {
     API_PREFIX : '/api',
 
     SECURE_KEY : setEnv ? 'esKWwHMMuo2hspzLzWKvbj7dV7ycPWy4ZXo5uNYj' : 'esKWwHMMuo2hspzLzWKvbj7dV7ycPWy4ZXo5uNYj',
+
+    ACCOUNT_UNLOCK_GAS : 15000,
 
 };

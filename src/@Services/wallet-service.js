@@ -49,21 +49,29 @@ export default class WalletService {
       return this.syncWallet.getAccountState();
   }
 
-  unlockZksyncWallet = async (token) => {
+  unlockZksyncWallet = async (token,iFOnlySigningKeyIsSet = false) => {
+      console.log('unlockZksyncWallet',iFOnlySigningKeyIsSet);
       await this.getSyncWallet();
-      //this.syncWallet.isSigningKeySet() - true (unlocked)
-      if (!(await this.syncWallet.isSigningKeySet())) {
+      if(iFOnlySigningKeyIsSet)
+          return await this.syncWallet.isSigningKeySet();
+      else{
+          console.log('unlock account process');
           if ((await this.syncWallet.getAccountId()) == undefined) {
+              console.log('Inside First IF');
               return;
           }
+          console.log('Else Part');
           const signingKeyTx = await this.syncWallet.setSigningKey({ feeToken: token.toUpperCase(), });
           const receipt = await signingKeyTx.awaitReceipt();
-          return receipt.success; // true - unlocked
+          return receipt;
       }
-      return true;
-      
-
   }
+
+  //   getUnlockAccountFee = async(accAddress,token) =>{
+  //       console.log('zksync.types.ChangePubKeyFee',zksync.types.ChangePubKeyFee);
+  //       const txFee = await this.syncProvider.getTransactionFee(zksync.types.ChangePubKeyFee, accAddress, token);
+  //       return txFee;
+  //   }
 
   depositFundsToZkSync = async (token, amount) => {
       amount = amount.toString();
