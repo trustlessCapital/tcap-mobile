@@ -223,7 +223,14 @@ export default (styles = StyleSheet.create({
         fontSize: moderateScale(12),
         position:'absolute',
         bottom:moderateScale(10)
-    }
+    },
+    feeText:{
+        alignSelf:'center',
+        marginTop:moderateScale(10),
+        fontWeight:'bold',
+        color:Colors.activeTintRed,
+        fontSize:moderateScale(12),
+    },
 }));
   
   

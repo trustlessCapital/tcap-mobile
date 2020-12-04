@@ -54,7 +54,7 @@ const TransferHomeScreen = ({...props}) =>{
     const accAddress = walletUtils.createAddressFromPrivateKey(pk);
     
     const [selectedAsset, setSelectedAsset] = useState(verifiedBalances[0]);
-    const [amountToTransfer, setAmountToTransfer] = useState(0.00);
+    const [amountToTransfer, setAmountToTransfer] = useState('');
     // testAddress  (for testing)
     // const testAddress = '0xD8f647855876549d2623f52126CE40D053a2ef6A';
     const [address, setAddress] = useState('');
@@ -101,7 +101,8 @@ const TransferHomeScreen = ({...props}) =>{
             const data = { selectedAsset,address,remarks,fee,amountToTransfer};
             navigation.navigate('TransferConfirmationScreen',{transactionData:data});
         }
-        else fallbackToBlockChain();
+        else 
+            fallbackToBlockChain();
     }; 
     
     const fallbackToBlockChain = async() =>{
@@ -109,13 +110,7 @@ const TransferHomeScreen = ({...props}) =>{
         if(isSigningKeySet)
         {
             setIsAccountUnlocked(true);
-            apiServices.updateIsAccountUnlockedWithServer(email,phoneNumber)
-                .then(data=>{
-                    console.log('data',data);
-                })
-                .catch(err=>{
-                    console.log('errr',err);
-                });
+            apiServices.updateIsAccountUnlockedWithServer(email,phoneNumber).then();
             setLoader(false);
             const data = { selectedAsset,address,remarks,fee,amountToTransfer};
             navigation.navigate('TransferConfirmationScreen',{transactionData:data});
@@ -192,6 +187,12 @@ const TransferHomeScreen = ({...props}) =>{
         );
     };
 
+    const setMaxTransferLimit = () =>{
+        const maxBalance = walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value);
+        setAmountToTransfer(maxBalance-fee);
+        console.log('amountToTransfer',amountToTransfer);
+    };
+
     const renderAssets = () =>{
         if(showTransactionUi)
             return (
@@ -202,13 +203,13 @@ const TransferHomeScreen = ({...props}) =>{
                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:'100%'}}>
                                 <TextInput
                                     keyboardType={'numeric'}
-                                    onChangeText={amt => {
+                                    onChangeText={(amt) => {
                                         setAmountToTransfer(amt);
                                     }}
                                     placeholder={'Enter Amount'}
                                     placeholderTextColor={Colors.tintColorGreyedDark}
                                     style={styles.inputText}
-                                    value={amountToTransfer}
+                                    value={amountToTransfer.toString()}
                                 />
                                 <TouchableOpacity onPress={()=>setModal(true)} style={{flexDirection:'row',alignItems:'center'}}>
                                     <Text style={styles.assetTitle}>{selectedAsset.symbol.toUpperCase()}</Text>
@@ -217,7 +218,9 @@ const TransferHomeScreen = ({...props}) =>{
                             </View>
                             <View style={styles.bottomInputBar}>
                                 <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ {selectedCurrency.symbol} {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),amountToTransfer, exchangeRates)}</Text>
-                                <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
+                                <TouchableOpacity onPress={()=>setMaxTransferLimit()}>
+                                    <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <Text style={GlobalStyles.titleTypo}> To Addess</Text>
@@ -226,7 +229,7 @@ const TransferHomeScreen = ({...props}) =>{
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 keyboardType={'email-address'}
-                                onChangeText={addr => {
+                                onChangeText={(addr) => {
                                     setAddress(addr);
                                 }}
                                 placeholder={'Enter Address'}

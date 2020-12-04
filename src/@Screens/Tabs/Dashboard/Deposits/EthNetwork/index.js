@@ -20,7 +20,6 @@ import WalletUtils from '../../../../../@Services/wallet-utils';
 import PropTypes from 'prop-types';
 import AppHeader from '../../../../../@Components/AppHeader';
 import { connect } from 'react-redux';
-import apiServices from '../../../../../@Services/api-services';
 import WalletService from '../../../../../@Services/wallet-service';
 import walletUtils from '../../../../../@Services/wallet-utils';
 
@@ -46,30 +45,10 @@ class DepositEthScreen extends Component {
   }
 
   state = {
-      isLoading: true,
+      isLoading: false,
       confirmDialog: false,
       confirmDialogTitle: 'Cancel Deposit Funds',
       confirmDialogMessage: 'Are you sure you want to cancel the deposit funds transaction?',
-  }
-
-
-  componentDidMount() {
-      this.getDepositFee();
-  }
-
-  getDepositFee = () =>{
-      apiServices.getTransferFundProcessingFee(this.token,this.accAddress,'deposit')
-          .then(data=>{
-              console.log('Data',data);
-              this.setState({isLoading:false});
-              //   setLoader(false);
-              //   setFee(data.totalFee);
-          })
-          .catch((err)=>{
-              this.setState({isLoading:false});
-              console.log('Err',err);
-              //   setLoader(false);
-          });
   }
 
   navigateBack = () => { this.props.navigation.goBack(); }
@@ -91,7 +70,6 @@ class DepositEthScreen extends Component {
   cancelTx = () => {
       this.setState({ confirmDialog: true });
   }
-
 
   get depositContent() {
       return (

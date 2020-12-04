@@ -67,12 +67,6 @@ export default class WalletService {
       }
   }
 
-  //   getUnlockAccountFee = async(accAddress,token) =>{
-  //       console.log('zksync.types.ChangePubKeyFee',zksync.types.ChangePubKeyFee);
-  //       const txFee = await this.syncProvider.getTransactionFee(zksync.types.ChangePubKeyFee, accAddress, token);
-  //       return txFee;
-  //   }
-
   depositFundsToZkSync = async (token, amount) => {
       amount = amount.toString();
       await this.getSyncWallet();
@@ -104,6 +98,7 @@ export default class WalletService {
       const body = {
           to: destination, token: token.toUpperCase(), amount: txAmount
       };
+      console.log('body',body);
       const transfer = await this.syncWallet.syncTransfer(body);
       const transactionDetails = Promise.all([
           transfer.awaitReceipt(),

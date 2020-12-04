@@ -61,9 +61,12 @@ const assetSet = [
     // {symbol:'RENBTC',imageAsset : require('../../../../../assets/images/assetLogos/usdc.svg')},
 ];
 
-const AssetCard = ({asset,exchangeRates,...props}) =>{ 
+const AssetCard = ({asset,exchangeRates,isOnlyCommitted=false,...props}) =>{ 
 
-    const {depositingBalances,committedBalances,selectedCurrency} = props;
+    const {
+        depositingBalances,committedBalances,selectedCurrency,
+        verifiedBalances
+    } = props;
 
     const {symbol,value} = asset;
     const loadAssetValue = (defaultVal) =>{
@@ -98,6 +101,18 @@ const AssetCard = ({asset,exchangeRates,...props}) =>{
         );
     };
 
+    const renderPendingTick = () =>{
+        const verified = verifiedBalances.findIndex(x => (x.symbol === asset.symbol && x.value === asset.value ));
+        if(verified !== -1)
+            return <Icon color={Colors.green} name={'check-double'} size={moderateScale(16)} style={{marginLeft:moderateScale(3)}} />;
+        return(
+            <View style={{flexDirection:'row',alignItems:'center'}}>
+                <Icon color={Colors.amber} name={'check'} size={moderateScale(16)} style={{marginLeft:moderateScale(3)}} />
+                <Text style={{color:Colors.amber,fontSize:moderateScale(9)}}>(Pending)</Text>
+            </View>
+        );
+    };
+
     return(
         <View style={styles.assetCard}>
             <View style={styles.imageWrapper}>
@@ -107,7 +122,7 @@ const AssetCard = ({asset,exchangeRates,...props}) =>{
                 <View style={styles.leftWrapper}>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
                         <Text style={styles.title}>{selectedCurrency.symbol} {loadAssetValue(0)}</Text>
-                        {renderTickMark()}
+                        {isOnlyCommitted ? renderPendingTick()  : renderTickMark()}
                     </View>
                     <Text style={styles.subTitle}>
                         {walletUtils.getAssetDisplayText(symbol,value)}
@@ -133,7 +148,9 @@ AssetCard.propTypes = {
     committedBalances:PropTypes.array.isRequired,
     depositingBalances:PropTypes.array.isRequired,
     exchangeRates:PropTypes.array.isRequired,
+    isOnlyCommitted:PropTypes.bool.isRequired,
     selectedCurrency:PropTypes.object.isRequired,
+    verifiedBalances:PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state){
@@ -141,6 +158,7 @@ function mapStateToProps(state){
         depositingBalances : state.dashboard.depositingBalances,
         committedBalances : state.dashboard.committedBalances,
         selectedCurrency : state.currency.selectedCurrency,
+        verifiedBalances : state.dashboard.verifiedBalances,
     };
 }
  

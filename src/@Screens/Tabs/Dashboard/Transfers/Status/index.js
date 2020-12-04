@@ -95,7 +95,8 @@ const TransferStatusScreen = ({...props}) =>{
                 }
                 
             })
-            .catch(() =>{
+            .catch((err) =>{
+                console.log('Err',err);
                 setErrorOccured(true);
                 setIsLoading(false);
             });

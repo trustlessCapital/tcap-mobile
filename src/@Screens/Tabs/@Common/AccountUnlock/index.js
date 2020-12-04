@@ -167,7 +167,6 @@ const AccountUnlockScreen = ({...props}) =>{
         walletService.unlockZksyncWallet(selectedAsset.symbol)
             .then(unlockReceipt=>{
                 setLoader(false);
-                console.log('unlock unlockReceipt',unlockReceipt);
                 if(unlockReceipt.success)
                 {
                     setShowErr(true);
@@ -182,11 +181,10 @@ const AccountUnlockScreen = ({...props}) =>{
                     setErrMsg('An Unexpected Error Has Occured!, Please try again after sometime');
                 }
             })
-            .catch((err)=>{
+            .catch(()=>{
                 setLoader(false);
                 setShowErr(true);
                 setErrMsg('An Unexpected Error Has Occured!, Please try again after sometime');
-                console.log('Err',err);
             });
     };
 

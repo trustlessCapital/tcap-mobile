@@ -35,7 +35,7 @@ const DashboardAsset = ({...props}) =>{
 
     const {
         updateVerifiedAccountBalances,verifiedBalances,
-        exchangeRates,setIsAccountUnlocked
+        exchangeRates,setIsAccountUnlocked,committedBalances
     } = props;
 
     const walletService = WalletService.getInstance();
@@ -54,16 +54,29 @@ const DashboardAsset = ({...props}) =>{
     const syncAccountUnlockFromServer = (address) =>{
         apiServices.getIsAccountUnlockedFromServer(address)
             .then(res=>{
-                console.log('Account unlock',res);
                 const {isAccountUnlocked} = res;
                 setIsAccountUnlocked(isAccountUnlocked);
             })
-            .catch((err)=>{
-                console.log('Account unlock err',err);
+            .catch(()=>{
                 setIsAccountUnlocked(false);
             });
     };
 
+    
+    if(committedBalances.length > verifiedBalances.length)
+        return(
+            <View style={styles.Wrapper}>
+                <Text style={styles.titleBar_title}>Assets</Text>
+                <View style={styles.redBar} />
+                <ScrollView style={styles.cardWrapper}>
+                    {
+                        committedBalances.map((item,index)=>(
+                            <AssetCard asset={item} exchangeRates={exchangeRates} isOnlyCommitted={true} key={index} />
+                        ))
+                    }
+                </ScrollView>
+            </View>
+        );
     if(verifiedBalances.length)
         return(
             <View style={styles.Wrapper}>
@@ -72,7 +85,7 @@ const DashboardAsset = ({...props}) =>{
                 <ScrollView style={styles.cardWrapper}>
                     {
                         verifiedBalances.map((item,index)=>(
-                            <AssetCard asset={item} exchangeRates={exchangeRates} key={index} />
+                            <AssetCard asset={item} exchangeRates={exchangeRates} isOnlyCommitted={false}  key={index} />
                         ))
                     }
                 </ScrollView>
@@ -89,6 +102,7 @@ const DashboardAsset = ({...props}) =>{
 };
 
 DashboardAsset.propTypes = {
+    committedBalances:PropTypes.object.isRequired,
     exchangeRates:PropTypes.array.isRequired,
     setIsAccountUnlocked:PropTypes.func.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,
@@ -98,7 +112,8 @@ DashboardAsset.propTypes = {
 function mapStateToProps(state){
     return{
         verifiedBalances : state.dashboard.verifiedBalances,
-        exchangeRates : state.dashboard.exchangeRates
+        exchangeRates : state.dashboard.exchangeRates,
+        committedBalances : state.dashboard.committedBalances,
     };
 }
 

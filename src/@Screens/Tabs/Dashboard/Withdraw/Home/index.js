@@ -137,13 +137,7 @@ const WithdrawHomeScreen = ({...props}) =>{
         if(isSigningKeySet)
         {
             setIsAccountUnlocked(true);
-            apiServices.updateIsAccountUnlockedWithServer(email,phoneNumber)
-                .then(data=>{
-                    console.log('data',data);
-                })
-                .catch(err=>{
-                    console.log('errr',err);
-                });
+            apiServices.updateIsAccountUnlockedWithServer(email,phoneNumber).then();
             setLoader(false);
             const data = { selectedAsset,address,fee,amountToWithdraw,fastWithDraw:fastWithDraw};
             navigation.navigate('WithdrawConfirmationScreen',{transactionData:data});
