@@ -36,21 +36,25 @@ import apiServices from '../../../../../@Services/api-services';
 import LoadingIndicator from '../../../../../@Components/loading-indicator';
 import ErrorDialog from '../../../../../@Components/error-dialog';
 import { useIsFocused } from '@react-navigation/native';
+import * as AccountActions from '../../../../../@Redux/actions/accountActions';
  
 const TransferHomeScreen = ({...props}) =>{
     const isFocused = useIsFocused();
 
     const {
         updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation,
-        selectedCurrency,route
+        selectedCurrency,route,isAccountUnlockedFromServer,setIsAccountUnlocked,
+        accountDetails
     } = props;
+
+    const {email,phoneNumber}  = accountDetails;
 
     const walletService = WalletService.getInstance();
     const pk = walletService.pk;    
     const accAddress = walletUtils.createAddressFromPrivateKey(pk);
     
     const [selectedAsset, setSelectedAsset] = useState(verifiedBalances[0]);
-    const [amountToTransfer, setAmountToTransfer] = useState(0.00);
+    const [amountToTransfer, setAmountToTransfer] = useState('');
     // testAddress  (for testing)
     // const testAddress = '0xD8f647855876549d2623f52126CE40D053a2ef6A';
     const [address, setAddress] = useState('');
@@ -90,21 +94,32 @@ const TransferHomeScreen = ({...props}) =>{
         else setLoader(false);
     },[verifiedBalances.length]);
 
-    const checkAccountIsUnlocked = async() =>{
-        const isUnlocked = await walletService.unlockZksyncWallet(selectedAsset.symbol);
-        if(isUnlocked)
+    const checkAccountIsUnlocked = () =>{
+        if(isAccountUnlockedFromServer)
         {
             setLoader(false);
             const data = { selectedAsset,address,remarks,fee,amountToTransfer};
             navigation.navigate('TransferConfirmationScreen',{transactionData:data});
         }
-        else{
-            setShowError(true);
+        else 
+            fallbackToBlockChain();
+    }; 
+    
+    const fallbackToBlockChain = async() =>{
+        const isSigningKeySet = await walletService.unlockZksyncWallet(selectedAsset.symbol,true);
+        if(isSigningKeySet)
+        {
+            setIsAccountUnlocked(true);
+            apiServices.updateIsAccountUnlockedWithServer(email,phoneNumber).then();
             setLoader(false);
-            setErrorMessage('Please try after sometimes!');
-            setErrorTitle('Account is Locked');
+            const data = { selectedAsset,address,remarks,fee,amountToTransfer};
+            navigation.navigate('TransferConfirmationScreen',{transactionData:data});
         }
-    };  
+        else{
+            setLoader(false);
+            navigation.navigate('AccountUnlockScreen');
+        }
+    };
 
     const refreshAssets = (currentAsset) =>{
         setIndicatingMsg('Please Wait...');
@@ -143,7 +158,7 @@ const TransferHomeScreen = ({...props}) =>{
         }
         else{
             setLoader(true);
-            setIndicatingMsg('Checking Account Please Wait..');
+            setIndicatingMsg('Checking Account Please Wait.. It Takes a while to check from the Main BlockChain.');
             checkAccountIsUnlocked();
         }
     };
@@ -172,6 +187,12 @@ const TransferHomeScreen = ({...props}) =>{
         );
     };
 
+    const setMaxTransferLimit = () =>{
+        const maxBalance = walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value);
+        setAmountToTransfer(maxBalance-fee);
+        console.log('amountToTransfer',amountToTransfer);
+    };
+
     const renderAssets = () =>{
         if(showTransactionUi)
             return (
@@ -182,13 +203,13 @@ const TransferHomeScreen = ({...props}) =>{
                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:'100%'}}>
                                 <TextInput
                                     keyboardType={'numeric'}
-                                    onChangeText={amt => {
+                                    onChangeText={(amt) => {
                                         setAmountToTransfer(amt);
                                     }}
                                     placeholder={'Enter Amount'}
                                     placeholderTextColor={Colors.tintColorGreyedDark}
                                     style={styles.inputText}
-                                    value={amountToTransfer}
+                                    value={amountToTransfer.toString()}
                                 />
                                 <TouchableOpacity onPress={()=>setModal(true)} style={{flexDirection:'row',alignItems:'center'}}>
                                     <Text style={styles.assetTitle}>{selectedAsset.symbol.toUpperCase()}</Text>
@@ -197,7 +218,9 @@ const TransferHomeScreen = ({...props}) =>{
                             </View>
                             <View style={styles.bottomInputBar}>
                                 <Text style={{color:Colors.green,maxWidth:moderateScale(150)}}> ~ {selectedCurrency.symbol} {walletUtils.getAssetDisplayTextInSelectedCurrency(selectedAsset.symbol.toLowerCase(),amountToTransfer, exchangeRates)}</Text>
-                                <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
+                                <TouchableOpacity onPress={()=>setMaxTransferLimit()}>
+                                    <Text style={{fontSize:moderateScale(12),fontWeight:'bold',color:Colors.activeTintRed}}>MAX : {walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value)} {selectedAsset.symbol.toUpperCase()} </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <Text style={GlobalStyles.titleTypo}> To Addess</Text>
@@ -206,7 +229,7 @@ const TransferHomeScreen = ({...props}) =>{
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 keyboardType={'email-address'}
-                                onChangeText={addr => {
+                                onChangeText={(addr) => {
                                     setAddress(addr);
                                 }}
                                 placeholder={'Enter Address'}
@@ -298,20 +321,24 @@ const TransferHomeScreen = ({...props}) =>{
 };
  
 TransferHomeScreen.propTypes = {
+    accountDetails:PropTypes.object.isRequired,
     exchangeRates:PropTypes.array.isRequired,
+    isAccountUnlockedFromServer:PropTypes.bool.isRequired,
     navigation:PropTypes.object.isRequired,
     route:PropTypes.object.isRequired,
     selectedCurrency:PropTypes.object.isRequired,
+    setIsAccountUnlocked:PropTypes.func.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,
     verifiedBalances:PropTypes.array.isRequired,
-    
 };
 
 function mapStateToProps(state){
     return{
+        accountDetails : state.account.accountDetails,
         verifiedBalances : state.dashboard.verifiedBalances,
         exchangeRates : state.dashboard.exchangeRates,
         selectedCurrency : state.currency.selectedCurrency,
+        isAccountUnlockedFromServer : state.account.isAccountUnlocked,
     };
 }
 
@@ -319,6 +346,8 @@ function mapDispatchToProps(dispatch){
     return{
         updateVerifiedAccountBalances:address =>
             dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
+        setIsAccountUnlocked : isUnlocked =>
+            dispatch(AccountActions.setIsAccountUnlocked(isUnlocked))
     };
 }
  

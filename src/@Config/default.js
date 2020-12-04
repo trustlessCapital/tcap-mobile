@@ -40,4 +40,6 @@ export default {
 
     SECURE_KEY : setEnv ? 'esKWwHMMuo2hspzLzWKvbj7dV7ycPWy4ZXo5uNYj' : 'esKWwHMMuo2hspzLzWKvbj7dV7ycPWy4ZXo5uNYj',
 
+    ACCOUNT_UNLOCK_GAS : 15000,
+
 };

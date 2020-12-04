@@ -16,18 +16,20 @@ import Colors from '../../../../../@Constants/Colors';
 import styles from '../Home/styles';
 import ConfirmDialog from '../../../../../@Components/confirm-dialog';
 import LoadingIndicator from '../../../../../@Components/loading-indicator';
-import StorageUtils from '../../../../../@Services/storage-utils';
 import WalletUtils from '../../../../../@Services/wallet-utils';
 import PropTypes from 'prop-types';
 import AppHeader from '../../../../../@Components/AppHeader';
 import { connect } from 'react-redux';
+import WalletService from '../../../../../@Services/wallet-service';
+import walletUtils from '../../../../../@Services/wallet-utils';
 
 class DepositEthScreen extends Component {
 
   static propTypes = {
+      exchangeRates:PropTypes.array.isRequired,
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
-      selectedCurrency:PropTypes.object.isRequired
+      selectedCurrency:PropTypes.object.isRequired,
   };
   
   constructor(props) {
@@ -38,32 +40,15 @@ class DepositEthScreen extends Component {
           if (this.props.route.params.token)
               this.token = this.props.route.params.token;
       }
+      this.walletService = WalletService.getInstance();
+      this.accAddress = walletUtils.createAddressFromPrivateKey(this.walletService.pk);
   }
 
   state = {
-      isLoading: true,
+      isLoading: false,
       confirmDialog: false,
       confirmDialogTitle: 'Cancel Deposit Funds',
       confirmDialogMessage: 'Are you sure you want to cancel the deposit funds transaction?',
-  }
-
-
-  componentDidMount() {
-      this.loadData();
-  }
-
-  loadData() {
-      this.state.isLoading = true;
-      this.getExchangeRates().then(() => {
-          this.setState({isLoading: false});
-      }).catch(() => {
-      // Show toast in case of any error
-          this.setState({isLoading: false});
-      });
-  }
-
-  getExchangeRates = async () => {
-      this.exchangeRates = await StorageUtils.exchangeRates();
   }
 
   navigateBack = () => { this.props.navigation.goBack(); }
@@ -85,7 +70,6 @@ class DepositEthScreen extends Component {
   cancelTx = () => {
       this.setState({ confirmDialog: true });
   }
-
 
   get depositContent() {
       return (
@@ -133,7 +117,7 @@ class DepositEthScreen extends Component {
                                       styles.greenText,
                                       {marginTop: 10, width: '100%'},
                                   ]}>
-                  ~ {this.props.selectedCurrency.symbol}{WalletUtils.getAssetDisplayTextInSelectedCurrency(this.token,this.state.amount, this.exchangeRates)}
+                  ~ {this.props.selectedCurrency.symbol}{WalletUtils.getAssetDisplayTextInSelectedCurrency(this.token,this.state.amount, this.props.exchangeRates)}
                               </Text>
                           </View>
                       </View>
@@ -204,6 +188,7 @@ class DepositEthScreen extends Component {
 function mapStateToProps(state){
     return{
         selectedCurrency : state.currency.selectedCurrency,
+        exchangeRates : state.dashboard.exchangeRates,
     };
 }
 

@@ -91,7 +91,6 @@ function resendOTP(email, phone) {
 }
 
 function mnemonicGenerated(email, phone,walletAddress) {
-    console.log('mnemonicGenerated',email,phone,walletAddress);
     return fetch(BASE_PATH + API_PREFIX + '/user/mnemonicgenerated', {
         method: 'POST',
         headers: {
@@ -149,7 +148,6 @@ function getAccountBalances(address) {
 
 function getTransferFundProcessingFee(symbol,address,type='transfer') {
     const url =  `${BASE_PATH}/v1/zksync/txfee/${type}/${symbol}/${address}`;
-    console.log('URL',url);
     return fetch(url, {
         method: 'GET',
         headers: {
@@ -173,7 +171,6 @@ function setTransactionDetailsWithServer(body){
 
 function getTransactionHistory(address) {
     const url =  `${BASE_PATH + API_PREFIX}/transactions/list-by-add/${address}`;
-    console.log('URL',url);
     return fetch(url, {
         method: 'GET',
         headers: {
@@ -184,7 +181,6 @@ function getTransactionHistory(address) {
 
 function getCurrencyRate(Currency = 'USD') {
     const url =  `${BASE_PATH + API_PREFIX}/currency-exchange/${Currency}`;
-    console.log('URL',url);
     return fetch(url, {
         method: 'GET',
         headers: {
@@ -193,9 +189,34 @@ function getCurrencyRate(Currency = 'USD') {
     }).then(processResponse);
 }
 
+function getIsAccountUnlockedFromServer(accAddress) {
+    const url =  `${BASE_PATH + API_PREFIX}/user/accountstatus/${accAddress}`;
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'x-api-key' : SECURE_KEY,
+        },
+    }).then(processResponse);
+}
+
+function updateIsAccountUnlockedWithServer(email,phone) {
+    const url =  `${BASE_PATH + API_PREFIX}/user/updateaccountstatus`;
+    const body = JSON.stringify({
+        email: email,
+        phoneNumber : phone
+    });
+    return fetch(url, {
+        method: 'POST',
+        body,
+        headers: {
+            'x-api-key' : SECURE_KEY,
+            'Content-Type': 'application/json'
+        },
+    }).then(processResponse);
+}
+
 function getCurrencyList() {
     const url =  `${BASE_PATH + API_PREFIX}/currency-exchange/currency-list`;
-    console.log('URL',url);
     return fetch(url, {
         method: 'GET',
         headers: {
@@ -238,5 +259,7 @@ export default (APIService = {
     getTransactionHistory,
     getCurrencyRate,
     getCurrencyList,
-    updateUserPhoneEmail
+    updateUserPhoneEmail,
+    getIsAccountUnlockedFromServer,
+    updateIsAccountUnlockedWithServer
 });
