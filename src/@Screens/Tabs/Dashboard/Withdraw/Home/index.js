@@ -37,13 +37,16 @@ import walletUtils from '../../../../../@Services/wallet-utils';
 import apiServices from '../../../../../@Services/api-services';
 import LoadingIndicator from '../../../../../@Components/loading-indicator';
 import ErrorDialog from '../../../../../@Components/error-dialog';
+import * as AccountActions from '../../../../../@Redux/actions/accountActions';
  
 const WithdrawHomeScreen = ({...props}) =>{
-
     const {
         updateVerifiedAccountBalances,verifiedBalances,exchangeRates,navigation,
-        selectedCurrency
+        selectedCurrency,isAccountUnlockedFromServer,
+        setIsAccountUnlocked,accountDetails
     } = props;
+
+    const {email,phoneNumber}  = accountDetails;
 
     const walletService = WalletService.getInstance();
     const pk = walletService.pk;    
@@ -90,7 +93,6 @@ const WithdrawHomeScreen = ({...props}) =>{
     };
 
     useEffect(()=>{
-        // console.log('accAddress',accAddress);
         if(verifiedBalances.length) setShowTransactionUi(true);
         updateVerifiedAccountBalances(accAddress);
     },[]);
@@ -120,23 +122,31 @@ const WithdrawHomeScreen = ({...props}) =>{
             });
     };
 
-    const checkAccountIsUnlocked = async() =>{
-        console.log('Checking Account is Unlocked ? ');
-        const isUnlocked = await walletService.unlockZksyncWallet(selectedAsset.symbol);
-        console.log('isUnlocked',isUnlocked);
-        if(isUnlocked)
+    const checkAccountIsUnlocked = () =>{
+        if(isAccountUnlockedFromServer)
         {
             setLoader(false);
             const data = { selectedAsset,address,fee,amountToWithdraw,fastWithDraw:fastWithDraw};
             navigation.navigate('WithdrawConfirmationScreen',{transactionData:data});
         }
-        else{
-            setShowError(true);
+        else fallbackToBlockChain();
+    }; 
+    
+    const fallbackToBlockChain = async() =>{
+        const isSigningKeySet = await walletService.unlockZksyncWallet(selectedAsset.symbol,true);
+        if(isSigningKeySet)
+        {
+            setIsAccountUnlocked(true);
+            apiServices.updateIsAccountUnlockedWithServer(email,phoneNumber).then();
             setLoader(false);
-            setErrorMessage('Please try after sometimes!');
-            setErrorTitle('Account is Locked');
+            const data = { selectedAsset,address,fee,amountToWithdraw,fastWithDraw:fastWithDraw};
+            navigation.navigate('WithdrawConfirmationScreen',{transactionData:data});
         }
-    };  
+        else{
+            setLoader(false);
+            navigation.navigate('AccountUnlockScreen');
+        }
+    };
 
     const checkValidData = () =>{
         const max = walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value);
@@ -161,7 +171,7 @@ const WithdrawHomeScreen = ({...props}) =>{
         }
         else{
             setLoader(true);
-            setIndicatingMsg('Checking Account Please Wait..');
+            setIndicatingMsg('Checking Account Please Wait.. It Takes a while to check from the Main BlockChain.');
             checkAccountIsUnlocked();
         }
     };
@@ -329,9 +339,12 @@ const WithdrawHomeScreen = ({...props}) =>{
 };
  
 WithdrawHomeScreen.propTypes = {
+    accountDetails:PropTypes.object.isRequired,
     exchangeRates:PropTypes.array.isRequired,
+    isAccountUnlockedFromServer:PropTypes.bool.isRequired,
     navigation:PropTypes.object.isRequired,
     selectedCurrency:PropTypes.object.isRequired,
+    setIsAccountUnlocked:PropTypes.func.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,
     verifiedBalances:PropTypes.array.isRequired,
 };
@@ -341,6 +354,8 @@ function mapStateToProps(state){
         verifiedBalances : state.dashboard.verifiedBalances,
         exchangeRates : state.dashboard.exchangeRates,
         selectedCurrency : state.currency.selectedCurrency,
+        isAccountUnlockedFromServer : state.account.isAccountUnlocked,
+        accountDetails : state.account.accountDetails,
     };
 }
 
@@ -348,6 +363,8 @@ function mapDispatchToProps(dispatch){
     return{
         updateVerifiedAccountBalances:address =>
             dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
+        setIsAccountUnlocked : isUnlocked =>
+            dispatch(AccountActions.setIsAccountUnlocked(isUnlocked))
     };
 }
  

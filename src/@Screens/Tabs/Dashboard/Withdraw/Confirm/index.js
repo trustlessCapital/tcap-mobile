@@ -58,7 +58,7 @@ const WithdrawConfirmationScreen = ({...props}) =>{
                     <Text style={styles.titleText}>{selectedCurrency.symbol} {amt}</Text>
                 </View>
                 <View style={styles.dataRow}>
-                    <Text style={styles.titleDetails}>CHARGES</Text>
+                    <Text style={styles.titleDetails}>FEE</Text>
                     <Text style={styles.titleText}>~ {selectedCurrency.symbol} {charges}</Text>
                 </View>
                 <View style={styles.dataRow}>

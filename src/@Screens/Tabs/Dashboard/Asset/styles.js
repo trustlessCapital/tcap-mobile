@@ -11,8 +11,17 @@ export default (styles = StyleSheet.create({
         fontSize: moderateScale(18),
         marginLeft:moderateScale(30)
     },
+    NoAssetText:{
+        color: Colors.white,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: moderateScale(14),
+        alignSelf:'center'
+    },
     Wrapper:{
         marginTop:moderateScale(20),
+    },
+    NoAssetWrapper:{
+        marginTop:moderateScale(200)
     },
     cardWrapper:{
         backgroundColor:'#1a2360',

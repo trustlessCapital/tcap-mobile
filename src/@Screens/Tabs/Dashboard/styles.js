@@ -42,6 +42,12 @@ export default (styles = StyleSheet.create({
     scene: {
         flex: 1,
     },
+    titleBar_title: {
+        color: Colors.white,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: 16,
+        alignSelf:'center'
+    },
 }));
   
   

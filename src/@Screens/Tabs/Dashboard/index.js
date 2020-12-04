@@ -7,7 +7,10 @@ import {
     SafeAreaView,
     ScrollView,
     AppState,
-    RefreshControl
+    RefreshControl,
+    ActivityIndicator,
+    View,
+    Text
 } from 'react-native';
 import styles from './styles';
 import SecurityServices from '../../../@Services/security';
@@ -21,20 +24,20 @@ import DashboardAsset from './Asset';
 import WalletService from '../../../@Services/wallet-service';
 import * as DashboardActions from '../../../@Redux/actions/dashboardActions';
 import walletUtils from '../../../@Services/wallet-utils';
-
+import * as AccountActions from '../../../@Redux/actions/accountActions';
 
 class DashboardScreen extends Component {
   static propTypes = {
       SyncZkSyncTokensFromServer:PropTypes.func.isRequired,
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
+      setAccountDetails:PropTypes.func.isRequired,
       updateBalanceObject:PropTypes.func.isRequired,
       updateVerifiedAccountBalances:PropTypes.func.isRequired,
   };
 
   constructor(props) {
       super(props);
-      console.log('Dashboard props',props);
       if (this.props.route && this.props.route.params) {
           if (this.props.route.params.accountDetails)
               this.accountDetails = this.props.route.params.accountDetails;
@@ -45,15 +48,22 @@ class DashboardScreen extends Component {
       appState: AppState.currentState,
       index: 0,
       refreshing:false,
+      isFocused:false,
   };
   authState = {};
 
   componentDidMount() {
+      this.focusListener = this.props.navigation.addListener('focus', () => {
+          this.setState({isFocused:true});
+      });
       this.props.SyncZkSyncTokensFromServer();
+      if(this.props.route.params.accountDetails)
+          this.props.setAccountDetails(this.props.route.params.accountDetails);
       AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   componentWillUnmount() {
+      this.focusListener.remove();
       AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
@@ -83,6 +93,26 @@ class DashboardScreen extends Component {
       });
   }
 
+  renderContent = () =>{
+      if(this.state.isFocused)
+          return(
+              <>
+                  <DashboardWallet
+                      accountDetails={this.accountDetails}
+                      navigation={this.props.navigation}
+                  />
+                  <DashboardAsset />
+              </>
+          );
+      return (
+          <View>
+              <Text style={styles.titleBar_title}>Welcome to you Wallet!</Text>
+              <ActivityIndicator color={Colors.title} size={'small'} />
+          </View>
+      );
+  }
+  
+
   render() {
       const {refreshing} = this.state;
       return (
@@ -100,11 +130,7 @@ class DashboardScreen extends Component {
                   } 
                   showsVerticalScrollIndicator={false}
               >
-                  <DashboardWallet
-                      accountDetails={this.accountDetails}
-                      navigation={this.props.navigation}
-                  />
-                  <DashboardAsset />
+                  {this.renderContent()}
               </ScrollView>
           </SafeAreaView>
       );
@@ -124,6 +150,8 @@ function mapDispatchToProps(dispatch){
             dispatch(DashboardActions.updateBalanceObject(balanceObj)),
         updateVerifiedAccountBalances:address =>
             dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
+        setAccountDetails : details =>
+            dispatch(AccountActions.setAccountDetails(details)),
     };
 }
 

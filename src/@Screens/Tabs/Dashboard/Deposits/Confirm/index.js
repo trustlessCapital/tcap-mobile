@@ -126,29 +126,6 @@ class DepositConfirmScreen extends Component {
                               styles.buttonStyle,
                               styles.marginButtom,
                               styles.noBackground,
-                          ]}>
-                          <Text style={[styles.buttonText3, styles.marginLeft]}>
-                Fee
-                          </Text>
-                          <View style={[styles.rowFlex, styles.marginRight]}>
-                              <View
-                                  style={[
-                                      styles.columnFlex,
-                                      styles.marginLeft,
-                                      styles.centerAlign,
-                                  ]}>
-                                  <Text style={[styles.buttonText3]}>0</Text>
-                                  <Text style={[styles.buttonText2, styles.greenText]}>
-                                      {this.props.selectedCurrency.symbol}0
-                                  </Text>
-                              </View>
-                          </View>
-                      </View>
-                      <View
-                          style={[
-                              styles.buttonStyle,
-                              styles.marginButtom,
-                              styles.noBackground,
                               styles.borderTop,
                           ]}>
                           <Text style={[styles.buttonText3, styles.marginLeft]}>
@@ -189,6 +166,9 @@ class DepositConfirmScreen extends Component {
                       </View>
                   </View>
               </View>
+              <Text style={styles.feeText}>
+                    Fee will be deducted from your ETH balance.
+              </Text>
           </>
       );
   }

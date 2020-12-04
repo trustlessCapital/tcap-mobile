@@ -132,8 +132,8 @@ android {
         applicationId "com.trustlesscapital"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "0.0.1"
+        versionCode 10
+        versionName "0.0.2"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
     }
