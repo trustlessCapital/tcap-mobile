@@ -15,9 +15,6 @@ const handleLocalAuthorization = (
     state,
     authState,
 ) => {
-
-    console.log('Calling Check the LocalAuthorization');
-
     if (state.appState.match(/inactive|background/) && nextAppState === 'active') {
         authenticateWithTouchID(component, authState);
     }
