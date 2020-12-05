@@ -17,15 +17,12 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import React, {Component} from 'react';
+import React from 'react';
 import {
     SafeAreaView,
-    AppState,
     ScrollView
 } from 'react-native';
 import styles from './styles';
-import PropTypes from 'prop-types';
-import SecurityServices from '../../../@Services/security';
 import Colors from '../../../@Constants/Colors';
 import StatusBarColor from '../../../@Components/status-bar-color';
 
@@ -35,62 +32,28 @@ import Help from './Help';
 import Legal from './Legal';
 import Details from './Details';
 
-export default class AccountsScreen extends Component {
 
-    static propTypes = {
-        navigation:PropTypes.object.isRequired,
-        route:PropTypes.object.isRequired,
-    };
-   
-    constructor(props) {
-        super(props);
-        if (this.props.route && this.props.route.params) {
-            if (this.props.route.params.accountDetails)
-                this.accountDetails = this.props.route.params.accountDetails;
-        }
-    }
-
-  state = {
-      appState: AppState.currentState,
-      index: 0,
-  };
+const AccountsScreen = () =>{
 
 
-  componentDidMount() {
-      AppState.addEventListener('change', this._handleAppStateChange);
-  }
+    return (
+        <SafeAreaView style={styles.wrapper}>
+            <StatusBarColor
+                backgroundColor={Colors.primary_bg}
+                barStyle="light-content"
+            />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <Details />
+                <AboutYou accountDetails={this.accountDetails} />
+                <Preferences accountDetails={this.accountDetails} />
+                <Help />
+                <Legal />
+            </ScrollView>
+        </SafeAreaView>
+    );
+};
 
-  componentWillUnmount() {
-      AppState.removeEventListener('change', this._handleAppStateChange);
-  }
+AccountsScreen.propTypes = {
+};
 
-  
-authState = {};
-
-  _handleAppStateChange = nextAppState => {
-      SecurityServices.handleLocalAuthorization(
-          this,
-          nextAppState,
-          this.state,
-          this.authState,
-      );
-  };
-
-  render() {
-      return (
-          <SafeAreaView style={styles.wrapper}>
-              <StatusBarColor
-                  backgroundColor={Colors.primary_bg}
-                  barStyle="light-content"
-              />
-              <ScrollView showsVerticalScrollIndicator={false}>
-                  <Details />
-                  <AboutYou accountDetails={this.accountDetails} />
-                  <Preferences accountDetails={this.accountDetails} navigation={this.props.navigation}  />
-                  <Help />
-                  <Legal />
-              </ScrollView>
-          </SafeAreaView>
-      );
-  }
-}
+export default AccountsScreen;

@@ -2,7 +2,12 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NativeModules } from 'react-native';
 import { PIN_SCREEN_MODE } from '../@Constants';
+import Config from '../@Config/default';
+
+import moment from 'moment';
+
 var Aes = NativeModules.Aes;
+const {LOCAL_AUTH_TIMEOUT} = Config;
 
 const handleLocalAuthorization = (
     component,
@@ -10,14 +15,24 @@ const handleLocalAuthorization = (
     state,
     authState,
 ) => {
-    if (
-        state.appState.match(/inactive|background/) &&
-    nextAppState === 'active'
-    ) {
-        if (!authState.isAuthAsked) authenticateWithTouchID(component, authState);
-        authState.isAuthAsked = false;
+
+    console.log('Calling Check the LocalAuthorization');
+
+    if (state.appState.match(/inactive|background/) && nextAppState === 'active') {
+        authenticateWithTouchID(component, authState);
     }
-    component.setState({ appState: nextAppState });
+    if(state.appState === 'active' && nextAppState === 'active')
+    {   
+        var start = moment(component.props.appBackgroundDate);
+        var end = moment(new Date());
+        var timeout = (end.diff(start, 'seconds'));
+        if(timeout > LOCAL_AUTH_TIMEOUT) authenticateWithTouchID(component, authState);
+    }
+    if(state.appState === 'active' && nextAppState === 'background')
+    {
+        const appInBackgroundDate = new Date();
+        component.props.setAppBackgroundDate(appInBackgroundDate);
+    }
 };
 
 const authenticateWithTouchID = async (component, authState) => {
