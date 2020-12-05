@@ -56,6 +56,8 @@ export default class SeedPhraseRecoveryScreen extends Component {
           this.accountDetails.email,
       ).then(() => {
           this._navigateToDashboard();
+      }).catch(()=>{
+          this.setState({ isLoading: false,isSeedPhraseValid:true });
       });
   }
 
@@ -70,6 +72,8 @@ export default class SeedPhraseRecoveryScreen extends Component {
               isLoading: false,
           });
           this.props.navigation.navigate('App',{ accountDetails: this.accountDetails });
+      }).catch(()=>{
+          this.setState({ isLoading: false,isSeedPhraseValid:true });
       }); 
   }
 
@@ -159,7 +163,7 @@ export default class SeedPhraseRecoveryScreen extends Component {
                           visible={this.state.isLoading}
                       />
                       <ErrorDialog
-                          message={'Please ensure you have entered all 12 words!'}
+                          message={'Please ensure you have entered all 12 words correctly!!'}
                           onDismiss={() => {
                               this.setState({isInvalidPhrase: false});
                           }}

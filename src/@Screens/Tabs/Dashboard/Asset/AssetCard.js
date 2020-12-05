@@ -135,9 +135,6 @@ const AssetCard = ({asset,exchangeRates,isOnlyCommitted=false,...props}) =>{
                 <Text style={{...styles.subTitle,alignSelf:'flex-end',fontSize:moderateScale(10)}}>
                     {'1 '+symbol.toUpperCase()} 
                 </Text>
-                {/* <View style={styles.percentBox}>
-                    <Text style={styles.percent}>2.5 %</Text>
-                </View> */}
             </View>
         </View>
     );
@@ -145,7 +142,7 @@ const AssetCard = ({asset,exchangeRates,isOnlyCommitted=false,...props}) =>{
  
 AssetCard.propTypes = {
     asset:PropTypes.object.isRequired,
-    committedBalances:PropTypes.array.isRequired,
+    committedBalances:PropTypes.any.isRequired,
     depositingBalances:PropTypes.array.isRequired,
     exchangeRates:PropTypes.array.isRequired,
     isOnlyCommitted:PropTypes.bool.isRequired,

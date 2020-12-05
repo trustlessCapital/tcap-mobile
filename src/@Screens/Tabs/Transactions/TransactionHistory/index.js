@@ -36,8 +36,6 @@ const TransactionHistory = () =>{
     const walletService = WalletService.getInstance();
     const accAddress =  walletUtils.createAddressFromPrivateKey(walletService.pk);
 
-    console.log('accAddress',accAddress);
-
     const [isLoading, setIsLoading] = useState(false);
     const [list , setList] = useState([]);
 

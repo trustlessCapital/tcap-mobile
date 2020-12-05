@@ -42,4 +42,7 @@ export default {
 
     ACCOUNT_UNLOCK_GAS : 15000,
 
+    // TIMEOUT  in seconds
+    LOCAL_AUTH_TIMEOUT : 180
+
 };

@@ -25,10 +25,10 @@ import WalletService from '../../../@Services/wallet-service';
 import * as DashboardActions from '../../../@Redux/actions/dashboardActions';
 import walletUtils from '../../../@Services/wallet-utils';
 import * as AccountActions from '../../../@Redux/actions/accountActions';
+import * as LocalAuthorizationActions from '../../../@Redux/actions/localAuthorizationActions';
 
 class DashboardScreen extends Component {
   static propTypes = {
-      
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
       setAccountDetails:PropTypes.func.isRequired,
@@ -43,14 +43,13 @@ class DashboardScreen extends Component {
           if (this.props.route.params.accountDetails)
               this.accountDetails = this.props.route.params.accountDetails;
       }
+      this.state = {
+          appState: AppState.currentState,
+          index: 0,
+          refreshing:false,
+          isFocused:false,
+      };
   }
-
-  state = {
-      appState: AppState.currentState,
-      index: 0,
-      refreshing:false,
-      isFocused:false,
-  };
   authState = {};
 
   componentDidMount() {
@@ -107,7 +106,7 @@ class DashboardScreen extends Component {
           );
       return (
           <View>
-              <Text style={styles.titleBar_title}>Welcome to you Wallet!</Text>
+              <Text style={styles.titleBar_title}>Please wait while your app loads</Text>
               <ActivityIndicator color={Colors.title} size={'small'} />
           </View>
       );
@@ -138,8 +137,9 @@ class DashboardScreen extends Component {
   }
 }
 
-function mapStateToProps(){    
+function mapStateToProps(state){
     return{
+        appBackgroundDate : state.localAuth.appBackgroundDate
     };
 }
 
@@ -153,6 +153,8 @@ function mapDispatchToProps(dispatch){
             dispatch(DashboardActions.updateVerifiedAccountBalances(address)),
         setAccountDetails : details =>
             dispatch(AccountActions.setAccountDetails(details)),
+        setAppBackgroundDate : backgroundDate =>
+            dispatch(LocalAuthorizationActions.setAppBackgroundDate(backgroundDate))
     };
 }
 
