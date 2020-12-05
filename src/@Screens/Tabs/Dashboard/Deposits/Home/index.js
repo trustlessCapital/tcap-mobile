@@ -129,7 +129,7 @@ export default class DepositHomeScreen extends Component {
                           onPress={this.goToDepositFromEthScreen.bind(this)}
                           style={styles.buttonStyleSecondary}>
                           <Text style={styles.buttonText}>
-                Add from Etherium main network
+                Add from Ethereum main network
                           </Text>
                       </TouchableOpacity>
                       <Text style={styles.optionStyle}>* Other Options will be available soon</Text>
