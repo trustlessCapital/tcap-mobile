@@ -32,9 +32,11 @@ import apiServices from '../../../../@Services/api-services';
 import LoadingIndicator from '../../../../@Components/loading-indicator';
 import ErrorDialog from '../../../../@Components/error-dialog';
 import Toast from 'react-native-simple-toast';
+import { connect } from 'react-redux';
  
-const AboutYou = ({accountDetails}) =>{
-    const {email,phoneNumber} = accountDetails;
+const AboutYou = ({...props}) =>{
+    
+    const {accountDetails:{email,phoneNumber}} = props;
 
     const [showEmail , setShowEmail] = useState(false);
     const [showPhoneNumber, setShowPhoneNumber] = useState(false);
@@ -301,6 +303,12 @@ AboutYou.propTypes = {
     accountDetails:PropTypes.object.isRequired,
 };
 
+function mapStateToProps(state){
+    return{
+        accountDetails : state.account.accountDetails
+    };
+}
+
  
-export default AboutYou;
+export default connect(mapStateToProps)(AboutYou);
 

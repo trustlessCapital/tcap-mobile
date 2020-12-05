@@ -102,7 +102,7 @@ const DashboardAsset = ({...props}) =>{
 };
 
 DashboardAsset.propTypes = {
-    committedBalances:PropTypes.object.isRequired,
+    committedBalances:PropTypes.any.isRequired,
     exchangeRates:PropTypes.array.isRequired,
     setIsAccountUnlocked:PropTypes.func.isRequired,
     updateVerifiedAccountBalances:PropTypes.func.isRequired,

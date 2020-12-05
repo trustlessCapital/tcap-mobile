@@ -30,6 +30,7 @@ import Colors from '../../../../@Constants/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { moderateScale } from 'react-native-size-matters';
 import LoadingIndicator from '../../../../@Components/loading-indicator';
+import {useNavigation} from '@react-navigation/native';
 
 const availabeOptions = [
     {icon:'dollar-sign',name:'Display Currency',showArrow:false}
@@ -39,8 +40,10 @@ const Preferences = ({...props}) =>{
 
     const {
         updateExchangeRates,selectedCurrency,currencyList,
-        navigation,accountDetails,updateCurrencyList
+        accountDetails,updateCurrencyList
     } = props;
+
+    const navigation = useNavigation();
 
     const value = `${selectedCurrency.exchange}  ( ${selectedCurrency.symbol} )`;
     const [isActive, setIsActive] = useState(false);
@@ -75,9 +78,9 @@ const Preferences = ({...props}) =>{
             });
     };
 
-    const renderEachCurrency = (item) =>{
+    const renderEachCurrency = (item,index) =>{
         return(
-            <TouchableOpacity onPress={()=>getCurrency(item.shortName)} style={styles.currencyRowWrapper}>
+            <TouchableOpacity key={index} onPress={()=>getCurrency(item.shortName)} style={styles.currencyRowWrapper}>
                 <Text style={styles.optionText}>{item.fullName} - {item.shortName}</Text>
                 <Text style={styles.optionSymbol}> ( {item.symbol} )</Text>
             </TouchableOpacity>
@@ -122,12 +125,12 @@ const Preferences = ({...props}) =>{
                 <ScrollView contentContainerStyle={{padding:moderateScale(20)}} showsVerticalScrollIndicator={false}>
                     {renderSearchedData()}
                     <Text style={styles.titleBar_title}>Recommended</Text>
-                    {recommended.map((item)=>(
-                        renderEachCurrency(item)
+                    {recommended.map((item,index)=>(
+                        renderEachCurrency(item,index)
                     ))}
                     <Text style={styles.titleBar_title}>All</Text>
-                    {all.map((item)=>(
-                        renderEachCurrency(item)
+                    {all.map((item,index)=>(
+                        renderEachCurrency(item,index)
                     ))}
                 </ScrollView>
             </SafeAreaView>
@@ -164,7 +167,6 @@ const Preferences = ({...props}) =>{
 Preferences.propTypes = {
     accountDetails:PropTypes.object.isRequired,
     currencyList:PropTypes.object.isRequired,
-    navigation:PropTypes.object.isRequired,
     selectedCurrency:PropTypes.object.isRequired,
     updateCurrencyList:PropTypes.func.isRequired,
     updateExchangeRates:PropTypes.func.isRequired,
@@ -173,7 +175,8 @@ Preferences.propTypes = {
 function mapStateToProps(state){
     return{
         selectedCurrency : state.currency.selectedCurrency,
-        currencyList:state.currency.currencyList
+        currencyList:state.currency.currencyList,
+        accountDetails : state.account.accountDetails
     };
 }
 

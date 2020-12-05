@@ -18,21 +18,25 @@
  * Created By @name Sukumar_Abhijeet,
  */
 
-import { combineReducers } from 'redux';
+import { 
+    UPDATE_APP_BACKGROUND_DATE
+} from '../constants/localAuthorization-constants';
 
-import accountReducer from './accountReducer';
-import currencyReducer from './currencyReducer';
 
-import dashboardReducer from './dashboardReducer';
-import localAuthorizationReducer from './localAuthorizationReducer';
-import zkSyncTokenReducer from './zkSyncTokenReducer';
+const initialState = {
+    appBackgroundDate : new Date() 
+};
 
-const rootReducer = combineReducers({
-    zkSyncTokens:zkSyncTokenReducer,
-    dashboard:dashboardReducer,
-    currency:currencyReducer,
-    account:accountReducer,
-    localAuth : localAuthorizationReducer,
-});
+const  localAuthorizationReducer = (state = initialState,action) =>{
+    const {type,backgroundDate} = action;
+    switch(type)
+    {
+    case  UPDATE_APP_BACKGROUND_DATE:
+        return { ...state,appBackgroundDate:backgroundDate};
+        
+    default :   
+        return state;
+    }
+};
 
-export default rootReducer;
+export default localAuthorizationReducer;

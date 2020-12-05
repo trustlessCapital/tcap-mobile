@@ -29,8 +29,11 @@ import APIService from '../../../@Services/api-services';
 import SecurityServices from '../../../@Services/security';
 
 import styles from './styles';
+import { connect } from 'react-redux';
 
-export default class PINScreen extends Component {
+import * as LocalAuthorizationActions from '../../../@Redux/actions/localAuthorizationActions';
+
+class PINScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -71,24 +74,17 @@ export default class PINScreen extends Component {
 
   componentDidMount() {
       AppState.addEventListener('change', this._handleAppStateChange);
+
       if (this.state.mode === PIN_SCREEN_MODE.LOGIN_PIN && !this.isPinFallback) {
           SecurityServices.authenticateOnStartup().then(() => this.allowLogin = true).catch(() => {
               this.allowLogin = true;
           });
       }
-      //   BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
   componentWillUnmount() {
       AppState.removeEventListener('change', this._handleAppStateChange);
-      //   BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton);
   }
-
-  //   _handleBackButton = () =>{
-  //       if(this.state.disableBackButton) this.props.navigation.pop();
-  //       else return false;
-  //   };
-
   _handleAppStateChange = (nextAppState) => {
       if (!this.isPinFallback) {
           SecurityServices.handleLocalAuthorization(
@@ -483,3 +479,19 @@ export default class PINScreen extends Component {
           });
   }
 }
+
+function mapStateToProps(state){
+    return{
+        appBackgroundDate : state.localAuth.appBackgroundDate
+    };
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        setAppBackgroundDate : backgroundDate =>
+            dispatch(LocalAuthorizationActions.setAppBackgroundDate(backgroundDate))
+    };
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(PINScreen);

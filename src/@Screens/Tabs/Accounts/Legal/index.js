@@ -28,8 +28,8 @@ import SUPPORT from '../../../../@Constants/Supports';
 const {termAndConditions,privacyPolicy} = SUPPORT;
 
 const availabeOptions = [
-    {icon:'',name:'Privacy Policy',showArrow:true},
-    {icon:'',name:'Terms And Conditions',showArrow:true},
+    {icon:'',name:'Privacy Policy',showArrow:true,itemValue:''},
+    {icon:'',name:'Terms And Conditions',showArrow:true,itemValue:''},
 ];
  
 const Legal = () =>{
@@ -78,7 +78,7 @@ const Legal = () =>{
         <View style={styles.boxWrapper}>
             <Text style={styles.titleBar_title}>Legal</Text>
             {availabeOptions.map((item,index)=>(
-                <Options key={index} onPress={()=>openLink(index)} optionItem={item} />
+                <Options key={index} onPress={()=>openLink(index)} optionItem={item} optionValue={item.itemValue} />
             ))}
         </View>
     );
