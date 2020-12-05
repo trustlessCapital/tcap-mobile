@@ -28,12 +28,13 @@ import * as AccountActions from '../../../@Redux/actions/accountActions';
 
 class DashboardScreen extends Component {
   static propTypes = {
-      SyncZkSyncTokensFromServer:PropTypes.func.isRequired,
+      
       navigation:PropTypes.object.isRequired,
       route:PropTypes.object.isRequired,
       setAccountDetails:PropTypes.func.isRequired,
       updateBalanceObject:PropTypes.func.isRequired,
       updateVerifiedAccountBalances:PropTypes.func.isRequired,
+      updateZkSyncTokens:PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -56,14 +57,14 @@ class DashboardScreen extends Component {
       this.focusListener = this.props.navigation.addListener('focus', () => {
           this.setState({isFocused:true});
       });
-      this.props.SyncZkSyncTokensFromServer();
+      this.props.updateZkSyncTokens();
       if(this.props.route.params.accountDetails)
           this.props.setAccountDetails(this.props.route.params.accountDetails);
       AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   componentWillUnmount() {
-      this.focusListener.remove();
+      this.focusListener();
       AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
@@ -144,7 +145,7 @@ function mapStateToProps(){
 
 function mapDispatchToProps(dispatch){
     return{
-        SyncZkSyncTokensFromServer:() =>
+        updateZkSyncTokens:() =>
             dispatch(ZkSyncTokenActions.updateZkSyncTokens()),
         updateBalanceObject:balanceObj =>
             dispatch(DashboardActions.updateBalanceObject(balanceObj)),

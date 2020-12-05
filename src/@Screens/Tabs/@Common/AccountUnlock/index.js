@@ -178,13 +178,13 @@ const AccountUnlockScreen = ({...props}) =>{
                 {
                     setLoader(false);
                     setShowErr(true);
-                    setErrMsg('An Unexpected Error Has Occured!, Please try again after sometime');
+                    setErrMsg('Please try again after sometime. In case the issue persists, please contact support.');
                 }
             })
             .catch(()=>{
                 setLoader(false);
                 setShowErr(true);
-                setErrMsg('An Unexpected Error Has Occured!, Please try again after sometime');
+                setErrMsg('Please try again after sometime. In case the issue persists, please contact support.');
             });
     };
 
