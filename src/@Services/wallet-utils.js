@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import SecurityServices from './security';
 import * as Keychain from 'react-native-keychain';
 import ECEncryption from 'react-native-ec-encryption';
-import base64 from 'react-native-base64';
+// import base64 from 'react-native-base64';
 import reduxStore from '../@Redux/store';
 
 const createWallet = (pk, network) => {
@@ -29,9 +29,7 @@ const _createPrivateKeyFromMnemonic = (mnemonic, index) => {
 };
 
 const _encryptWithEC = (text, label) => {
-    console.log('_encryptWithEC',text,label);
-    const encodedKey = base64.encode(label);
-    console.log('encodedKey',encodedKey);
+    // const encodedKey = base64.encode(label);
     return ECEncryption.encrypt({
         data: text,
         label: label
@@ -39,9 +37,7 @@ const _encryptWithEC = (text, label) => {
 };
 
 const _decryptWithEC = (cipherText, label) => {
-    console.log('_decryptWithEC',cipherText,label);
-    const encodedKey = base64.encode(label);
-    console.log('encodedKey',encodedKey);
+    // const encodedKey = base64.encode(label);
     return ECEncryption.decrypt({
         data: cipherText,
         label: label
