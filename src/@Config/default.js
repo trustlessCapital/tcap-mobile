@@ -24,7 +24,7 @@ const devServerIp = 'https://dev.api.trustless.capital';
 const prodServerIp = 'https://api.trustless.capital';
 
 //SET ENVIRONMENT
-const setEnv = env !== 'development';
+const setEnv = env === 'development';
 
 export default {
 
@@ -43,6 +43,6 @@ export default {
     ACCOUNT_UNLOCK_GAS : 15000,
 
     // TIMEOUT  in seconds
-    LOCAL_AUTH_TIMEOUT : 180
+    LOCAL_AUTH_TIMEOUT : 20
 
 };

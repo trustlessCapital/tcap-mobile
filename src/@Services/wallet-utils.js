@@ -29,16 +29,22 @@ const _createPrivateKeyFromMnemonic = (mnemonic, index) => {
 };
 
 const _encryptWithEC = (text, label) => {
+    console.log('_encryptWithEC',text,label);
+    const encodedKey = base64.encode(label);
+    console.log('encodedKey',encodedKey);
     return ECEncryption.encrypt({
         data: text,
-        label: base64.encode(label)
+        label: label
     });
 };
 
 const _decryptWithEC = (cipherText, label) => {
+    console.log('_decryptWithEC',cipherText,label);
+    const encodedKey = base64.encode(label);
+    console.log('encodedKey',encodedKey);
     return ECEncryption.decrypt({
         data: cipherText,
-        label: base64.encode(label)
+        label: label
     });
 };
 
@@ -66,20 +72,24 @@ const getPrivateKey = (pin, email) => {
                 return null;
             }
             cipherText = cipherText.password;
-            return _decryptWithEC(cipherText, email).then(encryptedData => {
-                try {
-                    encryptedData = JSON.parse(encryptedData);
-                } catch (e) {
-                    throw {error: 'Corrupted Data', status: -1};
-                }
-                return SecurityServices.decryptData(encryptedData, key)
-                    .then(data => {
-                        return data;
-                    })
-                    .catch(e => {
-                        throw {error: 'Invalid PIN', status: -2};
-                    });
-            });
+            return _decryptWithEC(cipherText, email)
+                .then(encryptedData => {
+                    try {
+                        encryptedData = JSON.parse(encryptedData);
+                    } catch (e) {
+                        throw {error: 'Corrupted Data', status: -1};
+                    }
+                    return SecurityServices.decryptData(encryptedData, key)
+                        .then(data => {
+                            return data;
+                        })
+                        .catch(() => {
+                            throw {error: 'Invalid PIN', status: -2};
+                        });
+                })
+                .catch(e=>{
+                    throw{error:'_decryptWithEC'+e};
+                });
         });
     });
 };

@@ -105,10 +105,14 @@ class DashboardScreen extends Component {
               </>
           );
       return (
-          <View>
+          <SafeAreaView>
+              <StatusBarColor
+                  backgroundColor={Colors.primary_bg}
+                  barStyle="light-content"
+              />
               <Text style={styles.titleBar_title}>Please wait while your app loads</Text>
               <ActivityIndicator color={Colors.title} size={'small'} />
-          </View>
+          </SafeAreaView>
       );
   }
   

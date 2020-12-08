@@ -399,6 +399,7 @@ class PINScreen extends Component {
   };
 
   loginUser = async () => {
+      console.log('Login USer');
       this.setState({ isLoading: true, loadingMessage: 'Please wait!!' });
       SecurityServices.fetchAccountDetails(this.state.pin)
           .then((account) => {
