@@ -1,5 +1,5 @@
 export default {
-    supportMail :'support@trustless.capital',
+    supportMail :'hello@trustless.capital',
     twitterLink : 'https://twitter.com/TrustlessCapHQ',
     helpAndSuport : 'https://trustless.capital/faqs.html#faq',
     privacyPolicy : 'https://trustless.capital/privacypolicy.html',
