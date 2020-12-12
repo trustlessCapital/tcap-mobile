@@ -92,7 +92,6 @@ const AccountUnlockScreen = ({...props}) =>{
     //     // setIndicatingMsg('Please Wait...');
     //     // setLoader(true);
     //     // const fee = await walletService.getUnlockAccountFee(accAddress,currentAsset.symbol);
-    //     console.log('ACCOUNT_UNLOCK_GAS',ACCOUNT_UNLOCK_GAS);
     //     // setLoader(false);
     //     // setFee(data.totalFee);
     // };

@@ -85,6 +85,7 @@ class PINScreen extends Component {
   componentWillUnmount() {
       AppState.removeEventListener('change', this._handleAppStateChange);
   }
+
   _handleAppStateChange = (nextAppState) => {
       if (!this.isPinFallback) {
           SecurityServices.handleLocalAuthorization(
@@ -367,7 +368,6 @@ class PINScreen extends Component {
               });
           })
           .catch(error => {
-              console.log('Signup error',error);
               this.setState({isLoading: false});
               if (error.status == 409) {
                   this.props.navigation.popToTop();
@@ -492,6 +492,5 @@ function mapDispatchToProps(dispatch){
             dispatch(LocalAuthorizationActions.setAppBackgroundDate(backgroundDate))
     };
 }
-
 
 export default connect(mapStateToProps,mapDispatchToProps)(PINScreen);

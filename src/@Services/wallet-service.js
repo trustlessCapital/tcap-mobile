@@ -2,6 +2,7 @@ import '@ethersproject/shims';
 import {ethers} from 'ethers';
 import WalletUtils from './wallet-utils';
 import * as zksync from '../lib/zksync/build-src/index';
+// import * as zksync from 'zksync';
 import Config from '../@Config/default';
 
 const { NETWORK , SUBNET } = Config;

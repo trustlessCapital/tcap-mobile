@@ -50,7 +50,11 @@ export default class SeedPhraseRecoveryScreen extends Component {
 
   _recoverWallet() {
       this.setState({ isLoading: true });
-      return WalletUtils.createAndStorePrivateKey(
+      setTimeout(()=>{this.privateKeyCreation();},300);
+  }
+
+  privateKeyCreation = () =>{
+      WalletUtils.createAndStorePrivateKey(
           this.state.seedPhrase.join(' ').toLowerCase(),
           this.pin,
           this.accountDetails.email,
@@ -62,7 +66,7 @@ export default class SeedPhraseRecoveryScreen extends Component {
   }
 
   _navigateToDashboard() {
-      return WalletUtils.getPrivateKey(
+      WalletUtils.getPrivateKey(
           this.pin,
           this.accountDetails.email,
       ).then(pk => {

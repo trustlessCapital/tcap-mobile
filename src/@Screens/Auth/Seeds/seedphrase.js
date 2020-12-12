@@ -52,6 +52,8 @@ export default class SeedPhraseScreen extends Component {
       randomSeed7 : '',
       randomSeed10 : '',
       randomSeed12 : '',
+      invalidOrderMsg : 'Please ensure you have entered the correct seed phrases  and in correct order!',
+      invalidOrderTitle : 'Invalid seed phrase order',
   };
 
   componentDidMount() {
@@ -71,8 +73,16 @@ export default class SeedPhraseScreen extends Component {
       });
   }
 
-  _checkReshuffledSeedPhrase() {
+  _onSaveButtonClick() {
+      if (this.state.isVerificationMode) {
+          this.checkReshuffledSeedPhrase();
+      } else {
+          this.originalSeedPhrase = _.clone(this.state.seedPhrase);
+          this.setState({isVerificationMode: true, saveButtonText: 'Done'});
+      }
+  }
 
+  checkReshuffledSeedPhrase() {
       const {
           randomSeed1,
           randomSeed4,
@@ -87,35 +97,42 @@ export default class SeedPhraseScreen extends Component {
       const originalSeed10 = this.originalSeedPhrase[9];
       const originalSeed12 = this.originalSeedPhrase[11];
 
-      //TODO - "Add Wallet Addess to the APIService.mnemonicGenerated "
-      // Key - walletAddress
-
-      if(originalSeed1 === randomSeed1.toLowerCase() && originalSeed4 === randomSeed4.toLowerCase() && originalSeed7 === randomSeed7.toLowerCase() && originalSeed10 === randomSeed10.toLowerCase() && originalSeed12 === randomSeed12.toLowerCase())
+      if(
+          originalSeed1 === randomSeed1.toLowerCase() && originalSeed4 === randomSeed4.toLowerCase()
+          && originalSeed7 === randomSeed7.toLowerCase() && originalSeed10 === randomSeed10.toLowerCase() 
+          && originalSeed12 === randomSeed12.toLowerCase()
+      )
       {
           this.setState({ isLoading: true, loadingMessage: WAIT_CREATEWALLET });
-          return WalletUtils.createAndStorePrivateKey(
-              this.originalSeedPhrase.join(' '),
-              this.pin,
-              this.accountDetails.email,
-          ).then(() => {
-              this._navigateToDashboard();
-          });
+          setTimeout(()=>{
+              this.privateKeyCreation();
+          },300);
       }
       else
       {
-          this.setState({invalidOrder: true});
+          this.setState({invalidOrder: true,});
       }
   }
 
+  privateKeyCreation = () =>{
+      WalletUtils.createAndStorePrivateKey(
+          this.originalSeedPhrase.join(' '),
+          this.pin,
+          this.accountDetails.email,
+      ).then(() => {
+          this._navigateToDashboard();
+      }).catch(()=>{
+      });
+  }
+
   _navigateToDashboard() {
-      return WalletUtils.getPrivateKey(
+      WalletUtils.getPrivateKey(
           this.pin,
           this.accountDetails.email,
       ).then(pk => {
           const walletService = WalletService.getInstance();
           walletService.setPk(pk);
           const walletAddess = WalletUtils.createAddressFromPrivateKey(pk);
-          console.log('WalletAddress while signing up',walletAddess);
           APIService.mnemonicGenerated(
               this.accountDetails.email,
               this.accountDetails.phoneNumber,
@@ -127,16 +144,11 @@ export default class SeedPhraseScreen extends Component {
                   this.props.navigation.navigate('App',{ accountDetails: this.accountDetails });
               });
           });
-      }); 
-  }
-
-  _onSaveButtonClick() {
-      if (this.state.isVerificationMode) {
-          this._checkReshuffledSeedPhrase();
-      } else {
-          this.originalSeedPhrase = _.clone(this.state.seedPhrase);
-          this.setState({isVerificationMode: true, saveButtonText: 'Done'});
-      }
+      })
+          .catch(()=>{
+              this.setState({isLoading: false});
+              this.setState({invalidOrder:true,invalidOrderMsg:'Something went wrong!, Please reinstall the app',invalidOrderTitle:'Unexpected Error'});
+          });
   }
 
   _onResetButtonClick() {
@@ -275,13 +287,11 @@ export default class SeedPhraseScreen extends Component {
                       visible={this.state.confirmResetDialog}
                   />
                   <ErrorDialog
-                      message={
-                          'Please ensure you have entered the correct seed phrases  and in correct order!'
-                      }
+                      message={this.state.invalidOrderMsg}
                       onDismiss={() => {
                           this.setState({invalidOrder: false});
                       }}
-                      title={'Invalid seed phrase order'}
+                      title={this.state.invalidOrderTitle}
                       visible={this.state.invalidOrder}
                   />
               </SafeAreaView>

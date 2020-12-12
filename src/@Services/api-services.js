@@ -19,7 +19,6 @@ function signUp(email, phone) {
         method: 'POST',
         headers: {
             'x-api-key' : SECURE_KEY,
-            Accept: 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({

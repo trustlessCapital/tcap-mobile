@@ -35,7 +35,6 @@ const ScannerScreen = ({...props}) =>{
 
     const onSuccess = (info) =>{
         setIsLoading(true);
-        console.log('Scanned Data',info);
         setTimeout(()=>{
             setIsLoading(false);
             navigate('TransferHomeScreen',{scannedAddress : info.data});

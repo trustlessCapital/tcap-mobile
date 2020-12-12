@@ -1,4 +1,3 @@
-
 // Copyright (C) 2020  Trustless Pvt Ltd. <https://trustless.capital>
 
 // This program is free software: you can redistribute it and/or modify
@@ -19,12 +18,9 @@
  */
 
 //MAIN ENVIRONMENT
-const env = process.env.NODE_ENV;
-const devServerIp = 'https://dev.api.trustless.capital';
-const prodServerIp = 'https://api.trustless.capital';
+// const env = process.env.NODE_ENV;
 
 //SET ENVIRONMENT
-const setEnv = env !== 'development';
 
 export default {
 
@@ -34,11 +30,11 @@ export default {
 
     SUBNET : 'WS',
 
-    BASE_PATH:  setEnv ? devServerIp : prodServerIp,
+    BASE_PATH:  'https://dev.api.trustless.capital', 
 
     API_PREFIX : '/api',
 
-    SECURE_KEY : setEnv ? 'esKWwHMMuo2hspzLzWKvbj7dV7ycPWy4ZXo5uNYj' : 'esKWwHMMuo2hspzLzWKvbj7dV7ycPWy4ZXo5uNYj',
+    SECURE_KEY : 'qe21CedWrr9iZvyfOzzCE5kACxqKlMmM9f2XqUmt',
 
     ACCOUNT_UNLOCK_GAS : 15000,
 

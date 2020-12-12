@@ -116,7 +116,7 @@ const TransactionStatusScreen = ({...props}) =>{
             }
             else Linking.openURL(url);
         } catch (error) {
-            console.log(error.message);
+            //toast error
         }
     };
 
