@@ -97,8 +97,7 @@ const WithdrawStatusScreen = ({...props}) =>{
                 }
                 
             })
-            .catch((err) =>{
-                console.log('Transfer err',err);
+            .catch(() =>{
                 setErrorOccured(true);
                 setIsLoading(false);
             });
@@ -152,7 +151,7 @@ const WithdrawStatusScreen = ({...props}) =>{
             }
             else Linking.openURL(url);
         } catch (error) {
-            console.log(error.message);
+            //toast error
         }
     };
 

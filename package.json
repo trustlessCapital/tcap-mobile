@@ -1,6 +1,6 @@
 {
   "name": "TrustlessCapital",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -60,10 +60,12 @@
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "text-encoding": "^0.7.0",
     "text-encoding-polyfill": "^0.6.7",
     "websocket": "^1.0.30",
     "websocket-as-promised": "^0.10.1",
-    "yarn": "^1.22.10"
+    "yarn": "^1.22.10",
+    "zksync": "^0.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

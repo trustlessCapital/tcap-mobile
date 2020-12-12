@@ -74,9 +74,7 @@ export default class SeedPhraseScreen extends Component {
   }
 
   _onSaveButtonClick() {
-      console.log('Save Button Clicked',this.state.isVerificationMode);
       if (this.state.isVerificationMode) {
-          console.log('Inside IF');
           this.checkReshuffledSeedPhrase();
       } else {
           this.originalSeedPhrase = _.clone(this.state.seedPhrase);
@@ -85,7 +83,6 @@ export default class SeedPhraseScreen extends Component {
   }
 
   checkReshuffledSeedPhrase() {
-      console.log('checkReshuffledSeedPhrase');
       const {
           randomSeed1,
           randomSeed4,
@@ -106,10 +103,8 @@ export default class SeedPhraseScreen extends Component {
           && originalSeed12 === randomSeed12.toLowerCase()
       )
       {
-          console.log('Calling createAndStorePrivateKey');
           this.setState({ isLoading: true, loadingMessage: WAIT_CREATEWALLET });
           setTimeout(()=>{
-              console.log('Calling timeout');
               this.privateKeyCreation();
           },300);
       }
@@ -125,21 +120,16 @@ export default class SeedPhraseScreen extends Component {
           this.pin,
           this.accountDetails.email,
       ).then(() => {
-          console.log('createAndStorePrivateKey response');
           this._navigateToDashboard();
-      }).catch((err)=>{
-          console.log('createAndStorePrivateKey err');
-          console.log('Error',err);
+      }).catch(()=>{
       });
   }
 
   _navigateToDashboard() {
-      console.log('_navigateToDashboard getPrivateKey');
       WalletUtils.getPrivateKey(
           this.pin,
           this.accountDetails.email,
       ).then(pk => {
-          console.log('getPrivateKey response');
           const walletService = WalletService.getInstance();
           walletService.setPk(pk);
           const walletAddess = WalletUtils.createAddressFromPrivateKey(pk);
@@ -148,7 +138,6 @@ export default class SeedPhraseScreen extends Component {
               this.accountDetails.phoneNumber,
               walletAddess,
           ).then(accountDetails => {
-              console.log('mnemonicGenerated response');
               SecurityServices.storeAccountDetails(accountDetails, this.pin).then(() => {
                   this.accountDetails = accountDetails;
                   this.setState({isLoading: false});
@@ -156,10 +145,9 @@ export default class SeedPhraseScreen extends Component {
               });
           });
       })
-          .catch(err=>{
+          .catch(()=>{
               this.setState({isLoading: false});
               this.setState({invalidOrder:true,invalidOrderMsg:'Something went wrong!, Please reinstall the app',invalidOrderTitle:'Unexpected Error'});
-              console.log('getPrivateKey',err);
           });
   }
 

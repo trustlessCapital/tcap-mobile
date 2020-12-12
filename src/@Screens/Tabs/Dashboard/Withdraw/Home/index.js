@@ -185,7 +185,7 @@ const WithdrawHomeScreen = ({...props}) =>{
                         <View style={GlobalStyles.inputBox}>
                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:'100%'}}>
                                 <TextInput
-                                    keyboardType={'numeric'}
+                                    keyboardType={'decimal-pad'}
                                     onChangeText={amt => {
                                         setAmountToWithdraw(amt);
                                     }}

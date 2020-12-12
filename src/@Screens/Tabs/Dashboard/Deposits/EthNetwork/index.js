@@ -91,7 +91,7 @@ class DepositEthScreen extends Component {
                                   {marginBottom: 10},
                               ]}>
                               <TextInput
-                                  keyboardType={'phone-pad'}
+                                  keyboardType={'decimal-pad'}
                                   onChangeText={text => {
                                       this.state.amount = text.replace(/[^0-9\.]/g, '');
                                       this.setState({});
