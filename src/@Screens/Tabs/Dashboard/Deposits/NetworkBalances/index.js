@@ -122,7 +122,7 @@ class DepositEthBalanceScreen extends Component {
           <>
               <View style={styles.card}>
                   <Text style={styles.title}>
-            Choose from your balances in Etherium Main Network
+            Choose from your balances in Ethereum Main Network
                   </Text>
                   <View style={styles.cardContent}>
                       {

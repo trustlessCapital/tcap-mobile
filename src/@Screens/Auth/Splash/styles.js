@@ -1,32 +1,28 @@
 import {
-    StyleSheet,
-    Dimensions,
+    StyleSheet
 } from 'react-native';
 import Colors from '../../../@Constants/Colors';
+import {moderateScale} from 'react-native-size-matters';
   
 export default (styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         backgroundColor: Colors.primaryBg,
+        justifyContent:'center',
+        alignItems:'center'
     },
-    container: {
-        flex: 1,
-        height: Dimensions.get('window').height,
-        backgroundColor: Colors.primaryBg,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginStart: 20,
-        marginEnd: 20,
-    },
-    title: {
-        color: Colors.title,
-        fontFamily: 'Montserrat-Bold',
-        fontSize: 18,
-        marginBottom: 10,
+    imageBox:{
+        width: moderateScale(400),
+        height:moderateScale(150)
     },
     titleImage: {
-        width: 400,
-        resizeMode: 'contain',
+        flex:1,width:null,height:null
+    },
+    beta:{
+        fontWeight:'bold',
+        fontFamily: 'Montserrat-Bold',
+        fontSize:moderateScale(20),
+        color:Colors.activeTintRed
     },
 }));
   

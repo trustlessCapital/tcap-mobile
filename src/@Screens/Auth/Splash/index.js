@@ -5,10 +5,9 @@
 import React, { useEffect } from 'react';
 import {
     SafeAreaView,
-    ScrollView,
     View,
     Image,
-    KeyboardAvoidingView,
+    Text
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './styles';
@@ -62,13 +61,10 @@ const SplashScreen = ({...props}) =>{
 
     return(
         <SafeAreaView style={styles.wrapper}>
-            <KeyboardAvoidingView style={{flex: 1}}>
-                <ScrollView contentContainerStyle={{flexGrow: 1}}>
-                    <View style={styles.container}>
-                        <Image source={logoImage} style={styles.titleImage} />
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+            <View style={styles.imageBox}>
+                <Image resizeMode={'contain'} source={logoImage} style={styles.titleImage} />
+            </View>
+            <Text style={styles.beta}>( BETA )</Text>
         </SafeAreaView>
     );
 };
