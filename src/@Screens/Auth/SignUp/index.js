@@ -91,7 +91,6 @@ export default class SignUp extends Component {
   }
 
   onEmailChange = (emailInput) => {
-      console.log('Callings');
       emailInput = emailInput.toLowerCase();
       if (/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(emailInput)) {
           this.setState({ emailInput: emailInput, isEmailValid: true });
@@ -167,7 +166,8 @@ export default class SignUp extends Component {
           }
           else Linking.openURL(url);
       } catch (error) {
-          console.log(error.message);
+          // toast error
+
       }
   };
 

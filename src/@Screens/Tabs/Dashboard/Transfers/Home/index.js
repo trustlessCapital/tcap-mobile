@@ -190,7 +190,6 @@ const TransferHomeScreen = ({...props}) =>{
     const setMaxTransferLimit = () =>{
         const maxBalance = walletUtils.getAssetDisplayText( selectedAsset.symbol,selectedAsset.value);
         setAmountToTransfer(maxBalance-fee);
-        console.log('amountToTransfer',amountToTransfer);
     };
 
     const renderAssets = () =>{
@@ -202,7 +201,7 @@ const TransferHomeScreen = ({...props}) =>{
                         <View style={GlobalStyles.inputBox}>
                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:'100%'}}>
                                 <TextInput
-                                    keyboardType={'numeric'}
+                                    keyboardType={'decimal-pad'}
                                     onChangeText={(amt) => {
                                         setAmountToTransfer(amt);
                                     }}

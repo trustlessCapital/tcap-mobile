@@ -59,9 +59,8 @@ const TransactionHistory = () =>{
                 setList(data);
                 setIsLoading(false);
             })
-            .catch(err=>{
+            .catch(()=>{
                 setIsLoading(false);
-                console.log(err);
             });
     };
 

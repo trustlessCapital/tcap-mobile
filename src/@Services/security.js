@@ -1,6 +1,6 @@
 import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-community/async-storage';
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 import { PIN_SCREEN_MODE } from '../@Constants';
 import Config from '../@Config/default';
 
@@ -16,19 +16,37 @@ const handleLocalAuthorization = (
     authState,
 ) => {
     if (state.appState.match(/inactive|background/) && nextAppState === 'active') {
-        authenticateWithTouchID(component, authState);
+        if(Platform.OS!=='ios')
+            authenticateWithTouchID(component, authState);
     }
-    if(state.appState === 'active' && nextAppState === 'active')
-    {   
-        var start = moment(component.props.appBackgroundDate);
-        var end = moment(new Date());
-        var timeout = (end.diff(start, 'seconds'));
-        if(timeout > LOCAL_AUTH_TIMEOUT) authenticateWithTouchID(component, authState);
-    }
-    if(state.appState === 'active' && nextAppState === 'background')
+    if(Platform.OS === 'ios')
     {
-        const appInBackgroundDate = new Date();
-        component.props.setAppBackgroundDate(appInBackgroundDate);
+        if(state.appState === 'inactive' && nextAppState === 'background')
+        {
+            const appInBackgroundDate = new Date();
+            component.props.setAppBackgroundDate(appInBackgroundDate);
+        }
+        if(state.appState === 'inactive' && nextAppState === 'active')
+        {
+            const  start = moment(component.props.appBackgroundDate);
+            const  end = moment(new Date());
+            const  timeout = (end.diff(start, 'seconds'));
+            if(timeout > LOCAL_AUTH_TIMEOUT) authenticateWithTouchID(component, authState);
+        }
+    }
+    else{
+        if(state.appState === 'active' && nextAppState === 'active')
+        {   
+            const start = moment(component.props.appBackgroundDate);
+            const  end = moment(new Date());
+            const timeout = (end.diff(start, 'seconds'));
+            if(timeout > LOCAL_AUTH_TIMEOUT) authenticateWithTouchID(component, authState);
+        }
+        if(state.appState === 'active' && nextAppState === 'background')
+        {
+            const appInBackgroundDate = new Date();
+            component.props.setAppBackgroundDate(appInBackgroundDate);
+        }
     }
 };
 
@@ -46,7 +64,15 @@ const authenticateWithTouchID = async (component, authState) => {
             });
         });
         if (authenticationResult.success) {
-            component.setState({ locked: false });
+            const appInBackgroundDate = new Date();
+            component.props.setAppBackgroundDate(appInBackgroundDate);
+        }
+        else
+        {
+            component.props.navigation.navigate('Auth',{
+                screen:'PINScreen',
+                params: { mode: PIN_SCREEN_MODE.LOGIN_PIN, },
+            });
         }
     }
 };

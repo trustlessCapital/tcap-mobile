@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import SecurityServices from './security';
 import * as Keychain from 'react-native-keychain';
 import ECEncryption from 'react-native-ec-encryption';
-import base64 from 'react-native-base64';
+// import base64 from 'react-native-base64';
 import reduxStore from '../@Redux/store';
 
 const createWallet = (pk, network) => {
@@ -29,16 +29,18 @@ const _createPrivateKeyFromMnemonic = (mnemonic, index) => {
 };
 
 const _encryptWithEC = (text, label) => {
+    // const encodedKey = base64.encode(label);
     return ECEncryption.encrypt({
         data: text,
-        label: base64.encode(label)
+        label: label
     });
 };
 
 const _decryptWithEC = (cipherText, label) => {
+    // const encodedKey = base64.encode(label);
     return ECEncryption.decrypt({
         data: cipherText,
-        label: base64.encode(label)
+        label: label
     });
 };
 
@@ -66,20 +68,24 @@ const getPrivateKey = (pin, email) => {
                 return null;
             }
             cipherText = cipherText.password;
-            return _decryptWithEC(cipherText, email).then(encryptedData => {
-                try {
-                    encryptedData = JSON.parse(encryptedData);
-                } catch (e) {
-                    throw {error: 'Corrupted Data', status: -1};
-                }
-                return SecurityServices.decryptData(encryptedData, key)
-                    .then(data => {
-                        return data;
-                    })
-                    .catch(e => {
-                        throw {error: 'Invalid PIN', status: -2};
-                    });
-            });
+            return _decryptWithEC(cipherText, email)
+                .then(encryptedData => {
+                    try {
+                        encryptedData = JSON.parse(encryptedData);
+                    } catch (e) {
+                        throw {error: 'Corrupted Data', status: -1};
+                    }
+                    return SecurityServices.decryptData(encryptedData, key)
+                        .then(data => {
+                            return data;
+                        })
+                        .catch(() => {
+                            throw {error: 'Invalid PIN', status: -2};
+                        });
+                })
+                .catch(e=>{
+                    throw{error:'_decryptWithEC'+e};
+                });
         });
     });
 };

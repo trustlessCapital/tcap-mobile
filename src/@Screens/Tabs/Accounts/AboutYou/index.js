@@ -78,12 +78,8 @@ const AboutYou = ({...props}) =>{
     const sendOtp = () =>{
         setNumberOtp(true);
         apiServices.resendOTP(email,`${countryCallingCode}${newNumber}`)
-            .then((data)=>{
-                console.log('Data',data);
-            })
-            .catch((err)=>{
-                console.log('err',err);
-            });
+            .then()
+            .catch();
     };
 
     const verifyOTP = (otp) => {
@@ -112,8 +108,7 @@ const AboutYou = ({...props}) =>{
                     setErroTitle('Verify Email');
                     setErrorMessage('Please check your email for verification link');
                 })
-                .catch((err)=>{
-                    console.log('Err',err);
+                .catch(()=>{
                     setIsLoading(false);
                     setShowError(true);
                     setErroTitle('Update Failed');

@@ -108,7 +108,7 @@ class DepositStatusScreen extends Component {
               });
       }
       catch(err){
-          console.log('Err',err);
+          // toast error
       }
   }
 
@@ -167,15 +167,13 @@ class DepositStatusScreen extends Component {
           }
           else Linking.openURL(url);
       } catch (error) {
-          console.log(error.message);
+          //toast error
       }
   }
 
   openEmailLink = () =>{
       sendEmail(supportMail)
-          .then(() => {
-              console.log('Our email successful provided to device mail ');
-          });
+          .then();
   };
 
   copyToClipboard = () =>{

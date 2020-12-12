@@ -95,8 +95,7 @@ const TransferStatusScreen = ({...props}) =>{
                 }
                 
             })
-            .catch((err) =>{
-                console.log('Err',err);
+            .catch(() =>{
                 setErrorOccured(true);
                 setIsLoading(false);
             });
@@ -110,9 +109,7 @@ const TransferStatusScreen = ({...props}) =>{
 
     const openEmailLink = () =>{
         sendEmail(supportMail)
-            .then(() => {
-                console.log('Our email successful provided to device mail ');
-            });
+            .then();
     };
 
     const openLink = async ()=>{
@@ -151,7 +148,7 @@ const TransferStatusScreen = ({...props}) =>{
             }
             else Linking.openURL(url);
         } catch (error) {
-            console.log(error.message);
+            //toast error
         }
     };
 
